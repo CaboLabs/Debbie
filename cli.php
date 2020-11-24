@@ -19,18 +19,35 @@ spl_autoload_register(function ($class) {
 /*
  * argv[0] -> cli.php
  * argv[1] -> root
- * argv[2] -> suite
- * argv[3] -> case  (optional)
+ * argv[2] -> suite (optional)
+ * argv[3] -> case (optional)
  * */
 
-if ($argc < 3)
+if ($argc < 2)
 {
-  echo 'Missing test_root and test_suite'. PHP_EOL;
-  exit;
+   echo 'Missing test_root and test_suite'. PHP_EOL;
+   exit;
 }
 
 $run = new \phtest\PhTestRun();
 $run->init($argv[1]);
-$run->run_cases($argv[2]);
+
+// case or cases specific
+if ($argc == 4)
+{
+   $run->run_cases($argv[2], $argv[3]);
+}
+// suite specified
+else if ($argc == 3)
+{
+   $run->run_suite($argv[2]);
+}
+// run all
+else
+{
+   $run->run_all();
+}
+
+$run->render_reports();
 
 ?>

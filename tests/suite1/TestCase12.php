@@ -4,7 +4,7 @@ namespace tests\suite1;
 
 use \phtest\PhTestCase;
 
-class TestCase11 extends PhTestCase {
+class TestCase12 extends PhTestCase {
 
    public function just_a_normal_function()
    {
@@ -21,11 +21,6 @@ class TestCase11 extends PhTestCase {
    {
       echo "this is another test output";
       $this->assert(false, "This is happening", array(false));
-   }
-
-   public function test_no_output()
-   {
-      $this->assert(true);
    }
 }
 

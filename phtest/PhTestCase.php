@@ -54,7 +54,7 @@ abstract class PhTestCase {
   }
   */
 
-   public function assert($cond, $msg = 'Error', $params = array())
+   public function assert($cond, $msg = '', $params = array())
    {
 //       echo 'calling class'. PHP_EOL;
 // print_r($this->get_calling_class());

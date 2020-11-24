@@ -42,8 +42,7 @@ class PhTestSuite {
             // execute only methods that starts with 'test'
             if (strncmp($test_name, 'test', strlen('test')) === 0)
             {
-               // TODO: grab al lthe output even from correct running (try { })
-               echo 'test: '. $test_name . PHP_EOL;
+               //echo 'test: '. $test_name . PHP_EOL;
 
                $this->report_start($test_case_object, $test_name);
 

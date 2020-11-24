@@ -1,10 +1,10 @@
 <?php
 
-namespace tests\suite1;
+namespace tests\suite2;
 
 use \phtest\PhTestCase;
 
-class TestCase11 extends PhTestCase {
+class TestCase21 extends PhTestCase {
 
    public function just_a_normal_function()
    {
@@ -21,11 +21,6 @@ class TestCase11 extends PhTestCase {
    {
       echo "this is another test output";
       $this->assert(false, "This is happening", array(false));
-   }
-
-   public function test_no_output()
-   {
-      $this->assert(true);
    }
 }
 
