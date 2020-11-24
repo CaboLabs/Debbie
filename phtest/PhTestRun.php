@@ -5,15 +5,17 @@ namespace phtest;
 class PhTestRun {
 
    // root folder where all the test suites have their own folder
-   private $test_suite_root = './tests';
+   private $test_suite_root = '/tests';
 
-   public function init($test_suite_root = './tests')
+   public function init($test_suite_root = '/tests')
    {
       if (!is_dir($test_suite_root))
       {
          echo "Folder $test_suite_root doesn't exist";
          exit;
       }
+
+      $this->test_suite_root = $test_suite_root;
    }
 
    public function run_all()
@@ -39,6 +41,9 @@ class PhTestRun {
    public function run_cases($suite, ...$cases)
    {
       $path = $this->test_suite_root . DIRECTORY_SEPARATOR . $suite;
+
+      //echo $path . PHP_EOL;
+
       $suite_dir = dir($path);
 
       $test_cases = array();
@@ -47,12 +52,18 @@ class PhTestRun {
       while (false !== ($test_case = $suite_dir->read()))
       {
          $test_case_path = $path.'/'.$test_case;
+
+         //echo $test_case_path . PHP_EOL;
+         //echo str_replace('/', '\\', $test_case_path) . PHP_EOL;
+         $namespaced_class = substr(str_replace('/', '\\', $test_case_path), 0, -4);
          
-         if (is_file($test_case_path) && in_array($test_case, $cases))
+         if (is_file($test_case_path) && (empty($cases) || in_array($test_case, $cases)))
          {
-            $test_cases[$test_case] = $test_case_path;
+            $test_cases[$namespaced_class] = $test_case_path;
          }
       }
+
+      //print_r($test_cases);
 
       $phsuite = new PhTestSuite($suite, $test_cases);
       $phsuite->run();
