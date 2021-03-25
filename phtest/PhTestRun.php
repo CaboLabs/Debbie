@@ -9,6 +9,8 @@ class PhTestRun {
 
    private $reports = array();
 
+   private $after_each_test_function;
+
    public function init($test_suite_root = './tests')
    {
       if (!is_dir($test_suite_root))
@@ -27,7 +29,7 @@ class PhTestRun {
       while (false !== ($test_suite = $root_dir->read()))
       {
          if (!is_dir($this->test_suite_root . DIRECTORY_SEPARATOR . $test_suite) ||
-             in_array($test_suite, array('.', '..'))) continue;
+             in_array($test_suite, array('.', '..', 'data'))) continue;
 
          $path = $this->test_suite_root . DIRECTORY_SEPARATOR . $test_suite;
 
@@ -51,7 +53,7 @@ class PhTestRun {
          $suite_dir->close();
 
          $phsuite = new PhTestSuite($test_suite, $test_cases);
-         $phsuite->run();
+         $phsuite->run($this->after_each_test_function);
          $this->reports[] = $phsuite->get_reports();
       }
 
@@ -94,7 +96,7 @@ class PhTestRun {
       }
 
       $phsuite = new PhTestSuite($suite, $test_cases);
-      $phsuite->run();
+      $phsuite->run($this->after_each_test_function);
       $this->reports[] = $phsuite->get_reports();
    }
 
@@ -120,7 +122,7 @@ class PhTestRun {
       }
 
       $phsuite = new PhTestSuite($suite, $test_cases);
-      $phsuite->run();
+      $phsuite->run($this->after_each_test_function);
       $this->reports[] = $phsuite->get_reports();
    }
 
@@ -132,32 +134,60 @@ class PhTestRun {
       {
          foreach ($test_suite_reports as $test_case => $reports)
          {
-            echo '├── '. $test_case . PHP_EOL;
+            echo '├── Test case: '. $test_case . PHP_EOL;
             echo '|   |'. PHP_EOL;
 
             foreach ($reports as $test_function => $report)
             {
-               echo '|   ├── '. $test_function . PHP_EOL;
-               echo '|   |   |'. PHP_EOL;
+               echo '|   ├── Test: '. $test_function . PHP_EOL;
 
-               foreach ($report['asserts'] as $assert_report)
+               //print_r($report['asserts']);
+
+               if (isset($report['asserts']))
                {
-                  if ($assert_report['type'] == 'ERROR')
+                  foreach ($report['asserts'] as $assert_report)
                   {
-                     echo '|   |   └── ERROR: '. $assert_report['msg'] .PHP_EOL;
-                  }
-                  else if ($assert_report['type'] == 'OK')
-                  {
-                     echo '|   |   └── OK: '. $assert_report['msg'] .PHP_EOL;
+                     if ($assert_report['type'] == 'ERROR')
+                     {
+                        echo '|   |   |'. PHP_EOL;
+                        echo "|   |   └── \033[91mERROR: ". $assert_report['msg'] ."\033[0m". PHP_EOL;
+                     }
+                     else if ($assert_report['type'] == 'OK')
+                     {
+                        echo '|   |   |'. PHP_EOL;
+                        echo "|   |   └── \033[92mOK: ". $assert_report['msg'] ."\033[0m". PHP_EOL;
+                     }
+                     else if ($assert_report['type'] == 'EXCEPTION')
+                     {
+                        echo '|   |   |'. PHP_EOL;
+                        echo "|   |   └── \033[94mEXCEPTION: ". $assert_report['msg'] ."\033[0m". PHP_EOL;
+                     }
                   }
                }
 
-               echo '|   |   |'. PHP_EOL;
-               echo '|   |   └── OUTPUT: '. $report['output'] . PHP_EOL;
+               if (!empty($report['output']))
+               {
+                  echo '|   |   |'. PHP_EOL;
+                  echo '|   |   └── OUTPUT: '. $report['output'] . PHP_EOL;
+               }
+
                echo '|   |'. PHP_EOL;
             }
          }
       }
+
+      echo PHP_EOL;
+   }
+
+
+   public function get_reports()
+   {
+      return $this->reports;
+   }
+
+   public function after_each_test($callback)
+   {
+      $this->after_each_test_function = $callback;
    }
 }
 

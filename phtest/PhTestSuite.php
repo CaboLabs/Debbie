@@ -9,7 +9,7 @@ class PhTestSuite {
    private $test_suite_name;
 
    // paths to test case files
-   private $test_cases;
+   private $test_cases = array();
 
    // Reportes de resultados del test
    private $reports = array();
@@ -27,50 +27,55 @@ class PhTestSuite {
          $test_case_object = new $test_case($this, $test_case_path);
          $this->test_cases[$test_case] = $test_case_object;
       }
-
-      //print_r($this->test_cases);
    }
 
-   public function run()
+   public function run($after_each_test_callback = NULL)
    {
       foreach ($this->test_cases as $test_case_class => $test_case_object)
       {
          $test_names = get_class_methods($test_case_object);
+
+         // execute only methods that starts with 'test'
+         $test_names = array_filter($test_names, function($n) {
+            return (strncmp($n, 'test', strlen('test')) === 0);
+         });
+
          //print_r($test_names);
-         foreach ($test_names as $test_name)
+         foreach ($test_names as $i => $test_name)
          {
-            // execute only methods that starts with 'test'
-            if (strncmp($test_name, 'test', strlen('test')) === 0)
+            //echo 'test: '. $test_name . PHP_EOL;
+
+            $this->report_start($test_case_object, $test_name);
+
+            // get all output
+            ob_start();
+
+            try
             {
-               //echo 'test: '. $test_name . PHP_EOL;
+               // invokes the test function
+               call_user_func(array($test_case_object, $test_name));
+            }
+            catch (\Exception $e)
+            {
+               echo "UPS: ". $e->getMessage() . PHP_EOL;
+               $this->report_exception($test_case_class, $test_name, $e);
+            }
 
-               $this->report_start($test_case_object, $test_name);
+            // all echoes and prints that could happen during execution
+            $output = ob_get_contents();
 
-               // get all output
-               ob_start();
+            ob_end_clean();
 
-               try
-               {
-                  // invokes the test function
-                  call_user_func(array($test_case_object, $test_name));
-               }
-               catch (\Exception $e)
-               {
-                  // TODO
-                  $trace = debug_backtrace(0);
-                  array_shift($trace); // removes the call to assert()
-                  array_pop($trace); // removes the call to cli.run_cases()
+            $this->report_end($test_case_object, $test_name, $output);
 
-  
-                  $this->report_exception($test_case_class, $test_name, $e, $trace);
-               }
-
-               // all echoes and prints that could happen during execution
-               $output = ob_get_contents();
-
-               ob_end_clean();
-
-               $this->report_end($test_case_object, $test_name, $output);
+            if ($after_each_test_callback)
+            {
+               // TEST: dont execute for the last one
+               //if (($i+1) < count($test_names))
+               //{
+                  //echo "TRUNCATE $i of ". count($test_names) . PHP_EOL;
+                  $after_each_test_callback();
+               //}
             }
          }
       }
@@ -121,7 +126,7 @@ class PhTestSuite {
       $this->reports[$test_case_class][$test_case_name]['output'] = $output;
    }
 
-   public function report_exception($test_case_class, $test_name, $exception, $trace = array(), $params = array())
+   public function report_exception($test_case_class, $test_name, $exception, $params = array())
    {
       $_params = '';
       foreach ($params as $key=>$value)
@@ -138,7 +143,19 @@ class PhTestSuite {
          $this->reports[$test_case_class][$test_name] = array();
          $this->reports[$test_case_class][$test_name]['asserts'] = array();
       }
-      $this->reports[$test_case_class][$test_name]['asserts'][] = array('type'=>'EXCEPTION', 'msg'=>$exception->getMessage(), 'trace'=>$trace, 'params'=>$_params);
+
+      $trace = $exception->getTrace();
+      array_pop($trace); // removes call to cli
+      array_pop($trace); // removes the call to phtests/cli
+      array_pop($trace); // removes call to PhTestRun
+      array_pop($trace); // removes call to PhTestSuite
+
+      $this->reports[$test_case_class][$test_name]['asserts'][] = array(
+         'type'   => 'EXCEPTION',
+         'msg'    => $exception->getMessage(),
+         'trace'  => $trace,
+         'params' => $_params
+      );
    }
 
    public function get_reports()
@@ -152,4 +169,5 @@ class PhTestSuite {
       print_r($this->reports);
    }
 }
+
 ?>
