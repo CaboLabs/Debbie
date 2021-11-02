@@ -6,9 +6,9 @@
     "testing",
     "test"
   ],
-  "homepage": "https://github.com/ppazos/PhTesthttps://github.com/ppazos/PhTest",
+  "homepage": "https://github.com/ppazos/PhTest",
   "license": "Apache 2.0",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "require": {
     "php": "^7.0|^8.0"
   },
