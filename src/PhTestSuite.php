@@ -1,6 +1,6 @@
 <?php
 
-namespace phtest;
+namespace CaboLabs\PhTest;
 
 class PhTestSuite {
 
@@ -29,11 +29,11 @@ class PhTestSuite {
       }
    }
 
-   public function run($after_each_test_callback = NULL)
+   public function run($after_each_test_callback = NULL, $specific_methods = NULL)
    {
       foreach ($this->test_cases as $test_case_class => $test_case_object)
       {
-         $test_names = get_class_methods($test_case_object);
+         $test_names = $specific_methods ?? get_class_methods($test_case_object);
 
          // execute only methods that starts with 'test'
          $test_names = array_filter($test_names, function($n) {
@@ -44,6 +44,11 @@ class PhTestSuite {
          foreach ($test_names as $i => $test_name)
          {
             //echo 'test: '. $test_name . PHP_EOL;
+            if(!method_exists($test_case_object, $test_name))
+            {
+               echo "Method $test_name not found \n";
+               continue;
+            }
 
             $this->report_start($test_case_object, $test_name);
 

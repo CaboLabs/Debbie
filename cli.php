@@ -1,16 +1,9 @@
 <?php
 
-$_BASE = __DIR__ . '/'; // .'/../';
+$_BASE = __DIR__ . '/';
 
-spl_autoload_register(function ($class) {
-  global $_BASE;
-  //echo $_BASE.str_replace('\\', '/', $class).'.php' . PHP_EOL;
-  if (file_exists($_BASE.str_replace('\\', '/', $class).'.php'))
-  {
-    require_once($_BASE.str_replace('\\', '/', $class).'.php');
-  }
-});
-
+// composer includes
+require __DIR__ . '/vendor/autoload.php';
 
 
 //print_r($argv);
@@ -29,11 +22,22 @@ if ($argc < 2)
    exit;
 }
 
-$run = new \phtest\PhTestRun();
+$run = new \CaboLabs\PhTest\PhTestRun();
 $run->init($argv[1]);
 
+// Method specific
+if ($argc > 4)
+{
+   $methods = array();
+
+   for ($i = 4; $i < $argc; $i++) {
+      $methods[] = $argv[$i];
+   }
+
+   $run->run_case($argv[2], $argv[3], $methods);
+}
 // case or cases specific
-if ($argc == 4)
+else if ($argc == 4)
 {
    $run->run_cases($argv[2], $argv[3]);
 }

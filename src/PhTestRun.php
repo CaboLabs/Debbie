@@ -1,6 +1,6 @@
 <?php
 
-namespace phtest;
+namespace CaboLabs\PhTest;
 
 class PhTestRun {
 
@@ -40,13 +40,17 @@ class PhTestRun {
          // $test_case is a class name
          while (false !== ($test_case = $suite_dir->read()))
          {
-            $test_case_path = $path.'/'.$test_case;
-
-            $namespaced_class = substr(str_replace('/', '\\', $test_case_path), 0, -4);
-            
-            if (is_file($test_case_path))
+            // only php files are valid test cases
+            if (preg_match('/\.php$/', $test_case))
             {
-               $test_cases[$namespaced_class] = $test_case_path;
+               $test_case_path = $path.'/'.$test_case;
+
+               $namespaced_class = substr(str_replace('/', '\\', $test_case_path), 0, -4);
+               
+               if (is_file($test_case_path))
+               {
+                  $test_cases[$namespaced_class] = $test_case_path;
+               }
             }
          }
 
@@ -72,31 +76,24 @@ class PhTestRun {
       // TODO
    }
 
-   public function run_case($suite, $case)
+   public function run_case($suite, $case, $method = NULL)
    {
       // TODO
 
       $path = $this->test_suite_root . DIRECTORY_SEPARATOR . $suite;
 
-      $suite_dir = dir($path);
+      $test_case_path = $path.'/'. $case . '.php';
+
+      $namespaced_class = substr(str_replace('/', '\\', $test_case_path), 0, -4);
 
       $test_cases = array();
-
-      // $test_case is a class name
-      while (false !== ($test_case = $suite_dir->read()))
+      if (is_file($test_case_path))
       {
-         $test_case_path = $path.'/'.$test_case;
-
-         $namespaced_class = substr(str_replace('/', '\\', $test_case_path), 0, -4);
-         
-         if (is_file($test_case_path) && (empty($case) || $test_case == $case))
-         {
-            $test_cases[$namespaced_class] = $test_case_path;
-         }
+         $test_cases[$namespaced_class] = $test_case_path;
       }
 
       $phsuite = new PhTestSuite($suite, $test_cases);
-      $phsuite->run($this->after_each_test_function);
+      $phsuite->run($this->after_each_test_function, $method);
       $this->reports[] = $phsuite->get_reports();
    }
 
@@ -105,19 +102,23 @@ class PhTestRun {
       $path = $this->test_suite_root . DIRECTORY_SEPARATOR . $suite;
 
       $suite_dir = dir($path);
-
+      
       $test_cases = array();
 
       // $test_case is a class name
       while (false !== ($test_case = $suite_dir->read()))
       {
-         $test_case_path = $path.'/'.$test_case;
-
-         $namespaced_class = substr(str_replace('/', '\\', $test_case_path), 0, -4);
-         
-         if (is_file($test_case_path) && (empty($cases) || in_array($test_case, $cases)))
+         // only php files are valid test cases
+         if (preg_match('/\.php$/', $test_case))
          {
-            $test_cases[$namespaced_class] = $test_case_path;
+            $test_case_path = $path .'/'. $test_case;
+
+            $namespaced_class = substr(str_replace('/', '\\', $test_case_path), 0, -4);
+            
+            if (is_file($test_case_path) && (empty($cases) || in_array($test_case, $cases)))
+            {
+               $test_cases[$namespaced_class] = $test_case_path;
+            }
          }
       }
 

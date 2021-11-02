@@ -1,6 +1,6 @@
 <?php
 
-namespace phtest;
+namespace CaboLabs\PhTest;
 
 abstract class PhTestCase {
 

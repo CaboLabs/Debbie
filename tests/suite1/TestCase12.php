@@ -2,7 +2,7 @@
 
 namespace tests\suite1;
 
-use \phtest\PhTestCase;
+use \CaboLabs\PhTest\PhTestCase;
 
 class TestCase12 extends PhTestCase {
 
