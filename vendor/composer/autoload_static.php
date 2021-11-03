@@ -10,6 +10,7 @@ class ComposerStaticInitb32572703e00f6724892af48a3569f90
         'C' => 
         array (
             'CaboLabs\\PhTest\\' => 16,
+            'CaboLabs\\PhBasic\\' => 17,
         ),
     );
 
@@ -17,6 +18,10 @@ class ComposerStaticInitb32572703e00f6724892af48a3569f90
         'CaboLabs\\PhTest\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
+        ),
+        'CaboLabs\\PhBasic\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/cabolabs/phbasic/src',
         ),
     );
 

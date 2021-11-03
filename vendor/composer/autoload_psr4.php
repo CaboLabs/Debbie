@@ -7,4 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'CaboLabs\\PhTest\\' => array($baseDir . '/src'),
+    'CaboLabs\\PhBasic\\' => array($vendorDir . '/cabolabs/phbasic/src'),
 );

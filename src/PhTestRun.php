@@ -2,6 +2,8 @@
 
 namespace CaboLabs\PhTest;
 
+use CaboLabs\PhBasic\BasicString;
+
 class PhTestRun {
 
    // root folder where all the test suites have their own folder
@@ -15,8 +17,13 @@ class PhTestRun {
    {
       if (!is_dir($test_suite_root))
       {
-         echo "Folder $test_suite_root doesn't exist";
+         echo "Folder $test_suite_root doesn't exist\n";
          exit;
+      }
+
+      if (!BasicString::endsWith($test_suite_root, DIRECTORY_SEPARATOR))
+      {
+         $test_suite_root .= DIRECTORY_SEPARATOR;
       }
 
       $this->test_suite_root = $test_suite_root;
@@ -26,14 +33,31 @@ class PhTestRun {
    {
       $root_dir = dir($this->test_suite_root);
 
+      if ($root_dir === FALSE)
+      {
+         echo "Can't read ". $root_dir ."\n";
+         exit();
+      }
+
       while (false !== ($test_suite = $root_dir->read()))
       {
-         if (!is_dir($this->test_suite_root . DIRECTORY_SEPARATOR . $test_suite) ||
+         if (!is_dir($this->test_suite_root . $test_suite) ||
              in_array($test_suite, array('.', '..', 'data'))) continue;
 
-         $path = $this->test_suite_root . DIRECTORY_SEPARATOR . $test_suite;
+         $path = $this->test_suite_root . $test_suite;
+
+         if (!BasicString::endsWith($path, DIRECTORY_SEPARATOR))
+         {
+            $path .= DIRECTORY_SEPARATOR;
+         }
 
          $suite_dir = dir($path);
+
+         if ($suite_dir === FALSE)
+         {
+            echo "Can't read ". $suite_dir ."\n";
+            exit();
+         }
 
          $test_cases = array();
 
@@ -43,9 +67,9 @@ class PhTestRun {
             // only php files are valid test cases
             if (preg_match('/\.php$/', $test_case))
             {
-               $test_case_path = $path.'/'.$test_case;
+               $test_case_path = $path . $test_case;
 
-               $namespaced_class = substr(str_replace('/', '\\', $test_case_path), 0, -4);
+               $namespaced_class = substr(str_replace(['/', './'], ['\\', ''], $test_case_path), 0, -4);
                
                if (is_file($test_case_path))
                {
@@ -78,13 +102,16 @@ class PhTestRun {
 
    public function run_case($suite, $case, $method = NULL)
    {
-      // TODO
+      $path = $this->test_suite_root . $suite;
 
-      $path = $this->test_suite_root . DIRECTORY_SEPARATOR . $suite;
+      if (!BasicString::endsWith($path, DIRECTORY_SEPARATOR))
+      {
+         $path .= DIRECTORY_SEPARATOR;
+      }
 
-      $test_case_path = $path.'/'. $case . '.php';
+      $test_case_path = $path . $case . '.php';
 
-      $namespaced_class = substr(str_replace('/', '\\', $test_case_path), 0, -4);
+      $namespaced_class = substr(str_replace(['/', './'], ['\\', ''], $test_case_path), 0, -4);
 
       $test_cases = array();
       if (is_file($test_case_path))
@@ -99,9 +126,20 @@ class PhTestRun {
 
    public function run_cases($suite, ...$cases)
    {
-      $path = $this->test_suite_root . DIRECTORY_SEPARATOR . $suite;
+      $path = $this->test_suite_root . $suite;
+
+      if (!BasicString::endsWith($path, DIRECTORY_SEPARATOR))
+      {
+         $path .= DIRECTORY_SEPARATOR;
+      }
 
       $suite_dir = dir($path);
+
+      if ($suite_dir === FALSE)
+      {
+         echo "Can't read ". $suite_dir ."\n";
+         exit();
+      }
       
       $test_cases = array();
 
@@ -111,9 +149,9 @@ class PhTestRun {
          // only php files are valid test cases
          if (preg_match('/\.php$/', $test_case))
          {
-            $test_case_path = $path .'/'. $test_case;
+            $test_case_path = $path . $test_case;
 
-            $namespaced_class = substr(str_replace('/', '\\', $test_case_path), 0, -4);
+            $namespaced_class = substr(str_replace(['/', './'], ['\\', ''], $test_case_path), 0, -4);
             
             if (is_file($test_case_path) && (empty($cases) || in_array($test_case, $cases)))
             {

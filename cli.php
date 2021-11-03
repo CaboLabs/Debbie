@@ -22,6 +22,8 @@ if ($argc < 2)
    exit;
 }
 
+print_r($argv);
+
 $run = new \CaboLabs\PhTest\PhTestRun();
 $run->init($argv[1]);
 
