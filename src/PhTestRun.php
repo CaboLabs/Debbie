@@ -69,7 +69,7 @@ class PhTestRun {
             {
                $test_case_path = $path . $test_case;
 
-               $namespaced_class = substr(str_replace(['/', './'], ['\\', ''], $test_case_path), 0, -4);
+               $namespaced_class = substr(str_replace(['./', '/'], ['', '\\'], $test_case_path), 0, -4);
                
                if (is_file($test_case_path))
                {
@@ -111,7 +111,7 @@ class PhTestRun {
 
       $test_case_path = $path . $case . '.php';
 
-      $namespaced_class = substr(str_replace(['/', './'], ['\\', ''], $test_case_path), 0, -4);
+      $namespaced_class = substr(str_replace(['./', '/'], ['', '\\'], $test_case_path), 0, -4);
 
       $test_cases = array();
       if (is_file($test_case_path))
@@ -151,7 +151,7 @@ class PhTestRun {
          {
             $test_case_path = $path . $test_case;
 
-            $namespaced_class = substr(str_replace(['/', './'], ['\\', ''], $test_case_path), 0, -4);
+            $namespaced_class = substr(str_replace(['./', '/'], ['', '\\'], $test_case_path), 0, -4);
             
             if (is_file($test_case_path) && (empty($cases) || in_array($test_case, $cases)))
             {
