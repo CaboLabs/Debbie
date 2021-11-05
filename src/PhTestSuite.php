@@ -23,9 +23,13 @@ class PhTestSuite {
       {
          require_once($test_case_path);
 
-         // test case object has a reference to it's test suite
-         $test_case_object = new $test_case($this, $test_case_path);
-         $this->test_cases[$test_case] = $test_case_object;
+         // if the file found doesn't define a PhTestCase, do not try to create the test case object
+         if (class_exists($test_case) && is_subclass_of($test_case, '\CaboLabs\PhTest\PhTestCase'))
+         {
+            // test case object has a reference to it's test suite
+            $test_case_object = new $test_case($this, $test_case_path);
+            $this->test_cases[$test_case] = $test_case_object;
+         }
       }
    }
 
