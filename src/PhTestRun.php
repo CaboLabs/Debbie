@@ -2,7 +2,7 @@
 
 namespace CaboLabs\PhTest;
 
-use CaboLabs\PhBasic\BasicString;
+use \CaboLabs\PhBasic\BasicString as str;
 
 class PhTestRun {
 
@@ -21,7 +21,7 @@ class PhTestRun {
          exit;
       }
 
-      if (!BasicString::endsWith($test_suite_root, DIRECTORY_SEPARATOR))
+      if (!str::endsWith($test_suite_root, DIRECTORY_SEPARATOR))
       {
          $test_suite_root .= DIRECTORY_SEPARATOR;
       }
@@ -46,7 +46,7 @@ class PhTestRun {
 
          $path = $this->test_suite_root . $test_suite;
 
-         if (!BasicString::endsWith($path, DIRECTORY_SEPARATOR))
+         if (!str::endsWith($path, DIRECTORY_SEPARATOR))
          {
             $path .= DIRECTORY_SEPARATOR;
          }
@@ -104,7 +104,7 @@ class PhTestRun {
    {
       $path = $this->test_suite_root . $suite;
 
-      if (!BasicString::endsWith($path, DIRECTORY_SEPARATOR))
+      if (!str::endsWith($path, DIRECTORY_SEPARATOR))
       {
          $path .= DIRECTORY_SEPARATOR;
       }
@@ -128,7 +128,7 @@ class PhTestRun {
    {
       $path = $this->test_suite_root . $suite;
 
-      if (!BasicString::endsWith($path, DIRECTORY_SEPARATOR))
+      if (!str::endsWith($path, DIRECTORY_SEPARATOR))
       {
          $path .= DIRECTORY_SEPARATOR;
       }
@@ -159,6 +159,8 @@ class PhTestRun {
             }
          }
       }
+
+      $suite_dir->close();
 
       $phsuite = new PhTestSuite($suite, $test_cases);
       $phsuite->run($this->after_each_test_function);
