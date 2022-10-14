@@ -53,6 +53,6 @@ else
    $run->run_all();
 }
 
-$run->render_reports();
+$run->render_reports_html();
 
 ?>
