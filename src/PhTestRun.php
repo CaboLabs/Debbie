@@ -228,16 +228,16 @@ class PhTestRun {
       
       foreach ($this->reports as $i => $test_suite_reports)
       {
-         $html_report += '<ul>';
+         $html_report .= '<ul>';
          foreach ($test_suite_reports as $test_case => $reports)
          {
-            $html_report += '<ul>';
-            $html_report += '<li class="container"><p>Test case: '. $test_case .'</p>';
+            $html_report .= '<ul>';
+            $html_report .= '<li class="container"><p>Test case: '. $test_case .'</p>';
 
             foreach ($reports as $test_function => $report)
             {
-               $html_report += '<ul>';
-               $html_report += '<li class="container"><p>Test: '. $test_function .'</p>';
+               $html_report .= '<ul>';
+               $html_report .= '<li class="container"><p>Test: '. $test_function .'</p>';
 
                if (isset($report['asserts']))
                {
@@ -245,34 +245,34 @@ class PhTestRun {
                   {
                      if ($assert_report['type'] == 'ERROR')
                      {
-                        $html_report += '<li><p style="color:red">ERROR: '. $assert_report['msg'] .'</p></li>';
+                        $html_report .= '<li><p style="color:red">ERROR: '. $assert_report['msg'] .'</p></li>';
                      }
                      else if ($assert_report['type'] == 'OK')
                      {
-                        $html_report += '<li><p style="color:green">OK: '. $assert_report['msg'] .'</p></li>';
+                        $html_report .= '<li><p style="color:green">OK: '. $assert_report['msg'] .'</p></li>';
                      }
                      else if ($assert_report['type'] == 'EXCEPTION')
                      {
-                        $html_report += '<li><p style="color:blue">EXCEPTION: '. $assert_report['msg'] .'</p></li>';
+                        $html_report .= '<li><p style="color:blue">EXCEPTION: '. $assert_report['msg'] .'</p></li>';
                      }
                   }
                }
 
                if (!empty($report['output']))
                {
-                  $html_report += '<li><p style="color:gray">OUTPUT: '. $report['output'] .'</p></li>';
+                  $html_report .= '<li><p style="color:gray">OUTPUT: '. $report['output'] .'</p></li>';
                }
 
-               $html_report += '</li>';
-               $html_report += '</ul>';
+               $html_report .= '</li>';
+               $html_report .= '</ul>';
             }
-            $html_report += '</li>';
-            $html_report += '</ul>';
+            $html_report .= '</li>';
+            $html_report .= '</ul>';
          }
-         $html_report += '</ul>';
+         $html_report .= '</ul>';
       }
 
-      $html_report += '<br>';
+      $html_report .= '<br>';
 
       file_put_contents('prueba reporte.html', $html_report);
    }
