@@ -126,7 +126,6 @@ class PhTestRun {
 
    public function run_cases($suite, ...$cases)
    {
-      var_dump($cases);
       $path = $this->test_suite_root . $suite;
 
       if (!str::endsWith($path, DIRECTORY_SEPARATOR))
