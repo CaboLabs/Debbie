@@ -220,7 +220,7 @@ class PhTestRun {
       echo PHP_EOL;
    }
 
-   public function render_reports_html()
+   public function render_reports_html($path = null)
    {
       global $html_report, $html_head, $content, $html_end;
 
@@ -332,7 +332,14 @@ class PhTestRun {
       
       $content = $html_head.$html_report.$html_end;
 
-      file_put_contents('prueba reporte.html', $content);
+      if ($path != null)
+      {
+         file_put_contents($path, $content);
+      }
+      else
+      {
+         file_put_contents('prueba reporte.html', $content);
+      }
    }
 
    public function get_reports()
