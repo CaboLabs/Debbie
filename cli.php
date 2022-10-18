@@ -83,13 +83,12 @@ else
    $run->run_all();
 }
 
-// HTML test report generator
-if ($report_html && $report_html_path == null)
+if ($report_html && $report_html_path == null) // HTML test report generator
 {
    $run->render_reports_html();
 }
-else
-if ($report_html && $report_html_path != null)
+else 
+if ($report_html && $report_html_path != null) // HTML test report generator with specified path
 {
    $run->render_reports_html($report_html_path);
 }
