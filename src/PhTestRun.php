@@ -338,7 +338,7 @@ class PhTestRun {
       }
       else
       {
-         file_put_contents('prueba reporte.html', $content);
+         file_put_contents('Test_report.html', $content);
       }
    }
 

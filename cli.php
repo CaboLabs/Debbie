@@ -20,22 +20,8 @@ require __DIR__ . '/vendor/autoload.php';
 
 $report_html = false;
 
-$report_html_path = false;
+$report_html_path = null;
 
-
-var_dump(array_filter($argv, function($path) {
-   foreach ($argv as $argv_path) 
-{
-   $p = substr($argv_path, 0, 6);
-   if ($p == '-output')
-   {
-      $path = $argv_path;
-   }
-}
-   return $path;
-}, ARRAY_FILTER_USE_KEY));
-
-/*
 if (in_array('-report=html', $argv))
 {
    $report_html = true;
@@ -43,6 +29,19 @@ if (in_array('-report=html', $argv))
    $e = array_search('-report=html', $argv);
 
    unset($argv[$e]);
+   $argc--;
+}
+
+if (in_array('-output=', $argv))
+{
+   $report_html_path = end($argv);
+
+   $f = array_search('-output=', $argv);
+
+   unset($argv[$f]);
+   $argc--;
+
+   array_pop($argv);
    $argc--;
 }
 
@@ -84,18 +83,24 @@ else
    $run->run_all();
 }
 
-if ($report_html)
+if ($report_html && $report_html_path == null)
 {
    $run->render_reports_html();
-
-   if ($report_html_path)
-   {
-      $run->render_reports_html($report_html_path);
-   }
+}
+else
+if ($report_html && $report_html_path != null)
+{
+   $run->render_reports_html($report_html_path);
+}
+else
+if (!$report_html && $report_html_path != null)
+{
+   echo 'missing parameters, this should contain "-report=html" before "'. $report_html_path .'"'. PHP_EOL;
+   exit;
 }
 else
 {
    $run->render_reports();
 }
-*/
+
 ?>
