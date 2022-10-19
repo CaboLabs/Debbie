@@ -33,15 +33,15 @@ foreach ($argv as $k => $arg)
       $argc--;
    }
 
-   if ($search == '-output=')
+   if ($search == '-output')
    {
       $search_path = explode("=", $arg);
       $report_html_path = end($search_path);
       $argc--;
    }
+   var_dump($arg);
 }
-var_dump($output);
-var_dump($report_html_path);
+
 
 /*
 if ($argc < 2)
