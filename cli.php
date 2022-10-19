@@ -15,36 +15,35 @@ require __DIR__ . '/vendor/autoload.php';
  * argv[2] -> suite (optional)
  * argv[3] -> case (optional)
  * argv[4] -> -report=html (optional)
- * argv[5] -> -output=./output/out.html (optional)
+ * argv[5] -> -output=./output/out.html (optional), if no path is specified it will be saved in the root
  * */
 
-$report_html = false;
+$report_html_path = './';
 
-$report_html_path = null;
+$output = 'html';
 
-if (in_array('-report=html', $argv))
+foreach ($argv as $k => $arg) 
 {
-   $report_html = true;
+   $search = substr($arg, 0, 7);
 
-   $e = array_search('-report=html', $argv);
+   if ($search == '-report')
+   {
+      $type_out = explode("=", $arg);
+      $output = end($type_out);
+      $argc--;
+   }
 
-   unset($argv[$e]);
-   $argc--;
+   if ($search == '-output=')
+   {
+      $search_path = explode("=", $arg);
+      $report_html_path = end($search_path);
+      $argc--;
+   }
 }
+var_dump($output);
+var_dump($report_html_path);
 
-if (in_array('-output=', $argv))
-{
-   $report_html_path = end($argv);
-
-   $f = array_search('-output=', $argv);
-
-   unset($argv[$f]);
-   $argc--;
-
-   array_pop($argv);
-   $argc--;
-}
-
+/*
 if ($argc < 2)
 {
    echo 'Missing test_root and test_suite'. PHP_EOL;
@@ -83,24 +82,29 @@ else
    $run->run_all();
 }
 
-if ($report_html && $report_html_path == null) // HTML test report generator
+if ($output == 'html')
 {
-   $run->render_reports_html();
-}
-else 
-if ($report_html && $report_html_path != null) // HTML test report generator with specified path
-{
+   if ($report_html_path == './')
+   {
+      $report_html_path = null;
+   }
+
    $run->render_reports_html($report_html_path);
 }
 else
-if (!$report_html && $report_html_path != null)
+if ($output != 'html' || $output != 'text')
 {
-   echo 'missing parameters, this should contain "-report=html" before "'. $report_html_path .'"'. PHP_EOL;
+   echo '"output" should be equal to "html" or "text"'. PHP_EOL;
    exit;
 }
 else
+if ($output == 'text')
 {
    $run->render_reports();
 }
-
+else
+{
+   $run->render_reports_html();
+}
+*/
 ?>
