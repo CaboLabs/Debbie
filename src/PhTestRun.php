@@ -218,8 +218,60 @@ class PhTestRun {
       }
 
       echo PHP_EOL;
+      $this->get_summary_report();
    }
 
+
+   public function get_summary_report()
+   {
+      global $total_suites, $total_cases, $total_tests, $total_asserts, $total_failed, $total_successful, $exception;
+      
+      $summary_by_suite = array();
+
+      $total_suites = count($this->reports);
+
+      foreach ($this->reports as $i => $test_suite_reports)
+      {
+         foreach ($test_suite_reports as $test_case => $reports)
+         {
+            $total_cases ++;
+
+            foreach ($reports as $test_function => $report)
+            {
+               $total_tests++;
+
+               if (isset($report['asserts']))
+               {
+                  foreach ($report['asserts'] as $assert_report)
+                  {
+                     $total_asserts ++;
+
+                     if ($assert_report['type'] == 'ERROR')
+                     {
+                        $total_failed ++;
+                     }
+                     else if ($assert_report['type'] == 'OK')
+                     {
+                        $total_successful ++;
+                     }
+                     else if ($assert_report['type'] == 'EXCEPTION')
+                     {
+                        $exception ++;
+                     }
+                  }
+               }
+            }
+         }
+      }
+      echo'suites '. $total_suites. PHP_EOL;
+      echo'cases '. $total_cases. PHP_EOL;
+      echo'tests '. $total_tests. PHP_EOL;
+      echo'asserts '. $total_asserts. PHP_EOL;
+      echo'failed '. $total_failed. PHP_EOL;
+      echo'successful '. $total_successful. PHP_EOL;
+      echo'$exception '. $exception. PHP_EOL;
+      var_dump($summary_by_suite);
+   }
 
    public function get_reports()
    {
