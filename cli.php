@@ -15,14 +15,14 @@ require __DIR__ . '/vendor/autoload.php';
  * argv[2] -> suite (optional)
  * argv[3] -> case (optional)
  * argv[4] -> -report=html (optional)
- * argv[5] -> -output=./output/out.html (optional), if no path is specified it will be saved in the root
+ * argv[5] -> -output="./output/out.html" (optional), if no path is specified it will be saved in the root
  * */
 
 $report_html_path = './';
 
 $output = 'html';
 
-foreach ($argv as $k => $arg) 
+foreach ($argv as $arg) 
 {
    $search = substr($arg, 0, 7);
 
@@ -39,17 +39,13 @@ foreach ($argv as $k => $arg)
       $report_html_path = end($search_path);
       $argc--;
    }
-   var_dump($arg);
 }
 
-
-/*
 if ($argc < 2)
 {
    echo 'Missing test_root and test_suite'. PHP_EOL;
    exit;
 }
-
 
 $run = new \CaboLabs\PhTest\PhTestRun();
 $run->init($argv[1]);
@@ -84,17 +80,12 @@ else
 
 if ($output == 'html')
 {
-   if ($report_html_path == './')
-   {
-      $report_html_path = null;
-   }
-
    $run->render_reports_html($report_html_path);
 }
 else
-if ($output != 'html' || $output != 'text')
+if ($output != 'html' && $output != 'text')
 {
-   echo '"output" should be equal to "html" or "text"'. PHP_EOL;
+   echo '"-report=" should be equal to "html" or "text"'. PHP_EOL;
    exit;
 }
 else
@@ -104,7 +95,7 @@ if ($output == 'text')
 }
 else
 {
-   $run->render_reports_html();
+   $run->render_reports_html($report_html_path);
 }
-*/
+
 ?>

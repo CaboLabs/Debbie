@@ -220,9 +220,9 @@ class PhTestRun {
       echo PHP_EOL;
    }
 
-   public function render_reports_html($path = null)
+   public function render_reports_html($path)
    {
-      global $html_report, $html_head, $content, $html_end;
+      global $html_report, $content;
 
       $html_report = '<h1>Test report<h1>';
       
@@ -273,7 +273,7 @@ class PhTestRun {
       }
 
       //css provisional
-      $html_head = <<< EOD
+      $content = <<< EOD
          <!DOCTYPE html>
          <html lang="en">
          <head>
@@ -325,21 +325,16 @@ class PhTestRun {
          margin-left: -17px;
          }
          </style><body>
+
+         $html_report
+         
+         </body></html>
          EOD;
-
-      $html_end = '</body></html>';
       // end css provisional
-      
-      $content = $html_head.$html_report.$html_end;
 
-      if ($path != null)
-      {
-         file_put_contents($path, $content);
-      }
-      else
-      {
-         file_put_contents('Test_report.html', $content);
-      }
+      $path == './' ? 'test_report.html' : $path;
+
+      file_put_contents($path, $content);
    }
 
    public function get_reports()
