@@ -204,7 +204,6 @@ class PhTestRun {
                         echo "|   |   └── \033[91mERROR: ". $assert_report['msg'] ."\033[0m". PHP_EOL;
                      
                         $total_failed ++;
-                        array_push($total_cases_failed, $test_case);
                      }
                      else if ($assert_report['type'] == 'OK')
                      {
@@ -217,11 +216,6 @@ class PhTestRun {
                      {
                         echo '|   |   |'. PHP_EOL;
                         echo "|   |   └── \033[94mEXCEPTION: ". $assert_report['msg'] ."\033[0m". PHP_EOL;
-                     }
-
-                     if (in_array())
-                     {
-                        array_push($total_cases_successful, $test_case);
                      }
                   }
 
@@ -237,6 +231,16 @@ class PhTestRun {
                echo '|   |'. PHP_EOL;
 
             }
+
+            if ($total_failed >= 1)
+            {
+               array_push($total_cases_failed, $test_case);
+            }
+            else
+            {
+               array_push($total_cases_successful, $test_case);
+            }
+            
          }
       }
 
@@ -263,22 +267,45 @@ class PhTestRun {
 
       echo '|   | |'. PHP_EOL;
 
-      echo '|   | |─── Cases failed: ' . PHP_EOL;
-
-      foreach ($total_cases_failed as $total_case_failed)
+      if (count($total_cases_failed) >= 1)
       {
-         echo '|   | | |─── '. $total_case_failed . PHP_EOL;
+
+         echo '|   | |─── Cases failed: ' . PHP_EOL;
+
+         echo '|   | |'. PHP_EOL;
+
+         foreach ($total_cases_failed as $total_case_failed)
+         {
+            echo '|   | | |─── '. $total_case_failed . PHP_EOL;
+
+            echo '|   | |'. PHP_EOL;
+         }
+      }
+      else
+      {
+         echo '|   | |─── Cases failed: 0' . PHP_EOL;
 
          echo '|   | |'. PHP_EOL;
       }
 
-      echo '|   | |─── Total cases successful: ' . PHP_EOL;
-
-      foreach ($total_cases_successful as $total_case_successful)
+      if (count($total_cases_successful) >= 1)
       {
-         echo '|   | | |─── '. $total_case_successful . PHP_EOL;
+         echo '|   | |─── Cases successful: ' . PHP_EOL;
 
-         echo '|   |'. PHP_EOL;
+         echo '|   | |'. PHP_EOL;
+
+         foreach ($total_cases_successful as $total_case_successful)
+         {
+            echo '|   | | |─── '. $total_case_successful . PHP_EOL;
+
+            echo '|   |'. PHP_EOL;
+         }
+      }
+      else
+      {
+         echo '|   | |─── Cases successful: 0' . PHP_EOL;
+
+         echo '|   | |'. PHP_EOL;
       }
 
       echo '|   ├── Total tests: '. $total_tests . PHP_EOL;
