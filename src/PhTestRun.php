@@ -146,18 +146,22 @@ class PhTestRun {
       // $test_case is a class name
       while (false !== ($test_case = $suite_dir->read()))
       {
-         // only php files are valid test cases
-         if (preg_match('/\.php$/', $test_case))
+         if (empty($cases))
          {
             $test_case_path = $path . $test_case;
-
-            $namespaced_class = substr(str_replace(['./', '/'], ['', '\\'], $test_case_path), 0, -4);
-            
-            if (is_file($test_case_path) && (empty($cases) || in_array($test_case, $cases)))
-            {
-               $test_cases[$namespaced_class] = $test_case_path;
-            }
          }
+         else
+         {
+            $test_case_path = $path . $cases[0] . '.php';
+         }
+         
+         $namespaced_class = substr(str_replace(['./', '/'], ['', '\\'], $test_case_path), 0, -4);
+           
+         if (is_file($test_case_path))
+         {
+            $test_cases[$namespaced_class] = $test_case_path;
+         }
+   
       }
 
       $suite_dir->close();
