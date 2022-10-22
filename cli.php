@@ -18,9 +18,9 @@ require __DIR__ . '/vendor/autoload.php';
  * argv[5] -> -output="./output/out.html" (optional), if no path is specified it will be saved in the root
  * */
 
-$report_html_path = './';
+$output = './';
 
-$output = 'html';
+$report = 'html';
 
 foreach ($argv as $arg) 
 {
@@ -29,14 +29,14 @@ foreach ($argv as $arg)
    if ($search == '-report')
    {
       $type_out = explode("=", $arg);
-      $output = end($type_out);
+      $report = end($type_out);
       $argc--;
    }
 
    if ($search == '-output')
    {
       $search_path = explode("=", $arg);
-      $report_html_path = end($search_path);
+      $output = end($search_path);
       $argc--;
    }
 }
@@ -78,24 +78,24 @@ else
    $run->run_all();
 }
 
-if ($output == 'html')
+if ($report == 'html')
 {
-   $run->render_reports_html($report_html_path);
+   $run->render_reports_html($output);
 }
 else
-if ($output != 'html' && $output != 'text')
+if ($report != 'html' && $report != 'text')
 {
    echo '"-report=" should be equal to "html" or "text"'. PHP_EOL;
    exit;
 }
 else
-if ($output == 'text')
+if ($report == 'text')
 {
    $run->render_reports();
 }
 else
 {
-   $run->render_reports_html($report_html_path);
+   $run->render_reports_html($output);
 }
 
 ?>
