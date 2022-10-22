@@ -332,7 +332,10 @@ class PhTestRun {
          EOD;
       // end css provisional
 
-      $path == './' ? 'test_report.html' : $path;
+      if ($path == './')
+      {
+         $path = 'test_report.html';
+      }
 
       file_put_contents($path, $content);
    }
