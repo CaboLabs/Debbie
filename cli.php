@@ -22,7 +22,7 @@ $report_html_path = './';
 
 $output = 'html';
 
-foreach ($argv as $arg) 
+foreach ($argv as $arg)
 {
    $search = substr($arg, 0, 7);
 
