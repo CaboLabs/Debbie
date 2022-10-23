@@ -224,6 +224,125 @@ class PhTestRun {
       echo PHP_EOL;
    }
 
+   public function render_reports_html($path)
+   {
+      global $html_report, $content;
+
+      $html_report = '<h1>Test report<h1>';
+      
+      foreach ($this->reports as $i => $test_suite_reports)
+      {
+         $html_report .= '<ul>';
+         foreach ($test_suite_reports as $test_case => $reports)
+         {
+            $html_report .= '<ul>';
+            $html_report .= '<li class="container"><p>Test case: '. $test_case .'</p>';
+
+            foreach ($reports as $test_function => $report)
+            {
+               $html_report .= '<ul>';
+               $html_report .= '<li class="container" style="margin-top: 10px;"><p>Test: '. $test_function .'</p>';
+
+               if (isset($report['asserts']))
+               {
+                  foreach ($report['asserts'] as $assert_report)
+                  {
+                     if ($assert_report['type'] == 'ERROR')
+                     {
+                        $html_report .= '<li><p style="color:red">ERROR: '. $assert_report['msg'] .'</p></li>';
+                     }
+                     else if ($assert_report['type'] == 'OK')
+                     {
+                        $html_report .= '<li><p style="color:green">OK: '. $assert_report['msg'] .'</p></li>';
+                     }
+                     else if ($assert_report['type'] == 'EXCEPTION')
+                     {
+                        $html_report .= '<li><p style="color:blue">EXCEPTION: '. $assert_report['msg'] .'</p></li>';
+                     }
+
+                     if (!empty($report['output']))
+                     {
+                        $html_report .= '<li><p style="color:gray">OUTPUT: '. $report['output'] .'</p></li>';
+                     }
+                  }
+               }
+
+               $html_report .= '</li>';
+               $html_report .= '</ul>';
+            }
+            $html_report .= '</li><br>';
+            $html_report .= '</ul>';
+         }
+         $html_report .= '</ul><br>';
+      }
+
+      //css provisional
+      $content = <<< EOD
+         <!DOCTYPE html>
+         <html lang="en">
+         <head>
+         <meta charset="UTF-8">
+         <meta http-equiv="X-UA-Compatible" content="IE=edge">
+         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+         <title>Document</title>
+         </head>
+         <style>
+         body{
+            font-size: 10px;
+            line-height: 35px;
+         }
+         ul,
+         li {
+         list-style: none;
+         margin: 0;
+         padding: 0;
+         }
+         ul {
+         padding-left: 1em;
+         }
+         li {
+         padding-left: 1em;
+         border: 1px dotted black;
+         border-width: 0 0 1px 1px;
+         }
+         li.container {
+         border-bottom: 0px;
+         }
+         li.empty {
+         font-style: italic;
+         color: silver;
+         border-color: silver;
+         }
+         li p {
+         margin: 0;
+         background: white;
+         position: relative;
+         top: 0.5em;
+         }
+         li ul {
+         border-top: 1px dotted black;
+         margin-left: -1em;
+         padding-left: 2em;
+         }
+         ul li:last-child ul {
+         border-left: 1px solid white;
+         margin-left: -17px;
+         }
+         </style><body>
+
+         $html_report
+         
+         </body></html>
+         EOD;
+      // end css provisional
+
+      if ($path == './')
+      {
+         $path = 'test_report.html';
+      }
+
+      file_put_contents($path, $content);
+   }
 
    public function get_reports()
    {
