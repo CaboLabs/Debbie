@@ -19,10 +19,11 @@ require __DIR__ . '/vendor/autoload.php';
  * */
 
 $output = './';
-
 $report = 'html';
+$output_index = 0;
+$report_index = 0;
 
-foreach ($argv as $arg)
+foreach ($argv as $i => $arg)
 {
    $search = substr($arg, 0, 7);
 
@@ -31,6 +32,7 @@ foreach ($argv as $arg)
       $type_out = explode("=", $arg);
       $report = end($type_out);
       $argc--;
+      $report_index = $i;
    }
 
    if ($search == '-output')
@@ -38,8 +40,14 @@ foreach ($argv as $arg)
       $search_path = explode("=", $arg);
       $output = end($search_path);
       $argc--;
+      $output_index = $i;
    }
 }
+
+// remove output and report parameters, so the rest are in the same order for the execution (suite, class, function)
+if ($output_index > 0) unset($argv[$output_index]);
+if ($report_index > 0) unset($argv[$report_index]);
+$argv = array_values($argv);
 
 if ($argc < 2)
 {
