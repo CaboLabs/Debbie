@@ -171,7 +171,7 @@ class PhTestRun {
       $this->reports[] = $phsuite->get_reports();
    }
 
-   public function render_reports()
+   public function render_reports($test_time)
    {
       global $total_suites, $total_cases, $total_tests, $total_asserts, $total_failed, $total_successful;
 
@@ -185,6 +185,9 @@ class PhTestRun {
 
          foreach ($test_suite_reports as $test_case => $reports)
          {
+            $successful = 0;
+            $failed = 0;
+
             echo '├── Test case: '. $test_case .'  ── Total case: '. count($reports) . ' time:xxx' . PHP_EOL;
             echo '|   |'. PHP_EOL;
 
@@ -192,6 +195,7 @@ class PhTestRun {
 
             foreach ($reports as $test_function => $report)
             {
+
                echo '|   ├── Test: '. $test_function . PHP_EOL;
 
                $total_tests ++;
@@ -208,6 +212,7 @@ class PhTestRun {
                         echo "|   |   └── \033[91mERROR: ". $assert_report['msg'] ."\033[0m". PHP_EOL;
                      
                         $total_failed ++;
+                        $failed ++;
                      }
                      else if ($assert_report['type'] == 'OK')
                      {
@@ -215,6 +220,7 @@ class PhTestRun {
                         echo "|   |   └── \033[92mOK: ". $assert_report['msg'] ."\033[0m". PHP_EOL;
                      
                         $total_successful ++;
+                        $successful ++;
                      }
                      else if ($assert_report['type'] == 'EXCEPTION')
                      {
@@ -238,40 +244,59 @@ class PhTestRun {
 
             if ($total_failed >= 1)
             {
-               array_push($total_cases_failed, $test_case);
+               $total_cases_failed[] = [
+                  'case' => $test_case,
+                  'case_failed' => $failed, 
+                  'case_successful' => $successful
+               ];
             }
             else
             {
-               array_push($total_cases_successful, $test_case);
+               $total_cases_successful[] = [
+                  'case' => $test_case, 
+                  'case_failed' => $failed, 
+                  'case_successful' => $successful
+               ];
             }
             
          }
       }
 
       echo PHP_EOL;
-
-      $this->get_summary_report($total_suites, $total_cases, $total_tests, $total_asserts, $total_failed, $total_successful, $total_cases_failed, $total_cases_successful);
+      
+      $this->get_summary_report($test_time, $total_suites, $total_cases, $total_tests, $total_asserts, $total_failed, $total_successful, $total_cases_failed, $total_cases_successful);
    
    }
 
-   public function render_reports_html($path)
+   public function render_reports_html($path, $test_time)
    {
-      global $html_report, $content;
+      global $html_report, $content, $total_suites, $total_cases, $total_tests, $total_asserts, $total_failed, $total_successful;
 
+      $total_cases_failed = $total_cases_successful = array();
+      
       $html_report = '<h1>Test report<h1>';
       
       foreach ($this->reports as $i => $test_suite_reports)
       {
          $html_report .= '<ul>';
+         $total_suites ++;
+
          foreach ($test_suite_reports as $test_case => $reports)
          {
+            $successful = 0;
+            $failed = 0;
+            
             $html_report .= '<ul>';
             $html_report .= '<li class="container"><p>Test case: '. $test_case .'</p>';
+
+            $total_cases ++;
 
             foreach ($reports as $test_function => $report)
             {
                $html_report .= '<ul>';
                $html_report .= '<li class="container" style="margin-top: 10px;"><p>Test: '. $test_function .'</p>';
+
+               $total_tests ++;
 
                if (isset($report['asserts']))
                {
@@ -280,10 +305,16 @@ class PhTestRun {
                      if ($assert_report['type'] == 'ERROR')
                      {
                         $html_report .= '<li><p style="color:red">ERROR: '. $assert_report['msg'] .'</p></li>';
+
+                        $total_failed ++;
+                        $failed ++;
                      }
                      else if ($assert_report['type'] == 'OK')
                      {
                         $html_report .= '<li><p style="color:green">OK: '. $assert_report['msg'] .'</p></li>';
+
+                        $total_successful ++;
+                        $successful ++;
                      }
                      else if ($assert_report['type'] == 'EXCEPTION')
                      {
@@ -295,6 +326,8 @@ class PhTestRun {
                         $html_report .= '<li><p style="color:gray">OUTPUT: '. $report['output'] .'</p></li>';
                      }
                   }
+
+                  $total_asserts ++;
                }
 
                $html_report .= '</li>';
@@ -302,8 +335,62 @@ class PhTestRun {
             }
             $html_report .= '</li><br>';
             $html_report .= '</ul>';
+
+            if ($total_failed >= 1)
+            {
+               $total_cases_failed[] = [
+                  'case' => $test_case,
+                  'case_failed' => $failed, 
+                  'case_successful' => $successful
+               ];
+            }
+            else
+            {
+               $total_cases_successful[] = [
+                  'case' => $test_case, 
+                  'case_failed' => $failed, 
+                  'case_successful' => $successful
+               ];
+            }
          }
          $html_report .= '</ul><br>';
+      }
+
+      if (count($total_cases_failed) >= 1)
+      {
+
+         $failed_cases = count($total_cases_failed);
+
+         foreach ($total_cases_failed as $total_case_failed)
+         {
+            $name_case = $total_case_failed["case"];
+
+            $asserts_failed = $total_case_failed["case_failed"];
+
+            $asserts_successful = $total_case_failed["case_successful"];
+         }
+      }
+      else
+      {
+         $failed_cases = 0;
+      }
+
+      if (count($total_cases_successful) >= 1)
+      {
+         $successful_case = count($total_cases_successful);
+
+         foreach ($total_cases_successful as $total_case_successful)
+         {
+            $name_case_succ = $total_case_successful["case"];
+
+            $asserts_failed_succ_case = $total_case_successful["case_failed"];
+
+            $asserts_successful_succ_case = $total_case_successful["case_successful"];
+         }
+      }
+      else
+      {
+         $successful_case = 0;
       }
 
       //css provisional
@@ -358,7 +445,59 @@ class PhTestRun {
          border-left: 1px solid white;
          margin-left: -17px;
          }
+
+         .grid-container {
+            display: grid;
+            gap: 10px;
+            padding: 10px;
+          }
+          
+          .grid-item {
+            padding: 20px;
+            border: 1px dotted black;
+            text-align: center;
+          }
+          
+          .item1 {
+            grid-column: 1;
+            grid-row: 1;
+          }
+          
+          .item2 {
+            grid-column: 2;
+            grid-row: 1;
+          }
+          
+          .item3 {
+            grid-column: 3;
+            grid-row: 1;
+          }
+          .item4 {
+            grid-column: 4;
+            grid-row: 1;
+          }
          </style><body>
+
+         <div class="grid-container">
+         <div class="grid-item item1">
+            <h1>Total suites: $total_suites </h1>
+            <h2> total time:  $test_time </h2>
+         </div>
+         <div class="grid-item item2">
+            <h1>Total tests cases: $total_cases </h1>
+            <div style='text-align: left;'>Total tests: $total_tests
+            <li>asserts failed: $total_failed</li>
+            <li>asserts successful: $total_successful</li>
+            <li>Total asserts: $total_asserts</li>
+            </div>
+         </div>
+         <div class="grid-item item3">
+            <h1>Cases failed: $failed_cases</h1>
+         </div>  
+         <div class="grid-item item4">
+            <h1>Cases successful: $successful_case</h1>
+         </div> 
+         </div>
 
          $html_report
          
@@ -374,15 +513,11 @@ class PhTestRun {
       file_put_contents($path, $content);
    }
 
-   public function get_summary_report($total_suites, $total_cases, $total_tests, $total_asserts, $total_failed, $total_successful, $total_cases_failed, $total_cases_successful)
+   public function get_summary_report($test_time, $total_suites, $total_cases, $total_tests, $total_asserts, $total_failed, $total_successful, $total_cases_failed, $total_cases_successful)
    {
       echo 'Summary reports: '. PHP_EOL . PHP_EOL;
 
-      echo '├── Total tests reports: '.  $total_suites . PHP_EOL;
-
-      echo '|   |'. PHP_EOL;
-
-      echo '|   ├─ total time: xxx'. PHP_EOL;
+      echo '├── Tests reports - Total suites: '.  $total_suites .'  --> total time: '. $test_time . PHP_EOL;
 
       echo '|   |'. PHP_EOL;
 
@@ -390,16 +525,44 @@ class PhTestRun {
 
       echo '|   | |'. PHP_EOL;
 
+      echo '|   | ├── Total tests: '. $total_tests . PHP_EOL;
+
+      echo '|   |'. PHP_EOL;
+
+      echo '|   |     |─── asserts failed: '. $total_failed . PHP_EOL;
+
+      echo '|   |     |'. PHP_EOL;
+
+      echo '|   |     |─── asserts successful: '. $total_successful . PHP_EOL;
+
+      echo '|   |'. PHP_EOL;
+
+      echo '|   |     |─── Total asserts: '. $total_asserts . PHP_EOL;
+
+      echo '|   |'. PHP_EOL;
+
+      echo '|   |'. PHP_EOL;
+
+      echo '|   |'. PHP_EOL;
+
       if (count($total_cases_failed) >= 1)
       {
 
-         echo '|   | |─── Cases failed: ' . PHP_EOL;
+         echo '|   | |─── Cases failed: ('. count($total_cases_failed) . ')'. PHP_EOL;
 
          echo '|   | |'. PHP_EOL;
 
          foreach ($total_cases_failed as $total_case_failed)
          {
-            echo '|   | | |─── '. $total_case_failed . PHP_EOL;
+            echo '|   | | |─── '. $total_case_failed["case"] . PHP_EOL;
+
+            echo '|   | | |─── '. PHP_EOL;
+
+            echo '|   | |          |─── asserts failed: '. $total_case_failed["case_failed"] . PHP_EOL;
+
+            echo '|   | |          | '. PHP_EOL;
+
+            echo '|   | |          |─── asserts successful: '. $total_case_failed["case_successful"] . PHP_EOL;
 
             echo '|   | |'. PHP_EOL;
          }
@@ -413,13 +576,21 @@ class PhTestRun {
 
       if (count($total_cases_successful) >= 1)
       {
-         echo '|   | |─── Cases successful: ' . PHP_EOL;
+         echo '|   | |─── Cases successful: ('. count($total_cases_successful) . ')'. PHP_EOL;
 
          echo '|   | |'. PHP_EOL;
 
          foreach ($total_cases_successful as $total_case_successful)
          {
-            echo '|   | | |─── '. $total_case_successful . PHP_EOL;
+            echo '|   | | |─── '. $total_case_successful["case"] . PHP_EOL;
+
+            echo '|   | | |─── '. PHP_EOL;
+
+            echo '|   | |          |─── asserts failed: '. $total_case_successful["case_failed"] . PHP_EOL;
+
+            echo '|   | |          | '. PHP_EOL;
+
+            echo '|   | |          |─── asserts successful: '. $total_case_successful["case_successful"] . PHP_EOL;
 
             echo '|   |'. PHP_EOL;
          }
@@ -430,20 +601,6 @@ class PhTestRun {
 
          echo '|   | |'. PHP_EOL;
       }
-
-      echo '|   ├── Total tests: '. $total_tests . PHP_EOL;
-
-      echo '|   |'. PHP_EOL;
-
-      echo '|   ├── Total asserts: '. $total_asserts . PHP_EOL;
-
-      echo '|   | |'. PHP_EOL;
-
-      echo '|   | |─── Total asserts failed: '. $total_failed . PHP_EOL;
-
-      echo '|   | |'. PHP_EOL;
-
-      echo '|   | |─── Total asserts successful: '. $total_successful . PHP_EOL;
 
       echo PHP_EOL;   
    }
