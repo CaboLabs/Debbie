@@ -275,6 +275,9 @@ class PhTestRun {
       $total_cases_failed = $total_cases_successful = array();
       
       $html_report = '<h1>Test report<h1>';
+
+      $item3 ="";
+      $item4 ="";
       
       foreach ($this->reports as $i => $test_suite_reports)
       {
@@ -360,14 +363,14 @@ class PhTestRun {
       {
 
          $failed_cases = count($total_cases_failed);
-
+         
          foreach ($total_cases_failed as $total_case_failed)
          {
-            $name_case = $total_case_failed["case"];
-
-            $asserts_failed = $total_case_failed["case_failed"];
-
-            $asserts_successful = $total_case_failed["case_successful"];
+            $item3 .= "
+            <div style='text-align: left;'>- ". $total_case_failed['case'] .": 
+             asserts failed: ". $total_case_failed['case_failed'] ." / 
+             asserts successful: ". $total_case_failed['case_successful'] ."
+            </div>";
          }
       }
       else
@@ -381,11 +384,11 @@ class PhTestRun {
 
          foreach ($total_cases_successful as $total_case_successful)
          {
-            $name_case_succ = $total_case_successful["case"];
-
-            $asserts_failed_succ_case = $total_case_successful["case_failed"];
-
-            $asserts_successful_succ_case = $total_case_successful["case_successful"];
+            $item4 .= "<div style='text-align: left;'>- ". $total_case_successful['case'].": 
+             asserts failed: ". $total_case_successful["case_failed"] ." / 
+             asserts successful: ". $total_case_successful["case_successful"] ."
+            </div>";
+           
          }
       }
       else
@@ -481,15 +484,9 @@ class PhTestRun {
          <div class="grid-container">
          <div class="grid-item item1">
             <h1>Total suites: $total_suites </h1>
-            <h2> total time:  $test_time </h2>
          </div>
          <div class="grid-item item2">
             <h1>Total tests cases: $total_cases </h1>
-            <div style='text-align: left;'>Total tests: $total_tests
-            <li>asserts failed: $total_failed</li>
-            <li>asserts successful: $total_successful</li>
-            <li>Total asserts: $total_asserts</li>
-            </div>
          </div>
          <div class="grid-item item3">
             <h1>Cases failed: $failed_cases</h1>
@@ -500,6 +497,30 @@ class PhTestRun {
          </div>
 
          $html_report
+
+         <h1>Summary</h1>
+         <div class="grid-container">
+         <div class="grid-item item1">
+            <h1>Total suites: $total_suites </h1>
+            <h2> total time:  $test_time </h2>
+         </div>
+         <div class="grid-item item2">
+            <h1>Total tests cases: $total_cases </h1>
+            <div style="text-align: left;">Total tests: $total_tests
+            <li>asserts failed: $total_failed</li>
+            <li>asserts successful: $total_successful</li>
+            <li>Total asserts: $total_asserts</li>
+            </div>
+         </div>
+         <div class="grid-item item3">
+            <h1>Cases failed: $failed_cases</h1>
+            $item3
+         </div>  
+         <div class="grid-item item4">
+            <h1>Cases successful: $successful_case</h1>
+            $item4
+         </div> 
+         </div>
          
          </body></html>
          EOD;
