@@ -502,14 +502,14 @@ class PhTestRun {
          <div class="grid-container">
          <div class="grid-item item1">
             <h1>Total suites: $total_suites </h1>
-            <h2> total time:  $test_time </h2>
+            <h2> total time:  $test_time μs</h2>
          </div>
          <div class="grid-item item2">
             <h1>Total tests cases: $total_cases </h1>
             <div style="text-align: left;">Total tests: $total_tests
-            <a>asserts failed: $total_failed</a>
-            <a>asserts successful: $total_successful</a>
-            <a>Total asserts: $total_asserts</a>
+            <p>asserts failed: $total_failed</p>
+            <p>asserts successful: $total_successful</p>
+            <p>Total asserts: $total_asserts</p>
             </div>
          </div>
          <div class="grid-item item3">
