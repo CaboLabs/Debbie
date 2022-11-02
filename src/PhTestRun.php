@@ -507,9 +507,9 @@ class PhTestRun {
          <div class="grid-item item2">
             <h1>Total tests cases: $total_cases </h1>
             <div style="text-align: left;">Total tests: $total_tests
-            <li>asserts failed: $total_failed</li>
-            <li>asserts successful: $total_successful</li>
-            <li>Total asserts: $total_asserts</li>
+            <a>asserts failed: $total_failed</a>
+            <a>asserts successful: $total_successful</a>
+            <a>Total asserts: $total_asserts</a>
             </div>
          </div>
          <div class="grid-item item3">
@@ -538,89 +538,89 @@ class PhTestRun {
    {
       echo 'Summary reports: '. PHP_EOL . PHP_EOL;
 
-      echo '├── Tests reports - Total suites: '.  $total_suites .'  --> total time: '. $test_time . PHP_EOL;
+      echo 'Tests reports - Total suites: '.  $total_suites .'  --> total time: '. $test_time .  ' μs' .PHP_EOL;
 
-      echo '|   |'. PHP_EOL;
+      echo PHP_EOL;
 
-      echo '|   ├── Total tests cases: '. $total_cases . PHP_EOL;
+      echo 'Total tests cases: '. $total_cases . PHP_EOL;
 
-      echo '|   | |'. PHP_EOL;
+      echo PHP_EOL;
 
-      echo '|   | ├── Total tests: '. $total_tests . PHP_EOL;
+      echo 'Total tests: '. $total_tests . PHP_EOL;
 
-      echo '|   |'. PHP_EOL;
+      echo PHP_EOL;
 
-      echo '|   |     |─── asserts failed: '. $total_failed . PHP_EOL;
+      echo '  asserts failed: '. $total_failed . PHP_EOL;
 
-      echo '|   |     |'. PHP_EOL;
+      echo PHP_EOL;
 
-      echo '|   |     |─── asserts successful: '. $total_successful . PHP_EOL;
+      echo '  asserts successful: '. $total_successful . PHP_EOL;
 
-      echo '|   |'. PHP_EOL;
+      echo PHP_EOL;
 
-      echo '|   |     |─── Total asserts: '. $total_asserts . PHP_EOL;
+      echo '  Total asserts: '. $total_asserts . PHP_EOL;
 
-      echo '|   |'. PHP_EOL;
+      echo PHP_EOL;
 
-      echo '|   |'. PHP_EOL;
-
-      echo '|   |'. PHP_EOL;
+      echo PHP_EOL;
 
       if (count($total_cases_failed) >= 1)
       {
 
-         echo '|   | |─── Cases failed: ('. count($total_cases_failed) . ')'. PHP_EOL;
+         echo 'Cases failed: ('. count($total_cases_failed) . ')'. PHP_EOL;
 
-         echo '|   | |'. PHP_EOL;
+         echo PHP_EOL;
 
          foreach ($total_cases_failed as $total_case_failed)
          {
-            echo '|   | | |─── '. $total_case_failed["case"] . PHP_EOL;
+            echo '  '. $total_case_failed["case"] . PHP_EOL;
 
-            echo '|   | | |─── '. PHP_EOL;
+            echo PHP_EOL;
 
-            echo '|   | |          |─── asserts failed: '. $total_case_failed["case_failed"] . PHP_EOL;
+            echo '    asserts failed: '. $total_case_failed["case_failed"] . PHP_EOL;
 
-            echo '|   | |          | '. PHP_EOL;
+            echo PHP_EOL;
 
-            echo '|   | |          |─── asserts successful: '. $total_case_failed["case_successful"] . PHP_EOL;
+            echo '    asserts successful: '. $total_case_failed["case_successful"] . PHP_EOL;
 
-            echo '|   | |'. PHP_EOL;
+            echo PHP_EOL;
          }
       }
       else
       {
-         echo '|   | |─── Cases failed: 0' . PHP_EOL;
+         echo 'Cases failed: 0' . PHP_EOL;
 
-         echo '|   | |'. PHP_EOL;
+         echo PHP_EOL;
       }
 
       if (count($total_cases_successful) >= 1)
       {
-         echo '|   | |─── Cases successful: ('. count($total_cases_successful) . ')'. PHP_EOL;
+         echo 'Cases successful: ('. count($total_cases_successful) . ')'. PHP_EOL;
 
-         echo '|   | |'. PHP_EOL;
+         echo PHP_EOL;
+
+         echo PHP_EOL;
 
          foreach ($total_cases_successful as $total_case_successful)
          {
-            echo '|   | | |─── '. $total_case_successful["case"] . PHP_EOL;
+            echo '  '. $total_case_successful["case"] . PHP_EOL;
 
-            echo '|   | | |─── '. PHP_EOL;
+            echo PHP_EOL;
 
-            echo '|   | |          |─── asserts failed: '. $total_case_successful["case_failed"] . PHP_EOL;
+            echo '    asserts failed: '. $total_case_successful["case_failed"] . PHP_EOL;
 
-            echo '|   | |          | '. PHP_EOL;
+            echo PHP_EOL;
 
-            echo '|   | |          |─── asserts successful: '. $total_case_successful["case_successful"] . PHP_EOL;
+            echo '    asserts successful: '. $total_case_successful["case_successful"] . PHP_EOL;
 
-            echo '|   |'. PHP_EOL;
+            echo PHP_EOL;
          }
       }
       else
       {
-         echo '|   | |─── Cases successful: 0' . PHP_EOL;
+         echo 'Cases successful: 0' . PHP_EOL;
 
-         echo '|   | |'. PHP_EOL;
+         echo PHP_EOL;
       }
 
       echo PHP_EOL;   
