@@ -22,6 +22,10 @@ $output = './';
 $report = 'html';
 $output_index = 0;
 $report_index = 0;
+$test_start_time = 0;
+$test_end_time = 0;
+$test_time = 0;
+
 
 foreach ($argv as $i => $arg)
 {
@@ -56,6 +60,8 @@ if ($argc < 2)
 }
 
 $run = new \CaboLabs\PhTest\PhTestRun();
+
+$test_start_time = microtime(true);
 $run->init($argv[1]);
 
 // Method specific
@@ -86,9 +92,12 @@ else
    $run->run_all();
 }
 
+$test_end_time = microtime(true);
+$test_time = round($test_end_time - $test_start_time, 5);
+
 if ($report == 'html')
 {
-   $run->render_reports_html($output);
+   $run->render_reports_html($output, $test_time);
 }
 else
 if ($report != 'html' && $report != 'text')
@@ -99,11 +108,11 @@ if ($report != 'html' && $report != 'text')
 else
 if ($report == 'text')
 {
-   $run->render_reports();
+   $run->render_reports($test_time);
 }
 else
 {
-   $run->render_reports_html($output);
+   $run->render_reports_html($output, $test_time);
 }
 
 ?>
