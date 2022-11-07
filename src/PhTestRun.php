@@ -188,7 +188,7 @@ class PhTestRun {
             $successful = 0;
             $failed = 0;
 
-            echo '├── Test case: '. $test_case .'  ── Total case: '. count($reports) . ' time:xxx' . PHP_EOL;
+            echo '├── Test case: '. $test_case .'  ── Total case: '. count($reports) . PHP_EOL;
             echo '|   |'. PHP_EOL;
 
             $total_cases ++;
@@ -242,7 +242,7 @@ class PhTestRun {
 
             }
 
-            if ($total_failed >= 1)
+            if ($failed > 0)
             {
                $total_cases_failed[] = [
                   'case' => $test_case,
@@ -250,7 +250,8 @@ class PhTestRun {
                   'case_successful' => $successful
                ];
             }
-            else
+
+            if ($successful > 0 && $failed == 0)
             {
                $total_cases_successful[] = [
                   'case' => $test_case, 
@@ -265,7 +266,6 @@ class PhTestRun {
       echo PHP_EOL;
       
       $this->get_summary_report($test_time, $total_suites, $total_cases, $total_tests, $total_asserts, $total_failed, $total_successful, $total_cases_failed, $total_cases_successful);
-   
    }
 
    public function render_reports_html($path, $test_time)
@@ -339,7 +339,7 @@ class PhTestRun {
             $html_report .= '</li><br>';
             $html_report .= '</ul>';
 
-            if ($total_failed >= 1)
+            if ($failed > 0)
             {
                $total_cases_failed[] = [
                   'case' => $test_case,
@@ -347,7 +347,8 @@ class PhTestRun {
                   'case_successful' => $successful
                ];
             }
-            else
+
+            if ($successful > 0 && $failed == 0)
             {
                $total_cases_successful[] = [
                   'case' => $test_case, 
@@ -363,15 +364,29 @@ class PhTestRun {
       {
 
          $failed_cases = count($total_cases_failed);
+
+         $item3 .= "<h1>Failed Summary:</h1> 
+            <table>
+            <tr>
+            <th>Suite</th>
+            <th>Class</th>
+            <th>Successful</th>
+            <th>Failed</th>
+            </tr>";
          
          foreach ($total_cases_failed as $total_case_failed)
          {
-            $item3 .= "
-            <div style='text-align: left;'>- ". $total_case_failed['case'] .": 
-             asserts failed: ". $total_case_failed['case_failed'] ." / 
-             asserts successful: ". $total_case_failed['case_successful'] ."
-            </div>";
+            $names_failed = explode("\\", $total_case_failed['case']);
+
+            $item3 .= "<tr>
+               <td>". $names_failed[1]."</td>
+               <td>". $names_failed[2]."</td>
+               <td> ". $total_case_failed['case_successful'] ."</td>
+               <td>". $total_case_failed['case_failed'] ."</td>
+            </tr>";
          }
+
+         $item3 .="</table>";
       }
       else
       {
@@ -382,14 +397,26 @@ class PhTestRun {
       {
          $successful_case = count($total_cases_successful);
 
+         $item4 .= "<h1>Successful Summary:</h1>
+            <table>
+               <tr>
+                  <th>Suite</th>
+                  <th>Class</th>
+                  <th>Successful</th>
+               </tr>";
+
          foreach ($total_cases_successful as $total_case_successful)
          {
-            $item4 .= "<div style='text-align: left;'>- ". $total_case_successful['case'].": 
-             asserts failed: ". $total_case_successful["case_failed"] ." / 
-             asserts successful: ". $total_case_successful["case_successful"] ."
-            </div>";
-           
+            $names_successful = explode("\\", $total_case_successful['case']);
+
+            $item4 .= "<tr>
+               <td>". $names_successful[1]."</td>
+               <td>". $names_successful[2]."</td>
+               <td> ". $total_case_successful["case_successful"] ."</td>
+            </tr>";           
          }
+
+         $item4 .= "</table>";
       }
       else
       {
@@ -479,6 +506,15 @@ class PhTestRun {
             grid-column: 4;
             grid-row: 1;
           }
+          table, th, td{
+            border: 1px solid gray;
+            border-collapse: collapse;
+            font-size: 18px;
+            padding: 5px;
+          }
+          td {
+            text-align: right;
+          }
          </style><body>
 
          <div class="grid-container">
@@ -498,30 +534,34 @@ class PhTestRun {
 
          $html_report
 
-         <h1>Summary</h1>
-         <div class="grid-container">
-         <div class="grid-item item1">
-            <h1>Total suites: $total_suites </h1>
-            <h2> total time:  $test_time μs</h2>
-         </div>
-         <div class="grid-item item2">
-            <h1>Total tests cases: $total_cases </h1>
-            <div style="text-align: left;">Total tests: $total_tests
-            <p>asserts failed: $total_failed</p>
-            <p>asserts successful: $total_successful</p>
-            <p>Total asserts: $total_asserts</p>
-            </div>
-         </div>
-         <div class="grid-item item3">
-            <h1>Cases failed: $failed_cases</h1>
-            $item3
-         </div>  
-         <div class="grid-item item4">
-            <h1>Cases successful: $successful_case</h1>
-            $item4
-         </div> 
-         </div>
-         
+         <h1>Total Summary:</h1>
+         <table>
+            <tr>
+            <th colspan="7" style="text-align: left;">total time:  $test_time μs</th>
+            </tr>
+            <tr>
+               <th>Total suites</th>
+               <th>Total test classes</th>
+               <th>Total tests</th>
+               <th rowspan="2"></th>
+               <th>Asserts successful</th>
+               <th>Asserts failed</th>
+               <th>Total asserts</th>
+            </tr>
+            <tr>
+               <td>$total_suites</td>
+               <td>$total_cases</td>
+               <td>$total_tests</td> 
+               <td>$total_successful</td>
+               <td>$total_failed</td>
+               <td>$total_asserts</td>
+            </tr>
+         </table>
+         <br> 
+         $item3
+         <br>
+         $item4
+         <br>     
          </body></html>
          EOD;
       // end css provisional
@@ -593,11 +633,11 @@ class PhTestRun {
          echo PHP_EOL;
       }
 
+      echo PHP_EOL;
+
       if (count($total_cases_successful) >= 1)
       {
          echo 'Cases successful: ('. count($total_cases_successful) . ')'. PHP_EOL;
-
-         echo PHP_EOL;
 
          echo PHP_EOL;
 
