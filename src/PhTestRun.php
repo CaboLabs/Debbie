@@ -536,29 +536,63 @@ class PhTestRun {
 
    public function get_summary_report($test_time, $total_suites, $total_cases, $total_tests, $total_asserts, $total_failed, $total_successful, $total_cases_failed, $total_cases_successful)
    {
+      $row = '';
+      $gap_x  = 1;
+      $gap_y  = 0;
+      $joins = '+';
+      $axi_x = '-';
+      $axi_y = '|';
+
+      $tableSummary = [
+         'Total suites'        => $total_suites,
+         'Total test classes'  => $total_cases,
+         'Total tests'         => $total_tests,
+         'Asserts successful'  => $total_successful,
+         'Asserts failed'      => $total_failed,
+         'Total asserts'       => $total_asserts
+      ];
+
+      $col_headers = array_keys(reset($tableSummary ));
+      $width = [];
+
+      foreach ($col_headers as $header) 
+      {
+         $max = 16;
+         foreach ($tableSummary as $row) 
+         {
+            $length = strlen($row[$header]);
+               if ($length > $max) 
+               {
+                  $max = $length;
+               }
+         }
+
+         if (($max % 2) != (16 % 2)) 
+         {
+               $max += 1;
+         }
+
+         $width[$header] = $max;
+      }
+
+      $col_width = $width;
+
+      foreach ($col_width as $colmn_width) 
+      {
+         $row .= $joins . str_repeat($axi_x, ($gap_x * 2) + $colmn_width);
+      }
+      $row .= $joins;
+
+      return $row;
+
       echo 'Summary reports: '. PHP_EOL . PHP_EOL;
 
       echo 'Tests reports - Total suites: '.  $total_suites .'  --> total time: '. $test_time .  ' μs' .PHP_EOL;
 
       echo PHP_EOL;
 
-      echo 'Total tests cases: '. $total_cases . PHP_EOL;
-
-      echo PHP_EOL;
-
-      echo 'Total tests: '. $total_tests . PHP_EOL;
-
-      echo PHP_EOL;
-
-      echo '  asserts failed: '. $total_failed . PHP_EOL;
-
-      echo PHP_EOL;
-
-      echo '  asserts successful: '. $total_successful . PHP_EOL;
-
-      echo PHP_EOL;
-
-      echo '  Total asserts: '. $total_asserts . PHP_EOL;
+     //print table
+      
 
       echo PHP_EOL;
 
