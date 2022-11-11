@@ -536,12 +536,17 @@ class PhTestRun {
 
    public function get_summary_report($test_time, $total_suites, $total_cases, $total_tests, $total_asserts, $total_failed, $total_successful, $total_cases_failed, $total_cases_successful)
    {
-      $row = '';
+      $row_separator = '';
+      $row_spacer = '';
+      $row_headers = '';
+      $row_cells = '';
       $gap_x  = 1;
       $gap_y  = 0;
       $joins = '+';
       $axi_x = '-';
       $axi_y = '|';
+      $width = [];
+      $width_headers = [];
 
       $tableSummary = [
          'Total suites'        => $total_suites,
@@ -552,47 +557,81 @@ class PhTestRun {
          'Total asserts'       => $total_asserts
       ];
 
-      $col_headers = array_keys(reset($tableSummary ));
-      $width = [];
-
+      $col_headers = array_keys($tableSummary);
+      
       foreach ($col_headers as $header) 
       {
          $max = 16;
-         foreach ($tableSummary as $row) 
-         {
-            $length = strlen($row[$header]);
-               if ($length > $max) 
-               {
-                  $max = $length;
-               }
-         }
+
+         $length = strlen($header);
+
+            if ($length > $max) 
+            {
+               $max = $length;
+            }
 
          if (($max % 2) != (16 % 2)) 
          {
-               $max += 1;
+            $max += 1;
          }
 
          $width[$header] = $max;
+
+         $space = ($gap_x * 2) + $width[$header];
+
+         $row_headers .= $axi_y . str_pad($header, $space, ' ', STR_PAD_BOTH);
+
+         $width_headers[] = $space;
       }
+
+      $row_headers .= $axi_y;
 
       $col_width = $width;
 
       foreach ($col_width as $colmn_width) 
       {
-         $row .= $joins . str_repeat($axi_x, ($gap_x * 2) + $colmn_width);
+         $row_separator .= $joins . str_repeat($axi_x, ($gap_x * 2) + $colmn_width);
+
+         $row_spacer .= $axi_y . str_repeat(' ', ($gap_x * 2) + $colmn_width);
       }
-      $row .= $joins;
 
-      return $row;
+      $row_separator .= $joins;
 
-      echo 'Summary reports: '. PHP_EOL . PHP_EOL;
-
-      echo 'Tests reports - Total suites: '.  $total_suites .'  --> total time: '. $test_time .  ' μs' .PHP_EOL;
+      $row_spacer .= $axi_y;
 
       echo PHP_EOL;
 
-     //print table
-      
+      echo 'Summary reports --> total time: '. $test_time .  ' μs'. PHP_EOL . PHP_EOL;
+
+      echo $row_separator . PHP_EOL;
+      echo str_repeat($row_spacer . PHP_EOL, $gap_y);
+      echo $row_headers . PHP_EOL;
+      echo str_repeat($row_spacer . PHP_EOL, $gap_y);
+      echo $row_separator . PHP_EOL;
+      echo str_repeat($row_spacer . PHP_EOL, $gap_y);
+
+      foreach ($tableSummary as $row_cell)
+      {
+         $row = $row_cell;
+
+         foreach ($width_headers as $width_header)  
+         { 
+            $width = $width_header;
+         }
+
+         $row_cells .= $axi_y . str_pad($row, $width, ' ', STR_PAD_LEFT);
+        
+      }
+
+      $row_cells .= $axi_y;
+
+      echo $row_cells . PHP_EOL;
+
+      echo $row_separator . PHP_EOL;
+
+      echo PHP_EOL;             
+
+      echo PHP_EOL;
 
       echo PHP_EOL;
 
@@ -657,7 +696,10 @@ class PhTestRun {
          echo PHP_EOL;
       }
 
-      echo PHP_EOL;   
+      echo PHP_EOL;  
+      var_dump($tableSummary);
+      var_dump($width_headers);
+
    }
 
    public function get_reports()
