@@ -546,7 +546,6 @@ class PhTestRun {
       $axi_x = '-';
       $axi_y = '|';
       $width = [];
-      $width_headers = [];
 
       $tableSummary = [
          'Total suites'        => $total_suites,
@@ -556,14 +555,12 @@ class PhTestRun {
          'Asserts failed'      => $total_failed,
          'Total asserts'       => $total_asserts
       ];
-
-      $col_headers = array_keys($tableSummary);
       
-      foreach ($col_headers as $header) 
+      foreach ($tableSummary as $key => $row) 
       {
          $max = 16;
 
-         $length = strlen($header);
+         $length = strlen($key);
 
             if ($length > $max) 
             {
@@ -575,16 +572,15 @@ class PhTestRun {
             $max += 1;
          }
 
-         $width[$header] = $max;
+         $width[$key] = $max;
 
-         $space = ($gap_x * 2) + $width[$header];
-
-         $row_headers .= $axi_y . str_pad($header, $space, ' ', STR_PAD_BOTH);
-
-         $width_headers[] = $space;
+         $row_headers .= $axi_y . str_pad($key, ($gap_x * 2) + $width[$key], ' ', STR_PAD_BOTH);
+         $row_cells .= $axi_y . str_pad($row, ($gap_x * 2) + $width[$key], ' ', STR_PAD_LEFT);
       }
 
       $row_headers .= $axi_y;
+
+      $row_cells .= $axi_y;
 
       $col_width = $width;
 
@@ -610,30 +606,13 @@ class PhTestRun {
       echo $row_separator . PHP_EOL;
       echo str_repeat($row_spacer . PHP_EOL, $gap_y);
 
-      foreach ($tableSummary as $row_cell)
-      {
-         $row = $row_cell;
-
-         foreach ($width_headers as $width_header)  
-         { 
-            $width = $width_header;
-         }
-
-         $row_cells .= $axi_y . str_pad($row, $width, ' ', STR_PAD_LEFT);
-        
-      }
-
-      $row_cells .= $axi_y;
-
+      echo str_repeat($row_spacer . PHP_EOL, $gap_y);
       echo $row_cells . PHP_EOL;
-
+      echo str_repeat($row_spacer . PHP_EOL, $gap_y);
       echo $row_separator . PHP_EOL;
+      echo str_repeat($row_spacer . PHP_EOL, $gap_y);
 
       echo PHP_EOL;             
-
-      echo PHP_EOL;
-
-      echo PHP_EOL;
 
       echo PHP_EOL;
 
@@ -697,9 +676,6 @@ class PhTestRun {
       }
 
       echo PHP_EOL;  
-      var_dump($tableSummary);
-      var_dump($width_headers);
-
    }
 
    public function get_reports()
