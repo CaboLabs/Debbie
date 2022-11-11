@@ -658,15 +658,10 @@ class PhTestRun {
          {
             $names_failed = explode("\\", $total_case_failed['case']);
 
-            $Cases_Failed = [
-               $names_failed[1], 
-               $names_failed[2], 
-               $total_case_failed['case_failed'], 
-               $total_case_failed['case_successful']
-            ]; 
-
-            $row_cells_failed .= $axi_y . str_pad($Cases_Failed, ($gap_x * 2) + $width_cases[$head], ' ', STR_PAD_LEFT);
-
+            $row_cells_failed .= $axi_y . str_pad($names_failed[1], ($gap_x * 2) + $width_cases[$head], ' ', STR_PAD_LEFT).
+               $axi_y . str_pad($names_failed[2], ($gap_x * 2) + $width_cases[$head], ' ', STR_PAD_LEFT).
+               $axi_y . str_pad($total_case_failed['case_failed'], ($gap_x * 2) + $width_cases[$head], ' ', STR_PAD_LEFT).
+               $axi_y . str_pad($total_case_failed['case_successful'], ($gap_x * 2) + $width_cases[$head], ' ', STR_PAD_LEFT). $axi_y .PHP_EOL;
          }
 
          $row_cells_failed .= $axi_y;
@@ -786,7 +781,6 @@ class PhTestRun {
 
       echo PHP_EOL;
       echo PHP_EOL;
-      var_dump($Cases_Failed);
    }
 
    public function get_reports()
