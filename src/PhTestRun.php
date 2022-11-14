@@ -535,15 +535,12 @@ class PhTestRun {
          $html_report
 
          <h1>Total Summary:</h1>
+         <h2>total time:  $test_time μs</h2>
          <table>
-            <tr>
-            <th colspan="7" style="text-align: left;">total time:  $test_time μs</th>
-            </tr>
             <tr>
                <th>Total suites</th>
                <th>Total test classes</th>
                <th>Total tests</th>
-               <th rowspan="2"></th>
                <th>Asserts successful</th>
                <th>Asserts failed</th>
                <th>Total asserts</th>
