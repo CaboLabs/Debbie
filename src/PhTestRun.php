@@ -754,7 +754,9 @@ class PhTestRun {
                $max += 1;
             }
 
-            $row_headers_failed .= $axi_y . str_pad($head, ($gap_x * 2) + $max, ' ', STR_PAD_BOTH);  
+            $row_headers_failed .= $axi_y . str_pad($head, ($gap_x * 2) + $max, ' ', STR_PAD_BOTH); 
+            $row_separator_cases .= $joins . str_repeat($axi_x, ($gap_x * 2) + $max);
+            $row_spacer_cases .= $axi_y . str_repeat(' ', ($gap_x * 2) + $max); 
          }
 
          $row_headers_failed .= $axi_y;
@@ -767,9 +769,6 @@ class PhTestRun {
                $axi_y . str_pad($names_failed[2], ($gap_x * 2) + $max, ' ', STR_PAD_RIGHT).
                $axi_y . str_pad($total_case_failed['case_failed'], ($gap_x * 2) + $max, ' ', STR_PAD_LEFT).
                $axi_y . str_pad($total_case_failed['case_successful'], ($gap_x * 2) + $max, ' ', STR_PAD_LEFT). $axi_y .PHP_EOL;
-
-               $row_separator_cases .= $joins . str_repeat($axi_x, ($gap_x * 2) + $max);
-               $row_spacer_cases .= $axi_y . str_repeat(' ', ($gap_x * 2) + $max);
          }
 
          $row_separator_cases .= $joins;
@@ -839,7 +838,9 @@ class PhTestRun {
                $max += 1;
             }
 
-            $row_headers_succes .= $axi_y . str_pad($head2, ($gap_x * 2) + $max, ' ', STR_PAD_BOTH);   
+            $row_headers_succes .= $axi_y . str_pad($head2, ($gap_x * 2) + $max, ' ', STR_PAD_BOTH); 
+            $row_separator_cases2 .= $joins . str_repeat($axi_x, ($gap_x * 2) + $max);
+            $row_spacer_cases2 .= $axi_y . str_repeat(' ', ($gap_x * 2) + $max);  
          }
 
          $row_headers_succes .= $axi_y;
@@ -851,9 +852,6 @@ class PhTestRun {
             $row_cells_succes .= $axi_y . str_pad($names_success[1], ($gap_x * 2) + $max, ' ', STR_PAD_RIGHT).
                $axi_y . str_pad($names_success[2], ($gap_x * 2) + $max, ' ', STR_PAD_RIGHT).
                $axi_y . str_pad($total_cases_success['case_successful'], ($gap_x * 2) + $max, ' ', STR_PAD_LEFT). $axi_y .PHP_EOL;
-
-            $row_separator_cases2 .= $joins . str_repeat($axi_x, ($gap_x * 2) + $max);
-            $row_spacer_cases2 .= $axi_y . str_repeat(' ', ($gap_x * 2) + $max);
          }
 
          $row_separator_cases2 .= $joins;
