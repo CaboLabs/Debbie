@@ -853,7 +853,7 @@ class PhTestRun {
                $axi_y . str_pad($total_cases_success['case_successful'], ($gap_x * 2) + $max, ' ', STR_PAD_LEFT). $axi_y .PHP_EOL;
 
             $row_separator_cases2 .= $joins . str_repeat($axi_x, ($gap_x * 2) + $max);
-            $row_spacer_cases2 .= $axi_y . str_repeat(' ', ($gap_x * 2) + 50);
+            $row_spacer_cases2 .= $axi_y . str_repeat(' ', ($gap_x * 2) + $max);
          }
 
          $row_separator_cases2 .= $joins;
