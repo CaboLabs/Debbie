@@ -583,40 +583,18 @@ class PhTestRun {
 
    public function get_summary_report($test_time, $total_suites, $total_cases, $total_tests, $total_asserts, $total_failed, $total_successful, $total_cases_failed, $total_cases_successful)
    {
-        /**
-         * print the summary table in the terminal*
-         * 
-         * @$row_separator = print "+--------------+--------------+--------------+" to table total Summary 
-         * @$row_separator_cases = print "+--------------+--------------+--------------+" to table Summary successful case
-         * @$row_separator_cases2 = print "+--------------+--------------+--------------+" to table Summary faild case
-         * @$row_headers = table header table total Summary
-         * @$row_cells = data table total Summary (body)
-         * @$row_headers_failed = table header table Summary failed
-         * @$row_cells_failed = data table summary failed (body)
-         * @$row_headers_succes = table header table Summary successful
-         * @$row_cells_succes = data table summary successful (body)
-         * @$row_headers_asserts = table header table asserts Summary
-         * @$row_cells_asserts = data table asserts successfu (body)
-         * @$row_separator_asserts = print "+--------------+--------------+--------------+" to asserts table 
-         * @$gap_x  = space on the x axis
-         * @$joins = point joining both axes
-         * @$axi_x = character for the x axis
-         * @$axi_y = character for the y axis
-         * @$max = maximum width
-         */
-
-      $row_separator = '';
-      $row_separator_cases = '';
-      $row_separator_cases2 = '';
-      $row_headers = '';
-      $row_cells = '';
-      $row_headers_failed = '';
-      $row_cells_failed = '';
-      $row_headers_succes = '';
-      $row_cells_succes = '';
-      $row_headers_asserts = '';
-      $row_cells_asserts = '';
-      $row_separator_asserts = '';
+      /**
+       * generate tables summary
+       * @param String $row_separator, print "+--------------+--------------+--------------+" to table total Summary 
+       * @param String @$row_headers, header table total Summary
+       * @param String $row_cells, data table total Summary (body)
+       * @param int $gap_x, space on the x axis
+       * @param String $joins, point joining both axes
+       * @param String $axi_x, character for the x axis
+       * @param String $axi_y, character for the y axis
+       * @param String $max,  maximum width
+       * @param Array $tableSummary, array with table data
+       */
     
       $gap_x  = 1;
       $joins = '+';
@@ -638,63 +616,11 @@ class PhTestRun {
          'Total asserts'       => $total_asserts
       ];
 
-  
       //generate table totals summary (suites,cases,tests)
-      $summary1 = self::generate_table(10, $tableSummary1);
+      $summary1 = self::generate_table_summary_totales(10, $tableSummary1, $gap_x, $joins, $axi_x, $axi_y);
 
-       /*   $max = 16;
-
-      foreach ($tableSummary1 as $key => $row) 
-      {
-         $length = strlen($key);
-
-            if ($length > $max) 
-            {
-               $max = $length;
-            }
-
-         if (($max % 2) != (16 % 2)) 
-         {
-            $max += 1;
-         }
-
-         $row_headers .= $axi_y . str_pad($key, ($gap_x * 2) + $max, ' ', STR_PAD_BOTH) . ' ';
-         $row_cells .= $axi_y . str_pad($row, ($gap_x * 2) + $max, ' ', STR_PAD_LEFT) . ' ';
-
-         $row_separator .= $joins . str_repeat($axi_x, ($gap_x * 2) + $max) . $axi_x;
-      }
-
-      $row_headers .= $axi_y;
-
-      $row_cells .= $axi_y;
-
-      $row_separator .= $joins;*/
-
-      foreach ($tableSummary2 as $key2 => $row_asserts) 
-      {
-         $length = strlen($key2);
-
-            if ($length > $max) 
-            {
-               $max = $length;
-            }
-
-         if (($max % 2) != (16 % 2)) 
-         {
-            $max += 1;
-         }
-
-         $row_headers_asserts .= $axi_y . str_pad($key2, ($gap_x * 2) + $max, ' ', STR_PAD_BOTH) . ' ';
-         $row_cells_asserts .= $axi_y . str_pad($row_asserts, ($gap_x * 2) + $max, ' ', STR_PAD_LEFT) . ' ';
-
-         $row_separator_asserts .= $joins . str_repeat($axi_x, ($gap_x * 2) + $max) . $axi_x;
-      }
-
-      $row_separator_asserts .= $joins;
-
-      $row_headers_asserts .= $axi_y;
-
-      $row_cells_asserts .= $axi_y;
+      //generate table totals asserts summary
+      $summary2 = self::generate_table_summary_totales(10, $tableSummary2, $gap_x, $joins, $axi_x, $axi_y);
 
       echo PHP_EOL;
 
@@ -704,37 +630,20 @@ class PhTestRun {
       foreach ($summary1 as $table1) 
       {
        echo $table1 . PHP_EOL;
-         /*echo $table1["row_separator"] . PHP_EOL;
-   
-         echo $table1["row_headers"] . PHP_EOL;
-         
-         echo $table1["row_separator"] . PHP_EOL;
-      
-         echo $table1["row_cells"] . PHP_EOL;
-      
-         echo $table1["row_separator"] . PHP_EOL;
-      
-         echo PHP_EOL;*/
+      }
+      echo PHP_EOL;
+
+       //render table totals asserts summary
+      foreach ($summary2 as $table2) 
+      {
+       echo $table2 . PHP_EOL;
       }
 
-      echo PHP_EOL;
-
-      //print table totals asserts summary
-      echo $row_separator_asserts . PHP_EOL;
-     
-      echo $row_headers_asserts . PHP_EOL;
-     
-      echo $row_separator_asserts . PHP_EOL;
-   
-      echo $row_cells_asserts . PHP_EOL;
-      
-      echo $row_separator_asserts . PHP_EOL;
-   
-      echo PHP_EOL;             
+      echo PHP_EOL;       
 
       echo PHP_EOL;
 
-
+      //render table failed cases summary
       if (count($total_cases_failed) >= 1)
       {
          $failed_cases = count($total_cases_failed);
@@ -743,69 +652,19 @@ class PhTestRun {
 
          $cases_failed_head = ['Suite' , 'Class', 'Failed', 'Successful'];
          
-         $summary_cases_failed = self::generate_table(5, $cases_failed_head, $total_cases_failed);
-         /* $max = 5;
+         //generate table failed cases summary
+         $summary_cases_failed = self::generate_table_cases_summary(5, $cases_failed_head, $total_cases_failed, $gap_x, $joins, $axi_x, $axi_y);
 
-        
-
-         for ($i=0; $i < count($total_cases_failed) ; $i++) 
-         {
-            $name_cas = explode("\\", $total_cases_failed[$i]['case']); 
-            $len1 = strlen($name_cas[2]);
-            $len2 = strlen($name_cas[1]);
-            if ($len1 > $max)
-            {
-               $max = $len1;
-            }
-            
-            if ($len2 > $len1)
-            {
-               $max = $len2;
-            }      
-         }
-
-         foreach ($cases_failed_head as $head) 
-         {
-            $length = strlen($head);
-
-               if ($length > $max) 
-               {
-                  $max = $length;
-               }
-
-            if (($max % 2) != (16 % 2)) 
-            {
-               $max += 1;
-            }
-
-            $row_headers_failed .= $axi_y . ' ' . str_pad($head, ($gap_x * 2) + $max, ' ', STR_PAD_BOTH) . ' '; 
-            $row_separator_cases .= $joins . $axi_x. str_repeat($axi_x, ($gap_x * 2) + $max) . $axi_x; 
-         }
-
-         $row_headers_failed .= $axi_y;
-
-         foreach ($total_cases_failed as $total_case_failed)
-         {
-            $names_failed = explode("\\", $total_case_failed['case']);
-
-            $row_cells_failed .= $axi_y . ' ' . str_pad($names_failed[1], ($gap_x * 2) + $max, ' ', STR_PAD_RIGHT) . ' ' .
-               $axi_y . ' ' . str_pad($names_failed[2], ($gap_x * 2) + $max, ' ', STR_PAD_RIGHT) . ' ' .
-               $axi_y . ' ' . str_pad($total_case_failed['case_failed'], ($gap_x * 2) + $max, ' ', STR_PAD_LEFT) . ' ' .
-               $axi_y . ' ' . str_pad($total_case_failed['case_successful'], ($gap_x * 2) + $max, ' ', STR_PAD_LEFT). ' ' . $axi_y . PHP_EOL;
-         }
-
-         $row_separator_cases .= $joins;*/
-
-         // print table cases failded summary
+         // render table cases failded summary
          foreach ($summary_cases_failed as $cases_failed) 
          {
-            echo $cases_failed . PHP_EOL;
+            echo $cases_failed;
          }
 
          echo PHP_EOL;
 
          echo PHP_EOL;
-      
+               
       }
       else
       {
@@ -813,74 +672,24 @@ class PhTestRun {
          echo 'Cases failed ('. $failed_cases . ')'. PHP_EOL;
       }
 
+      //render table successful cases summary
       if (count($total_cases_successful) >= 1)
       {
-         $max = 5;
-
          $successful_case = count($total_cases_successful);
 
          echo 'Successful Summary: Cases successful ('. $successful_case . ')'. PHP_EOL;
 
          $cases_success_head = ['Suite' , 'Class', 'Successful'];
-               
-         for ($i=0; $i < count($total_cases_successful) ; $i++) 
-         {
-            $name_cas = explode("\\", $total_cases_successful[$i]['case']); 
-            $len1 = strlen($name_cas[2]);
-            $len2 = strlen($name_cas[1]);
-            if ($len1 > $max)
-            {
-               $max = $len1;
-            }
-
-            if ($len2 > $len1)
-            {
-               $max = $len2;
-            }
-         }
-
-         foreach ($cases_success_head as $head2) 
-         {
-            $length2 = strlen($head2);
-
-               if ($length2 > $max) 
-               {
-                  $max = $length2;
-               }
-
-            if (($max % 2) != (16 % 2)) 
-            {
-               $max += 1;
-            }
-
-            $row_headers_succes .= $axi_y . ' ' . str_pad($head2, ($gap_x * 2) + $max, ' ', STR_PAD_BOTH) . ' '; 
-            $row_separator_cases2 .= $joins . $axi_x . str_repeat($axi_x, ($gap_x * 2) + $max). $axi_x; 
-         }
-
-         $row_headers_succes .= $axi_y;
-
-         foreach ($total_cases_successful as $total_cases_success)
-         {
-            $names_success = explode("\\", $total_cases_success['case']);
-      
-            $row_cells_succes .= $axi_y . ' ' . str_pad($names_success[1], ($gap_x * 2) + $max, ' ', STR_PAD_RIGHT) . ' ' .
-               $axi_y . ' ' . str_pad($names_success[2], ($gap_x * 2) + $max, ' ', STR_PAD_RIGHT) . ' ' .
-               $axi_y . ' ' . str_pad($total_cases_success['case_successful'], ($gap_x * 2) + $max, ' ', STR_PAD_LEFT) . ' ' . $axi_y . PHP_EOL;
-         }
-
-         $row_separator_cases2 .= $joins;
-
-         // print table cases successful summary
-         echo $row_separator_cases2 . PHP_EOL;
-  
-         echo $row_headers_succes . PHP_EOL;
-      
-         echo $row_separator_cases2 . PHP_EOL;
-
-         echo $row_cells_succes;
-      
-         echo $row_separator_cases2 . PHP_EOL;
          
+         //generate table success cases summary
+         $summary_cases_success = self::generate_table_cases_summary(5, $cases_success_head, $total_cases_successful, $gap_x, $joins, $axi_x, $axi_y);
+
+         // render table cases success summary
+         foreach ($summary_cases_success as $cases_success) 
+         {
+            echo $cases_success;
+         }
+
          echo PHP_EOL;
 
          echo PHP_EOL;
@@ -895,38 +704,37 @@ class PhTestRun {
       echo PHP_EOL;
    }
 
-   public function generate_table($max, $tableSummary)
+   public function generate_table_summary_totales($max, $tableSummary, $gap_x, $joins, $axi_x, $axi_y)
    {
+      /**
+       * generate summary table of totales
+       * 
+       */
       $row_separator = '';
       $row_headers = '';
       $row_cells = '';
-    
-      $gap_x  = 1;
-      $joins = '+';
-      $axi_x = '-';
-      $axi_y = '|';
-      $dataTable = array();
-
-      foreach ($tableSummary as $key => $row) 
+   
+      foreach ($tableSummary as $head => $row)
       {
-         $length = strlen($key);
+         $length = strlen($head);
 
-            if ($length > $max) 
-            {
-               $max = $length;
-            }
-
-        /* if (($max % 2) != (16 % 2)) 
+         if ($length > $max) 
          {
-            $max += 1;
-         }*/
+            $max = $length;
+         }
 
-         $row_headers .= $axi_y . str_pad($key, ($gap_x * 2) + $max, ' ', STR_PAD_BOTH) . ' ';
+         /* separator character is created line by line - adds spaces to the string and adds the number 
+          of characters of max width - space between the characters and finally the alignment that 
+          the string will have*/
+         $row_headers .= $axi_y . str_pad($head, ($gap_x * 2) + $max, ' ', STR_PAD_BOTH) . ' ';
          $row_cells .= $axi_y . str_pad($row, ($gap_x * 2) + $max, ' ', STR_PAD_LEFT) . ' ';
 
+         //separator is created with the characters "+" and "-" the latter is repeated to form a line 
          $row_separator .= $joins . str_repeat($axi_x, ($gap_x * 2) + $max) . $axi_x;
       }
 
+      /*I end each line with the character "|" to close the table and the character "+" to join the 
+      intercepts of the x y axes */
       $row_headers .= $axi_y;
 
       $row_cells .= $axi_y;
@@ -942,74 +750,82 @@ class PhTestRun {
       ];
    }
 
-   public function generate_table2($max, $arr, $arr2)
+   public function generate_table_cases_summary($max, $arr_head, $arr_cases, $gap_x, $joins, $axi_x, $axi_y)
    {
+      /**
+       * generate summary table of successful summary and faild summary
+       * 
+       */
+
       $row_separator_cases = '';
-      $row_headers_failed = '';
-      $row_cells_failed = '';
-    
-      $gap_x  = 1;
-      $joins = '+';
-      $axi_x = '-';
-      $axi_y = '|';
+      $row_headers = '';
+      $row_cells = '';
+          
+      //make the width of the column adapted to the content
+      for ($i=0; $i < count($arr_cases) ; $i++) 
+      {
+         $name_cas = explode("\\", $arr_cases[$i]['case']); 
+         $len1 = strlen($name_cas[2]);
+         $len2 = strlen($name_cas[1]);
+         if ($len1 > $max)
+         {
+            $max = $len1;
+         }
+         
+         if ($len2 > $len1)
+         {
+            $max = $len2;
+         }      
+      }
+
+      //create the table header with its separators
+      foreach ($arr_head as $head) 
+      {
+         $length = strlen($head);
+
+            if ($length > $max) 
+            {
+               $max = $length;
+            }
+
+         /* separator character is created line by line - adds spaces to the string and adds the number 
+               of characters of max width - space between the characters and finally the alignment that 
+               the string will have*/
+         $row_headers .= $axi_y . ' ' . str_pad($head, ($gap_x * 2) + $max, ' ', STR_PAD_BOTH) . ' '; 
+         $row_separator_cases .= $joins . $axi_x. str_repeat($axi_x, ($gap_x * 2) + $max) . $axi_x; 
+      }
+
+      $row_headers .= $axi_y;
+
+      foreach ($arr_cases as $total_case)
+      {
+         $names_failed = explode("\\", $total_case['case']);
+
+            /* separator character is created line by line - adds spaces to the string and adds the number 
+               of characters of max width - space between the characters and finally the alignment that 
+               the string will have*/
+         $row_cells .= $axi_y . ' ' . str_pad($names_failed[1], ($gap_x * 2) + $max, ' ', STR_PAD_RIGHT) . ' ' .
+            $axi_y . ' ' . str_pad($names_failed[2], ($gap_x * 2) + $max, ' ', STR_PAD_RIGHT) . ' ';
+
+         if (array_key_exists('case_failed', $arr_head))
+         {
+            $row_cells .= $axi_y . ' ' . str_pad($total_case['case_failed'], ($gap_x * 2) + $max, ' ', STR_PAD_LEFT) . ' ' .
+              $axi_y . ' ' . str_pad($total_case['case_successful'], ($gap_x * 2) + $max, ' ', STR_PAD_LEFT). ' ' . $axi_y . PHP_EOL;
+         }
+
+         $row_cells .= $axi_y . ' ' . str_pad($total_case['case_successful'], ($gap_x * 2) + $max, ' ', STR_PAD_LEFT). ' ' . $axi_y . PHP_EOL;
+      }
+
+      $row_separator_cases .= $joins;
       
-         for ($i=0; $i < count($arr2) ; $i++) 
-         {
-            $name_cas = explode("\\", $arr2[$i]['case']); 
-            $len1 = strlen($name_cas[2]);
-            $len2 = strlen($name_cas[1]);
-            if ($len1 > $max)
-            {
-               $max = $len1;
-            }
-            
-            if ($len2 > $len1)
-            {
-               $max = $len2;
-            }      
-         }
-
-         foreach ($arr as $head) 
-         {
-            $length = strlen($head);
-
-               if ($length > $max) 
-               {
-                  $max = $length;
-               }
-
-            if (($max % 2) != (16 % 2)) 
-            {
-               $max += 1;
-            }
-
-            $row_headers_failed .= $axi_y . ' ' . str_pad($head, ($gap_x * 2) + $max, ' ', STR_PAD_BOTH) . ' '; 
-            $row_separator_cases .= $joins . $axi_x. str_repeat($axi_x, ($gap_x * 2) + $max) . $axi_x; 
-         }
-
-         $row_headers_failed .= $axi_y;
-
-         foreach ($arr2 as $total_case_failed)
-         {
-            $names_failed = explode("\\", $total_case_failed['case']);
-
-            $row_cells_failed .= $axi_y . ' ' . str_pad($names_failed[1], ($gap_x * 2) + $max, ' ', STR_PAD_RIGHT) . ' ' .
-               $axi_y . ' ' . str_pad($names_failed[2], ($gap_x * 2) + $max, ' ', STR_PAD_RIGHT) . ' ' .
-               $axi_y . ' ' . str_pad($total_case_failed['case_failed'], ($gap_x * 2) + $max, ' ', STR_PAD_LEFT) . ' ' .
-               $axi_y . ' ' . str_pad($total_case_failed['case_successful'], ($gap_x * 2) + $max, ' ', STR_PAD_LEFT). ' ' . $axi_y . PHP_EOL;
-         }
-
-         $row_separator_cases .= $joins;
-
-         return $summary_case_failed = [
-            'row_separator_cases' => $row_separator_cases,
-            'row_headers_failed'  => $row_headers_failed,
-            'row_separator_cases' => $row_separator_cases,
-            'row_cells_failed'    => $row_cells_failed,
-            'row_separator_cases' => $row_separator_cases
-         ];
+      return $summary_case = [
+         'row_separator_cases1' => $row_separator_cases . PHP_EOL,
+         'row_headers_failed'  => $row_headers . PHP_EOL,
+         'row_separator_cases2' => $row_separator_cases . PHP_EOL,
+         'row_cells_failed'    => $row_cells,
+         'row_separator_cases3' => $row_separator_cases . PHP_EOL
+      ];        
    }
-
 }
 
 ?>
