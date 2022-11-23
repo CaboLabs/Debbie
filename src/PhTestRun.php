@@ -761,7 +761,7 @@ class PhTestRun {
       $row_headers = '';
       $row_cells = '';
           
-      //make the width of the column adapted to the content
+      //make the width of the column ('Suite' , 'Class') adapted to the content
       for ($i=0; $i < count($arr_cases) ; $i++) 
       {
          $name_cas = explode("\\", $arr_cases[$i]['case']); 
@@ -780,14 +780,7 @@ class PhTestRun {
 
       //create the table header with its separators
       foreach ($arr_head as $head) 
-      {
-         $length = strlen($head);
-
-            if ($length > $max) 
-            {
-               $max = $length;
-            }
-
+      { 
          /* separator character is created line by line - adds spaces to the string and adds the number 
                of characters of max width - space between the characters and finally the alignment that 
                the string will have*/
