@@ -584,7 +584,7 @@ class PhTestRun {
    public function get_summary_report($test_time, $total_suites, $total_cases, $total_tests, $total_asserts, $total_failed, $total_successful, $total_cases_failed, $total_cases_successful)
    {
       /**
-       * generate tables summary
+       * render tables summary
        * @param String $row_separator, print "+--------------+--------------+--------------+" to table total Summary 
        * @param String @$row_headers, header table total Summary
        * @param String $row_cells, data table total Summary (body)
@@ -669,7 +669,10 @@ class PhTestRun {
       else
       {
          $failed_cases = 0;
+         
          echo 'Cases failed ('. $failed_cases . ')'. PHP_EOL;
+
+         echo PHP_EOL;
       }
 
       //render table successful cases summary
