@@ -807,13 +807,15 @@ class PhTestRun {
          $row_cells .= $axi_y . ' ' . str_pad($names_failed[1], ($gap_x * 2) + $max, ' ', STR_PAD_RIGHT) . ' ' .
             $axi_y . ' ' . str_pad($names_failed[2], ($gap_x * 2) + $max, ' ', STR_PAD_RIGHT) . ' ';
 
-         if (array_key_exists('case_failed', $arr_head))
+         if (count($arr_head) == 4)
          {
             $row_cells .= $axi_y . ' ' . str_pad($total_case['case_failed'], ($gap_x * 2) + $max, ' ', STR_PAD_LEFT) . ' ' .
               $axi_y . ' ' . str_pad($total_case['case_successful'], ($gap_x * 2) + $max, ' ', STR_PAD_LEFT). ' ' . $axi_y . PHP_EOL;
          }
-
-         $row_cells .= $axi_y . ' ' . str_pad($total_case['case_successful'], ($gap_x * 2) + $max, ' ', STR_PAD_LEFT). ' ' . $axi_y . PHP_EOL;
+         else
+         {
+            $row_cells .= $axi_y . ' ' . str_pad($total_case['case_successful'], ($gap_x * 2) + $max, ' ', STR_PAD_LEFT). ' ' . $axi_y . PHP_EOL;
+         }
       }
 
       $row_separator_cases .= $joins;
