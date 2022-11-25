@@ -188,7 +188,7 @@ class PhTestRun {
             $successful = 0;
             $failed = 0;
 
-            echo '├── Test case: '. $test_case .'  ── Total case: '. count($reports) . PHP_EOL;
+            echo '├── Test case: '. $test_case .'  ── test count: '. count($reports) . PHP_EOL;
             echo '|   |'. PHP_EOL;
 
             $total_cases ++;
