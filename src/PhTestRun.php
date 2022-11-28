@@ -188,14 +188,13 @@ class PhTestRun {
             $successful = 0;
             $failed = 0;
 
-            echo '├── Test case: '. $test_case .'  ── test count: '. count($reports) . PHP_EOL;
+            echo '├── Test case: '. $test_case .' (test count: '. count($reports) .')'. PHP_EOL;
             echo '|   |'. PHP_EOL;
 
             $total_cases ++;
 
             foreach ($reports as $test_function => $report)
             {
-
                echo '|   ├── Test: '. $test_function . PHP_EOL;
 
                $total_tests ++;
@@ -239,7 +238,6 @@ class PhTestRun {
                }
 
                echo '|   |'. PHP_EOL;
-
             }
 
             if ($failed > 0)
@@ -272,12 +270,12 @@ class PhTestRun {
    {
       global $html_report, $content, $total_suites, $total_cases, $total_tests, $total_asserts, $total_failed, $total_successful;
 
-      $total_cases_failed = $total_cases_successful = array();
+      $total_cases_failed = $total_cases_successful = [];
       
       $html_report = '<h1>Test report<h1>';
 
-      $item3 ="";
-      $item4 ="";
+      $item3 = "";
+      $item4 = "";
       
       foreach ($this->reports as $i => $test_suite_reports)
       {
@@ -336,6 +334,7 @@ class PhTestRun {
                $html_report .= '</li>';
                $html_report .= '</ul>';
             }
+
             $html_report .= '</li><br>';
             $html_report .= '</ul>';
 
@@ -357,31 +356,31 @@ class PhTestRun {
                ];
             }
          }
+
          $html_report .= '</ul><br>';
       }
 
       if (count($total_cases_failed) >= 1)
       {
-
          $failed_cases = count($total_cases_failed);
 
          $item3 .= "<h1>Failed Summary:</h1> 
             <table>
-            <tr>
-            <th>Suite</th>
-            <th>Class</th>
-            <th>Successful</th>
-            <th>Failed</th>
-            </tr>";
+               <tr>
+               <th>Suite</th>
+               <th>Class</th>
+               <th>Successful</th>
+               <th>Failed</th>
+               </tr>";
          
          foreach ($total_cases_failed as $total_case_failed)
          {
             $names_failed = explode("\\", $total_case_failed['case']);
 
             $item3 .= "<tr>
-               <td>". $names_failed[1]."</td>
-               <td>". $names_failed[2]."</td>
-               <td> ". $total_case_failed['case_successful'] ."</td>
+               <td>". $names_failed[1] ."</td>
+               <td>". $names_failed[2] ."</td>
+               <td>". $total_case_failed['case_successful'] ."</td>
                <td>". $total_case_failed['case_failed'] ."</td>
             </tr>";
          }
@@ -410,10 +409,10 @@ class PhTestRun {
             $names_successful = explode("\\", $total_case_successful['case']);
 
             $item4 .= "<tr>
-               <td>". $names_successful[1]."</td>
-               <td>". $names_successful[2]."</td>
-               <td> ". $total_case_successful["case_successful"] ."</td>
-            </tr>";           
+               <td>". $names_successful[1] ."</td>
+               <td>". $names_successful[2] ."</td>
+               <td>". $total_case_successful["case_successful"] ."</td>
+            </tr>";
          }
 
          $item4 .= "</table>";
@@ -472,49 +471,46 @@ class PhTestRun {
          padding-left: 2em;
          }
          ul li:last-child ul {
-         border-left: 1px solid white;
-         margin-left: -17px;
+            border-left: 1px solid white;
+            margin-left: -17px;
          }
 
          .grid-container {
             display: grid;
             gap: 10px;
             padding: 10px;
-          }
-          
-          .grid-item {
+         }
+         .grid-item {
             padding: 20px;
             border: 1px dotted black;
             text-align: center;
-          }
+         }
           
-          .item1 {
+         .item1 {
             grid-column: 1;
             grid-row: 1;
-          }
-          
-          .item2 {
+         }
+         .item2 {
             grid-column: 2;
             grid-row: 1;
-          }
-          
-          .item3 {
+         }
+         .item3 {
             grid-column: 3;
             grid-row: 1;
-          }
-          .item4 {
+         }
+         .item4 {
             grid-column: 4;
             grid-row: 1;
-          }
-          table, th, td{
+         }
+         table, th, td{
             border: 1px solid gray;
             border-collapse: collapse;
             font-size: 18px;
             padding: 5px;
-          }
-          td {
+         }
+         td {
             text-align: right;
-          }
+         }
          </style><body>
 
          <div class="grid-container">
@@ -526,7 +522,7 @@ class PhTestRun {
          </div>
          <div class="grid-item item3">
             <h1>Cases failed: $failed_cases</h1>
-         </div>  
+         </div>
          <div class="grid-item item4">
             <h1>Cases successful: $successful_case</h1>
          </div> 
@@ -535,7 +531,7 @@ class PhTestRun {
          $html_report
 
          <h1>Total Summary:</h1>
-         <h2>total time:  $test_time μs</h2>
+         <h2>total time: $test_time μs</h2>
          <table>
             <tr>
                <th>Total suites</th>
@@ -558,9 +554,9 @@ class PhTestRun {
          $item3
          <br>
          $item4
-         <br>     
+         <br>
          </body></html>
-         EOD;
+      EOD;
       // end css provisional
 
       if ($path == './')
@@ -585,22 +581,22 @@ class PhTestRun {
    {
       /**
        * render tables summary
-       * @param String $row_separator, print "+--------------+--------------+--------------+" to table total Summary 
+       * @param String $row_separator, print "+--------------+--------------+--------------+" to table total Summary
        * @param String @$row_headers, header table total Summary
        * @param String $row_cells, data table total Summary (body)
        * @param int $gap_x, space on the x axis
        * @param String $joins, point joining both axes
        * @param String $axi_x, character for the x axis
        * @param String $axi_y, character for the y axis
-       * @param String $max,  maximum width
+       * @param String $column_width, default column width that will increase if any cell data is greater than this
        * @param Array $tableSummary, array with table data
        */
     
-      $gap_x  = 1;
+      $gap_x = 1;
       $joins = '+';
       $axi_x = '-';
       $axi_y = '|';
-      $max = 0;
+      $column_width = 10;
 
       //array with totals (suites,cases,tests)
       $tableSummary1 = [
@@ -617,30 +613,30 @@ class PhTestRun {
       ];
 
       //generate table totals summary (suites,cases,tests)
-      $summary1 = self::generate_table_summary_totales(10, $tableSummary1, $gap_x, $joins, $axi_x, $axi_y);
+      $summary1 = self::generate_table_summary_totales($column_width, $tableSummary1, $gap_x, $joins, $axi_x, $axi_y);
 
       //generate table totals asserts summary
-      $summary2 = self::generate_table_summary_totales(10, $tableSummary2, $gap_x, $joins, $axi_x, $axi_y);
+      $summary2 = self::generate_table_summary_totales($column_width, $tableSummary2, $gap_x, $joins, $axi_x, $axi_y);
 
       echo PHP_EOL;
 
-      echo 'Summary reports --> total time: '. $test_time .  ' μs'. PHP_EOL . PHP_EOL;
+      echo 'Summary reports --> total time: '. $test_time .' μs'. PHP_EOL . PHP_EOL;
  
       //render table totals summary (suites,cases,tests)
       foreach ($summary1 as $table1) 
       {
-       echo $table1 . PHP_EOL;
+         echo $table1 . PHP_EOL;
       }
+
       echo PHP_EOL;
 
        //render table totals asserts summary
-      foreach ($summary2 as $table2) 
+      foreach ($summary2 as $table2)
       {
-       echo $table2 . PHP_EOL;
+         echo $table2 . PHP_EOL;
       }
 
-      echo PHP_EOL;       
-
+      echo PHP_EOL;
       echo PHP_EOL;
 
       //render table failed cases summary
@@ -662,18 +658,15 @@ class PhTestRun {
          }
 
          echo PHP_EOL;
-
-         echo PHP_EOL;
-               
       }
       else
       {
          $failed_cases = 0;
          
          echo 'Cases failed ('. $failed_cases . ')'. PHP_EOL;
-
-         echo PHP_EOL;
       }
+
+      echo PHP_EOL;
 
       //render table successful cases summary
       if (count($total_cases_successful) >= 1)
@@ -694,20 +687,15 @@ class PhTestRun {
          }
 
          echo PHP_EOL;
-
-         echo PHP_EOL;
       }
       else
       {
          $successful_case = 0;
          echo 'Cases Successful ('. $successful_case . ')'. PHP_EOL;
       }
-
-      echo PHP_EOL;
-      echo PHP_EOL;
    }
 
-   public function generate_table_summary_totales($max, $tableSummary, $gap_x, $joins, $axi_x, $axi_y)
+   public function generate_table_summary_totales($column_width, $tableSummary, $gap_x, $joins, $axi_x, $axi_y)
    {
       /**
        * generate summary table of totales
@@ -721,22 +709,22 @@ class PhTestRun {
       {
          $length = strlen($head);
 
-         if ($length > $max) 
+         if ($length > $column_width) 
          {
-            $max = $length;
+            $column_width = $length;
          }
 
-         /* separator character is created line by line - adds spaces to the string and adds the number 
+         /* separator character is created line by line - adds spaces to the string and adds the number
           of characters of max width - space between the characters and finally the alignment that 
           the string will have*/
-         $row_headers .= $axi_y . str_pad($head, ($gap_x * 2) + $max, ' ', STR_PAD_BOTH) . ' ';
-         $row_cells .= $axi_y . str_pad($row, ($gap_x * 2) + $max, ' ', STR_PAD_LEFT) . ' ';
+         $row_headers .= $axi_y . str_pad($head, ($gap_x * 2) + $column_width, ' ', STR_PAD_BOTH) . ' ';
+         $row_cells .= $axi_y . str_pad($row, ($gap_x * 2) + $column_width, ' ', STR_PAD_LEFT) . ' ';
 
-         //separator is created with the characters "+" and "-" the latter is repeated to form a line 
-         $row_separator .= $joins . str_repeat($axi_x, ($gap_x * 2) + $max) . $axi_x;
+         //separator is created with the characters "+" and "-" the latter is repeated to form a line
+         $row_separator .= $joins . str_repeat($axi_x, ($gap_x * 2) + $column_width) . $axi_x;
       }
 
-      /*I end each line with the character "|" to close the table and the character "+" to join the 
+      /* I end each line with the character "|" to close the table and the character "+" to join the
       intercepts of the x y axes */
       $row_headers .= $axi_y;
 
@@ -746,14 +734,14 @@ class PhTestRun {
      
       return $dataTable = [
          '$row_separator1' => $row_separator,
-         'row_headers'    => $row_headers,
+         'row_headers'     => $row_headers,
          '$row_separator2' => $row_separator,
-         '$row_cells'     => $row_cells,
+         '$row_cells'      => $row_cells,
          '$row_separator3' => $row_separator
       ];
    }
 
-   public function generate_table_cases_summary($max, $arr_head, $arr_cases, $gap_x, $joins, $axi_x, $axi_y)
+   public function generate_table_cases_summary($column_width, $arr_head, $arr_cases, $gap_x, $joins, $axi_x, $axi_y)
    {
       /**
        * generate summary table of successful summary and faild summary
@@ -763,32 +751,33 @@ class PhTestRun {
       $row_separator_cases = '';
       $row_headers = '';
       $row_cells = '';
-          
+      
       //make the width of the column ('Suite' , 'Class') adapted to the content
       for ($i=0; $i < count($arr_cases) ; $i++) 
       {
-         $name_cas = explode("\\", $arr_cases[$i]['case']); 
+         $name_cas = explode("\\", $arr_cases[$i]['case']);
          $len1 = strlen($name_cas[2]);
          $len2 = strlen($name_cas[1]);
-         if ($len1 > $max)
+
+         if ($len1 > $column_width)
          {
-            $max = $len1;
+            $column_width = $len1;
          }
          
          if ($len2 > $len1)
          {
-            $max = $len2;
-         }      
+            $column_width = $len2;
+         }
       }
 
       //create the table header with its separators
       foreach ($arr_head as $head) 
       { 
          /* separator character is created line by line - adds spaces to the string and adds the number 
-               of characters of max width - space between the characters and finally the alignment that 
-               the string will have*/
-         $row_headers .= $axi_y . ' ' . str_pad($head, ($gap_x * 2) + $max, ' ', STR_PAD_BOTH) . ' '; 
-         $row_separator_cases .= $joins . $axi_x. str_repeat($axi_x, ($gap_x * 2) + $max) . $axi_x; 
+            of characters of max width - space between the characters and finally the alignment that 
+            the string will have*/
+         $row_headers .= $axi_y . ' ' . str_pad($head, ($gap_x * 2) + $column_width, ' ', STR_PAD_BOTH) . ' ';
+         $row_separator_cases .= $joins . $axi_x. str_repeat($axi_x, ($gap_x * 2) + $column_width) . $axi_x;
       }
 
       $row_headers .= $axi_y;
@@ -797,20 +786,21 @@ class PhTestRun {
       {
          $names_failed = explode("\\", $total_case['case']);
 
-            /* separator character is created line by line - adds spaces to the string and adds the number 
-               of characters of max width - space between the characters and finally the alignment that 
-               the string will have*/
-         $row_cells .= $axi_y . ' ' . str_pad($names_failed[1], ($gap_x * 2) + $max, ' ', STR_PAD_RIGHT) . ' ' .
-            $axi_y . ' ' . str_pad($names_failed[2], ($gap_x * 2) + $max, ' ', STR_PAD_RIGHT) . ' ';
+         /* separator character is created line by line - adds spaces to the string and adds the number
+            of characters of max width - space between the characters and finally the alignment that
+            the string will have*/
+         $row_cells .= $axi_y . ' ' . str_pad($names_failed[1], ($gap_x * 2) + $column_width, ' ', STR_PAD_RIGHT) . ' ' .
+            $axi_y . ' ' . str_pad($names_failed[2], ($gap_x * 2) + $column_width, ' ', STR_PAD_RIGHT) . ' ';
 
+         // FIXME: to show a table should depend only on the data, the content to display shouldnt depend on the number of items, so the data array shouldn't have keys, just data.
          if (count($arr_head) == 4)
          {
-            $row_cells .= $axi_y . ' ' . str_pad($total_case['case_failed'], ($gap_x * 2) + $max, ' ', STR_PAD_LEFT) . ' ' .
-              $axi_y . ' ' . str_pad($total_case['case_successful'], ($gap_x * 2) + $max, ' ', STR_PAD_LEFT). ' ' . $axi_y . PHP_EOL;
+            $row_cells .= $axi_y . ' ' . str_pad($total_case['case_failed'], ($gap_x * 2) + $column_width, ' ', STR_PAD_LEFT) . ' ' .
+              $axi_y . ' ' . str_pad($total_case['case_successful'], ($gap_x * 2) + $column_width, ' ', STR_PAD_LEFT). ' ' . $axi_y . PHP_EOL;
          }
          else
          {
-            $row_cells .= $axi_y . ' ' . str_pad($total_case['case_successful'], ($gap_x * 2) + $max, ' ', STR_PAD_LEFT). ' ' . $axi_y . PHP_EOL;
+            $row_cells .= $axi_y . ' ' . str_pad($total_case['case_successful'], ($gap_x * 2) + $column_width, ' ', STR_PAD_LEFT). ' ' . $axi_y . PHP_EOL;
          }
       }
 
@@ -822,7 +812,7 @@ class PhTestRun {
          'row_separator_cases2' => $row_separator_cases . PHP_EOL,
          'row_cells_failed'    => $row_cells,
          'row_separator_cases3' => $row_separator_cases . PHP_EOL
-      ];        
+      ];
    }
 }
 
