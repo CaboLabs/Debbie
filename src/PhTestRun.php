@@ -423,7 +423,11 @@ class PhTestRun {
          $successful_case = 0;
       }
 
-      //css provisional
+      $content = new \CaboLabs\PhTest\PhTestHtmlTemplate;
+
+      $content->Html_template($total_suites, $total_cases, $failed_cases, $successful_case, $html_report, $test_time, $total_tests, $total_successful, $total_failed, $total_asserts, $item3, $item4);
+
+      /*css provisional
       $content = <<< EOD
          <!DOCTYPE html>
          <html lang="en">
@@ -561,7 +565,7 @@ class PhTestRun {
          <br>     
          </body></html>
          EOD;
-      // end css provisional
+      // end css provisional */
 
       if ($path == './')
       {
