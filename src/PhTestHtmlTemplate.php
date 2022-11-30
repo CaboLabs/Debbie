@@ -246,8 +246,8 @@ class PhTestHtmlTemplate {
                                         <tr>
                                           <th scope="col">Suite</th>
                                           <th scope="col">Class</th>
-                                          <th scope="col">Successful</th>
-                                          <th scope="col">Failed</th>
+                                          <th class="text-right" scope="col">Successful</th>
+                                          <th class="text-right" scope="col">Failed</th>
                                         </tr>
                                       </thead>
                                       <tbody>
@@ -261,7 +261,7 @@ class PhTestHtmlTemplate {
                                         <tr>
                                           <th scope="col">Suite</th>
                                           <th scope="col">Class</th>
-                                          <th scope="col">Successful</th>
+                                          <th class="text-right" scope="col">Successful</th>
                                         </tr>
                                       </thead>
                                       <tbody>

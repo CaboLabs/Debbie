@@ -393,12 +393,12 @@ class PhTestRun {
          foreach ($total_cases_failed as $total_case_failed) {
             $names_failed = explode("\\", $total_case_failed['case']);
 
-            $failed_Summ .= "<tr>
-               <td>" . $names_failed[1] . "</td>
-               <td>" . $names_failed[2] . "</td>
-               <td> " . $total_case_failed['case_successful'] . "</td>
-               <td>" . $total_case_failed['case_failed'] . "</td>
-            </tr>";
+            $failed_Summ .= '<tr>
+               <td>' . $names_failed[1] . '</td>
+               <td>' . $names_failed[2] . '</td>
+               <td class="text-right">' . $total_case_failed['case_successful'] . '</td>
+               <td class="text-right">' . $total_case_failed['case_failed'] . '</td>
+            </tr>';
          }
       } else {
          $failed_cases = 0;
@@ -410,11 +410,11 @@ class PhTestRun {
          foreach ($total_cases_successful as $total_case_successful) {
             $names_successful = explode("\\", $total_case_successful['case']);
 
-            $succ_Summ .= "<tr>
-               <td>" . $names_successful[1] . "</td>
-               <td>" . $names_successful[2] . "</td>
-               <td>" . $total_case_successful["case_successful"] . "</td>
-            </tr>";
+            $succ_Summ .= '<tr>
+               <td>' . $names_successful[1] . '</td>
+               <td>' . $names_successful[2] . '</td>
+               <td class="text-right">' . $total_case_successful["case_successful"] . '</td>
+            </tr>';
          }
       } else {
          $successful_case = 0;
