@@ -270,140 +270,153 @@ class PhTestRun {
 
    public function render_reports_html($path, $test_time)
    {
+      /** @Var string $html_report, contains the result of all the report suites, test assets
+       *  @Var string $name_test_cases, extract only the suite name
+       *  @Var string $failed_Summ, renders the content of the summary table failed cases
+       *  @Var string $succ_Summ, renders the content of the summary table $successful cases
+       *  @Var int $successful, count successful asserts per test
+       *  @Var int $failed, count failed asserts per test
+       *  @Var string $names, extracts only the names of the suites from the array
+       *  @Var int $total_cases, stores the total cases number
+       *  @Var int $total_failed, stores the total failed cases number
+       *  @Var int $total_successful, stores the total successful cases number
+       */
       global $html_report, $content, $total_suites, $total_cases, $total_tests, $total_asserts, $total_failed, $total_successful;
 
       $total_cases_failed = $total_cases_successful = array();
-      
+
       $html_report = '';
       $name_test_cases = '';
 
-      $failed_Summ ="";
-      $succ_Summ ="";
-      
-      foreach ($this->reports as $i => $test_suite_reports)
-      {
-         $total_suites ++;
-         
-         foreach ($test_suite_reports as $test_case => $reports)
-         {
+      $failed_Summ = "";
+      $succ_Summ = "";
+
+      foreach ($this->reports as $i => $test_suite_reports) {
+         $total_suites++;
+
+         foreach ($test_suite_reports as $test_case => $reports) {
             $successful = 0;
             $failed = 0;
 
             $names = explode("\\", $test_case);
 
-            $name_test_cases .= '<li class="nav-item">
-                  <a class="nav-link collapsed" href="#"
-                     aria-expanded="true" aria-controls="collapseTwo">
-                     <i class="fas fa-fw fa-cog"></i>
-                     <span>'. $names[2] .'</span>
-                  </a>
-              </li>';
+            $total_cases++;
 
-            $total_cases ++;
-            
-            $html_report .= '<tr>'; 
-            foreach ($reports as $test_function => $report)
-            {
-               $html_report .= '<tr>';            
-               $html_report .= '<td>'. $test_function .'</td>';
+            $html_report .= '<div
+               class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+               <h6 class="m-0 font-weight-bold text-primary">' . $names[2] . '</h6>
+               </div>
+               <!-- Card Body -->
+               <div class="card-body">
+               <div>
+                  <table class="table">
+                     <thead>
+                     <tr>
+                        <th scope="col">Class</th>
+                        <th scope="col">Asserts</th>
+                        <th scope="col"></th>
+                     </tr>
+                     </thead>
+                  <tbody><tr>';
 
-               $total_tests ++;
+            foreach ($reports as $test_function => $report) {
+               $html_report .= '<td>' . $test_function . '</td>';
 
-               if (isset($report['asserts']))
-               {
-                  foreach ($report['asserts'] as $assert_report)
-                  {
-                     if ($assert_report['type'] == 'ERROR')
-                     {
-                        $html_report .= '<td class ="text-danger">ERROR: '. $assert_report['msg'] .'</td>';
+               $total_tests++;
 
-                        $total_failed ++;
-                        $failed ++;
+               if (isset($report['asserts'])) {
+                  foreach ($report['asserts'] as $assert_report) {
+                     if ($assert_report['type'] == 'ERROR') {
+                        $html_report .= '<td class ="text-danger">ERROR: ' . $assert_report['msg'] . '</td>';
+
+                        $total_failed++;
+                        $failed++;
+                     } else if ($assert_report['type'] == 'OK') {
+                        $html_report .= '<td class="text-success">OK: ' . $assert_report['msg'] . '</td>';
+
+                        $total_successful++;
+                        $successful++;
+                     } else if ($assert_report['type'] == 'EXCEPTION') {
+                        $html_report .= '<td class="text-primary">EXCEPTION: ' . $assert_report['msg'] . '</td>';
                      }
-                     else if ($assert_report['type'] == 'OK')
-                     {
-                        $html_report .= '<td class="text-success">OK: '. $assert_report['msg'] .'</td>';
 
-                        $total_successful ++;
-                        $successful ++;
+                     if (!empty($report['output'])) {
+                        $html_report .= '<td class="text-secondary">OUTPUT: ' . $report['output'] . '</td>';
                      }
-                     else if ($assert_report['type'] == 'EXCEPTION')
-                     {
-                        $html_report .= '<td class="text-primary">EXCEPTION: '. $assert_report['msg'] .'</td>';
-                     }
-
-                     if (!empty($report['output']))
-                     {
-                        $html_report .= '<td class="text-secondary">OUTPUT: '. $report['output'] .'</td>';
-                     }
+                     $html_report .= '</tr>';
                   }
 
-                  $total_asserts ++;
+                  $total_asserts++;
                }
-
-               $html_report .= '</tr>';
             }
-            $html_report .= '</tr>';
+            $html_report .= '</tr></tbody></table><br></div></div>';
+
+            if ($failed > 0) {
+               $total_cases_failed[] = [
+                  'case' => $test_case,
+                  'case_failed' => $failed,
+                  'case_successful' => $successful
+               ];
+            }
+
+            if ($successful > 0 && $failed == 0) {
+               $total_cases_successful[] = [
+                  'case' => $test_case,
+                  'case_failed' => $failed,
+                  'case_successful' => $successful
+               ];
+            }
+
+            $name_test_cases .= '<li class="nav-item">
+               <a class="nav-link collapsed" href="#"
+                  aria-expanded="true" aria-controls="collapseTwo">';
 
             if ($failed > 0)
             {
-               $total_cases_failed[] = [
-                  'case' => $test_case,
-                  'case_failed' => $failed, 
-                  'case_successful' => $successful
-               ];
+               $name_test_cases .= '<i class="fas fa-times-circle"></i>';
             }
-
-            if ($successful > 0 && $failed == 0)
+            else
             {
-               $total_cases_successful[] = [
-                  'case' => $test_case, 
-                  'case_failed' => $failed, 
-                  'case_successful' => $successful
-               ];
+               $name_test_cases .= '<i class="fa fa-check"></i>';
             }
+         
+            $name_test_cases .= '<span>' . $names[2] . '</span>
+               </a>
+               </li>';
          }
-         $html_report .= '</tr>';
+
       }
 
-      if (count($total_cases_failed) >= 1)
-      {
+      if (count($total_cases_failed) >= 1) {
          $failed_cases = count($total_cases_failed);
 
-         foreach ($total_cases_failed as $total_case_failed)
-         {
+         foreach ($total_cases_failed as $total_case_failed) {
             $names_failed = explode("\\", $total_case_failed['case']);
 
             $failed_Summ .= "<tr>
-               <td>". $names_failed[1]."</td>
-               <td>". $names_failed[2]."</td>
-               <td> ". $total_case_failed['case_successful'] ."</td>
-               <td>". $total_case_failed['case_failed'] ."</td>
+               <td>" . $names_failed[1] . "</td>
+               <td>" . $names_failed[2] . "</td>
+               <td> " . $total_case_failed['case_successful'] . "</td>
+               <td>" . $total_case_failed['case_failed'] . "</td>
             </tr>";
          }
-      }
-      else
-      {
+      } else {
          $failed_cases = 0;
       }
 
-      if (count($total_cases_successful) >= 1)
-      {
+      if (count($total_cases_successful) >= 1) {
          $successful_case = count($total_cases_successful);
 
-         foreach ($total_cases_successful as $total_case_successful)
-         {
+         foreach ($total_cases_successful as $total_case_successful) {
             $names_successful = explode("\\", $total_case_successful['case']);
 
             $succ_Summ .= "<tr>
-               <td>". $names_successful[1]."</td>
-               <td>". $names_successful[2]."</td>
-               <td>". $total_case_successful["case_successful"] ."</td>
-            </tr>";           
+               <td>" . $names_successful[1] . "</td>
+               <td>" . $names_successful[2] . "</td>
+               <td>" . $total_case_successful["case_successful"] . "</td>
+            </tr>";
          }
-      }
-      else
-      {
+      } else {
          $successful_case = 0;
       }
 
@@ -411,8 +424,7 @@ class PhTestRun {
 
       $content->Html_template($total_suites, $total_cases, $failed_cases, $successful_case, $html_report, $test_time, $total_tests, $total_successful, $total_failed, $total_asserts, $failed_Summ, $succ_Summ, $name_test_cases);
 
-      if ($path == './')
-      {
+      if ($path == './') {
          $path = 'test_report.html';
       }
 
