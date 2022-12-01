@@ -281,7 +281,7 @@ class PhTestRun {
        */
       global $html_report, $content, $total_suites, $total_cases, $total_tests, $total_asserts, $total_failed, $total_successful;
 
-      $total_cases_failed = $total_cases_successful = array();
+      $total_cases_failed = $total_cases_successful = [];
 
       $html_report = '';
       $name_test_cases = '';
