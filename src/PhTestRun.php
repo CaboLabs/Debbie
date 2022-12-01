@@ -691,9 +691,9 @@ class PhTestRun {
       
       return $summary_case = [
          'row_separator_cases1' => $row_separator_cases . PHP_EOL,
-         'row_headers_failed'  => $row_headers . PHP_EOL,
+         'row_headers_failed'   => $row_headers . PHP_EOL,
          'row_separator_cases2' => $row_separator_cases . PHP_EOL,
-         'row_cells_failed'    => $row_cells,
+         'row_cells_failed'     => $row_cells,
          'row_separator_cases3' => $row_separator_cases . PHP_EOL
       ];
    }
