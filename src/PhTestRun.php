@@ -291,10 +291,12 @@ class PhTestRun {
       $failed_Summ = "";
       $succ_Summ = "";
 
-      foreach ($this->reports as $i => $test_suite_reports) {
+      foreach ($this->reports as $i => $test_suite_reports) 
+      {
          $total_suites++;
 
-         foreach ($test_suite_reports as $test_case => $reports) {
+         foreach ($test_suite_reports as $test_case => $reports) 
+         {
             $successful = 0;
             $failed = 0;
 
@@ -309,9 +311,9 @@ class PhTestRun {
                <!-- Card Body -->
                <div class="card-body">
                <div>
-                  <table class="table">
+                  <table class="table table-borderless">
                      <thead>
-                     <tr>
+                     <tr class ="border-bottom">
                         <th scope="col">Class</th>
                         <th scope="col">Asserts</th>
                         <th scope="col"></th>
@@ -319,28 +321,37 @@ class PhTestRun {
                      </thead>
                   <tbody><tr>';
 
-            foreach ($reports as $test_function => $report) {
+            foreach ($reports as $test_function => $report) 
+            {
                $html_report .= '<td>' . $test_function . '</td>';
 
                $total_tests++;
 
-               if (isset($report['asserts'])) {
-                  foreach ($report['asserts'] as $assert_report) {
-                     if ($assert_report['type'] == 'ERROR') {
+               if (isset($report['asserts'])) 
+               {
+                  foreach ($report['asserts'] as $assert_report) 
+                  {
+                     if ($assert_report['type'] == 'ERROR') 
+                     {
                         $html_report .= '<td class ="text-danger">ERROR: ' . $assert_report['msg'] . '</td>';
 
                         $total_failed++;
                         $failed++;
-                     } else if ($assert_report['type'] == 'OK') {
+                     } 
+                     else if ($assert_report['type'] == 'OK') 
+                     {
                         $html_report .= '<td class="text-success">OK: ' . $assert_report['msg'] . '</td>';
 
                         $total_successful++;
                         $successful++;
-                     } else if ($assert_report['type'] == 'EXCEPTION') {
+                     } 
+                     else if ($assert_report['type'] == 'EXCEPTION') 
+                     {
                         $html_report .= '<td class="text-primary">EXCEPTION: ' . $assert_report['msg'] . '</td>';
                      }
 
-                     if (!empty($report['output'])) {
+                     if (!empty($report['output'])) 
+                     {
                         $html_report .= '<td class="text-secondary">OUTPUT: ' . $report['output'] . '</td>';
                      }
                      $html_report .= '</tr>';
@@ -351,7 +362,8 @@ class PhTestRun {
             }
             $html_report .= '</tr></tbody></table><br></div></div>';
 
-            if ($failed > 0) {
+            if ($failed > 0) 
+            {
                $total_cases_failed[] = [
                   'case' => $test_case,
                   'case_failed' => $failed,
@@ -359,7 +371,8 @@ class PhTestRun {
                ];
             }
 
-            if ($successful > 0 && $failed == 0) {
+            if ($successful > 0 && $failed == 0) 
+            {
                $total_cases_successful[] = [
                   'case' => $test_case,
                   'case_failed' => $failed,
@@ -371,15 +384,15 @@ class PhTestRun {
                <a class="nav-link collapsed" href="#"
                   aria-expanded="true" aria-controls="collapseTwo">';
 
-            if ($failed > 0)
+            if ($failed > 0) 
             {
-               $name_test_cases .= '<i class="fas fa-times-circle"></i>';
-            }
-            else
+               $name_test_cases .= '<i class="fas fa-times-circle text-warning"></i>';
+            } 
+            else 
             {
-               $name_test_cases .= '<i class="fa fa-check"></i>';
+               $name_test_cases .= '<i class="fa fa-check text-success"></i>';
             }
-         
+
             $name_test_cases .= '<span>' . $names[2] . '</span>
                </a>
                </li>';
@@ -387,7 +400,8 @@ class PhTestRun {
 
       }
 
-      if (count($total_cases_failed) >= 1) {
+      if (count($total_cases_failed) >= 1) 
+      {
          $failed_cases = count($total_cases_failed);
 
          foreach ($total_cases_failed as $total_case_failed) {
@@ -400,14 +414,18 @@ class PhTestRun {
                <td class="text-right">' . $total_case_failed['case_failed'] . '</td>
             </tr>';
          }
-      } else {
+      } 
+      else 
+      {
          $failed_cases = 0;
       }
 
-      if (count($total_cases_successful) >= 1) {
+      if (count($total_cases_successful) >= 1) 
+      {
          $successful_case = count($total_cases_successful);
 
-         foreach ($total_cases_successful as $total_case_successful) {
+         foreach ($total_cases_successful as $total_case_successful) 
+         {
             $names_successful = explode("\\", $total_case_successful['case']);
 
             $succ_Summ .= '<tr>
@@ -416,7 +434,9 @@ class PhTestRun {
                <td class="text-right">' . $total_case_successful["case_successful"] . '</td>
             </tr>';
          }
-      } else {
+      } 
+      else 
+      {
          $successful_case = 0;
       }
 
@@ -424,7 +444,8 @@ class PhTestRun {
 
       $content->Html_template($total_suites, $total_cases, $failed_cases, $successful_case, $html_report, $test_time, $total_tests, $total_successful, $total_failed, $total_asserts, $failed_Summ, $succ_Summ, $name_test_cases);
 
-      if ($path == './') {
+      if ($path == './') 
+      {
          $path = 'test_report.html';
       }
 
