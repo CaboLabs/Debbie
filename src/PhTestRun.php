@@ -175,7 +175,7 @@ class PhTestRun {
    {
       global $total_suites, $total_cases, $total_tests, $total_asserts, $total_failed, $total_successful;
 
-      $total_cases_failed = $total_cases_successful = array();
+      $total_cases_failed = $total_cases_successful = [];
 
       echo 'Test report: '. PHP_EOL . PHP_EOL;
       
@@ -268,16 +268,16 @@ class PhTestRun {
 
    public function render_reports_html($path, $test_time)
    {
-      /** @Var string $html_report, contains the result of all the report suites, test assets
-       *  @Var string $name_test_cases, extract only the suite name
-       *  @Var string $failed_Summ, renders the content of the summary table failed cases
-       *  @Var string $succ_Summ, renders the content of the summary table $successful cases
-       *  @Var int $successful, count successful asserts per test
-       *  @Var int $failed, count failed asserts per test
-       *  @Var string $names, extracts only the names of the suites from the array
-       *  @Var int $total_cases, stores the total cases number
-       *  @Var int $total_failed, stores the total failed cases number
-       *  @Var int $total_successful, stores the total successful cases number
+      /** @var String $html_report, contains the result of all the report suites, test assets
+       *  @var String $name_test_cases, extract only the suite name
+       *  @var String $failed_Summ, renders the content of the summary table failed cases
+       *  @var String $succ_Summ, renders the content of the summary table $successful cases
+       *  @var int $successful, count successful asserts per test
+       *  @var int $failed, count failed asserts per test
+       *  @var String $names, extracts only the names of the suites from the array
+       *  @var int $total_cases, stores the total cases number
+       *  @var int $total_failed, stores the total failed cases number
+       *  @var int $total_successful, stores the total successful cases number
        */
       global $html_report, $content, $total_suites, $total_cases, $total_tests, $total_asserts, $total_failed, $total_successful;
 
@@ -450,7 +450,6 @@ class PhTestRun {
       file_put_contents($path, $content);
    }
 
-   
    public function get_reports()
    {
       return $this->reports;
