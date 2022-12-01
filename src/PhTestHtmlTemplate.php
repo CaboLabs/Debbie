@@ -3,8 +3,20 @@
 namespace CaboLabs\PhTest;
 
 /**
- * 
  * this class renders the html when the tests are run.
+ * @param String $total_suites
+ * @param String $total_cases
+ * @param String $failed_cases
+ * @param String $successful_case
+ * @param String $html_report
+ * @param String $test_time
+ * @param String $total_tests
+ * @param String $total_successful
+ * @param String $total_failed
+ * @param String $total_asserts
+ * @param String $failed_Summ
+ * @param String $succ_Summ
+ * @param String $name_test_cases
  */
 
 class PhTestHtmlTemplate {
