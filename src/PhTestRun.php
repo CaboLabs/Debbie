@@ -302,22 +302,25 @@ class PhTestRun {
 
             $total_cases++;
 
-            $html_report .= '<div
-               class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-               <h6 class="m-0 font-weight-bold text-primary">' . $names[2] . '</h6>
-               </div>
-               <!-- Card Body -->
-               <div class="card-body">
-               <div>
-                  <table class="table table-borderless">
-                     <thead>
-                     <tr class ="border-bottom">
-                        <th scope="col">Class</th>
-                        <th scope="col">Asserts</th>
-                        <th scope="col"></th>
-                     </tr>
-                     </thead>
-                  <tbody><tr>';
+            $html_report .= ' <!-- Content Row -->
+               <div class="row" id = "' . $names[2] . '">
+                  <div class="col-xl-12 col-lg-12">
+                    <div class="card shadow mb-4">
+                        <!-- Card Header - Dropdown -->
+                        <div  class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                           <h6 class="m-0 font-weight-bold text-primary">' . $names[2] . '</h6>
+                        </div>
+                           <!-- Card Body -->
+                        <div class="card-body">
+                           <table class="table table-borderless" style="padding:0;">
+                              <thead>
+                                 <tr class ="border-bottom">
+                                    <th scope="col">Class</th>
+                                    <th scope="col">Asserts</th>
+                                    <th scope="col"></th>
+                                 </tr>
+                              </thead>
+                              <tbody><tr>';
 
             foreach ($reports as $test_function => $report) 
             {
@@ -358,7 +361,7 @@ class PhTestRun {
                   $total_asserts++;
                }
             }
-            $html_report .= '</tr></tbody></table><br></div></div>';
+            $html_report .= '</tbody></table></div></div></div></div>';
 
             if ($failed > 0) 
             {
