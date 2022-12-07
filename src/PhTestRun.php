@@ -312,7 +312,7 @@ class PhTestRun {
                         </div>
                            <!-- Card Body -->
                         <div class="card-body">
-                           <table class="table table-borderless" style="padding:0;">
+                           <table class="table table-borderless" style="margin: -0.5rem;">
                               <thead>
                                  <tr class ="border-bottom">
                                     <th scope="col">Class</th>
