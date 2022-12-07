@@ -53,8 +53,12 @@ class PhTestHtmlTemplate {
                 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
       
                     <!-- Sidebar - Brand -->
-                    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-                        <img width="150" src="assets/images/amplify.png">
+                   
+                    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="test_report.html">
+                      <div class="sidebar-brand-icon rotate-n-15">
+                          <i class="fas fa-laugh-wink"></i>
+                      </div>
+                      <div class="sidebar-brand-text mx-3">PhTest</div>
                     </a>
       
                     <!-- Divider -->
@@ -76,37 +80,7 @@ class PhTestHtmlTemplate {
                     </div>
       
                     <!-- Nav Item -->
-                    $name_test_cases
-      
-                    <!-- Divider -->
-                    <hr class="sidebar-divider my-0"><br>
-      
-                    <!-- Heading -->
-                    <div class="sidebar-heading">
-                      Report summary
-                    </div>
-      
-                    <li class="nav-item">
-                      <a class="nav-link collapsed" href="#" 
-                          aria-expanded="true" aria-controls="collapseTwo">
-                          <i class="fas fa-clipboard-list"></i>
-                          <span>Total summary</span>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link collapsed" href="#" 
-                          aria-expanded="true" aria-controls="collapseTwo">
-                          <i class="fas fa-clipboard-list"></i>
-                          <span>Failed Summary</span>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link collapsed" href="#" 
-                          aria-expanded="true" aria-controls="collapseTwo">
-                          <i class="fas fa-clipboard-list"></i>
-                          <span>Successful Summary</span>
-                      </a>
-                    </li>
+                    <!--$name_test_cases-->
                 </ul>
                 <!-- End of Sidebar -->
       
@@ -118,7 +92,7 @@ class PhTestHtmlTemplate {
                       <!-- Topbar -->
                       <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
                         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
-                          <h1 class="h2 text-gray-800">Test reports</h1>
+                          <h1 class="h2 text-gray-800"></h1>
                         </div>                                    
                       </nav>
                       <!-- End of Topbar -->
