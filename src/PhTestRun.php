@@ -269,7 +269,8 @@ class PhTestRun {
    public function render_reports_html($path, $test_time)
    {
       /** @var String $html_report, contains the result of all the report suites, test assets
-       *  @var String $name_test_cases, extract only the suite name
+       *  @var String $menu_items, extract only the suite name
+       *  @var String $menu_subitems, extract only the tests name
        *  @var String $failed_Summ, renders the content of the summary table failed cases
        *  @var String $succ_Summ, renders the content of the summary table $successful cases
        *  @var int $successful, count successful asserts per test
@@ -284,7 +285,8 @@ class PhTestRun {
       $total_cases_failed = $total_cases_successful = [];
 
       $html_report = '';
-      $name_test_cases = '';
+      $menu_items = '';
+      $menu_subitems = '';
 
       $failed_Summ = "";
       $succ_Summ = "";
@@ -321,6 +323,7 @@ class PhTestRun {
                                  </tr>
                               </thead>
                               <tbody><tr>';
+            $menu_subitems .= '<a class="collapse-item" href="#">' . $names[2] . '</a>';
 
             foreach ($reports as $test_function => $report) 
             {
@@ -381,24 +384,29 @@ class PhTestRun {
                ];
             }
 
-            $name_test_cases .= '<li class="nav-item">
-               <a class="nav-link collapsed" href="#"
-                  aria-expanded="true" aria-controls="collapseTwo">';
+            $menu_items .= '<li class="nav-item">
+               <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+               aria-expanded="true" aria-controls="collapseUtilities">';
 
             if ($failed > 0) 
             {
-               $name_test_cases .= '<i class="fas fa-times-circle text-warning"></i>';
+               $menu_items .= '<i class="fas fa-times-circle text-warning"></i>';
             } 
             else 
             {
-               $name_test_cases .= '<i class="fa fa-check text-success"></i>';
+               $menu_items .= '<i class="fa fa-check text-success"></i>';
             }
 
-            $name_test_cases .= '<span>' . $names[2] . '</span>
-               </a>
-               </li>';
-         }
+            $menu_items .= '<span>' . $names[1] . '</span></a>
+               <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+               data-parent="#accordionSidebar">
+               <div class="bg-white py-2 collapse-inner rounded">
+               <h6 class="collapse-header">Test case:</h6>';
 
+            $menu_items .= $menu_subitems;
+            
+            $menu_items .= '</div></div></li>';
+         }
       }
 
       if (count($total_cases_failed) >= 1) 
@@ -443,7 +451,7 @@ class PhTestRun {
 
       $content = new \CaboLabs\PhTest\PhTestHtmlTemplate;
 
-      $content->Html_template($total_suites, $total_cases, $failed_cases, $successful_case, $html_report, $test_time, $total_tests, $total_successful, $total_failed, $total_asserts, $failed_Summ, $succ_Summ, $name_test_cases);
+      $content->Html_template($total_suites, $total_cases, $failed_cases, $successful_case, $html_report, $test_time, $total_tests, $total_successful, $total_failed, $total_asserts, $failed_Summ, $succ_Summ, $menu_items);
 
       if ($path == './') 
       {

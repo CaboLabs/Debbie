@@ -16,12 +16,12 @@ namespace CaboLabs\PhTest;
  * @param String $total_asserts
  * @param String $failed_Summ
  * @param String $succ_Summ
- * @param String $name_test_cases
+ * @param String $menu_items
  */
 
 class PhTestHtmlTemplate {
 
-  public function Html_template($total_suites, $total_cases, $failed_cases, $successful_case, $html_report, $test_time, $total_tests, $total_successful, $total_failed, $total_asserts, $failed_Summ, $succ_Summ, $name_test_cases)
+  public function Html_template($total_suites, $total_cases, $failed_cases, $successful_case, $html_report, $test_time, $total_tests, $total_successful, $total_failed, $total_asserts, $failed_Summ, $succ_Summ, $menu_items)
   {
     global $content;
 
@@ -80,25 +80,7 @@ class PhTestHtmlTemplate {
                     </div>
       
                     <!-- Nav Item -->
-                    <!--$name_test_cases-->
-                    
-                    <li class="nav-item">
-                      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                          aria-expanded="true" aria-controls="collapseUtilities">
-                          <i class="fas fa-fw fa-wrench"></i>
-                          <span>Utilities</span>
-                      </a>
-                      <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                          data-parent="#accordionSidebar">
-                          <div class="bg-white py-2 collapse-inner rounded">
-                              <h6 class="collapse-header">Custom Utilities:</h6>
-                              <a class="collapse-item" href="utilities-color.html">Colors</a>
-                              <a class="collapse-item" href="utilities-border.html">Borders</a>
-                              <a class="collapse-item" href="utilities-animation.html">Animations</a>
-                              <a class="collapse-item" href="utilities-other.html">Other</a>
-                          </div>
-                      </div>
-                  </li>
+                    $menu_items
                 </ul>
                 <!-- End of Sidebar -->
       
