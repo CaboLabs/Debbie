@@ -175,7 +175,7 @@ class PhTestRun {
    {
       global $total_suites, $total_cases, $total_tests, $total_asserts, $total_failed, $total_successful;
 
-      $total_cases_failed = $total_cases_successful = array();
+      $total_cases_failed = $total_cases_successful = [];
 
       echo 'Test report: '. PHP_EOL . PHP_EOL;
       
@@ -188,7 +188,7 @@ class PhTestRun {
             $successful = 0;
             $failed = 0;
 
-            echo '├── Test case: '. $test_case .' (test count: '. count($reports) .')'. PHP_EOL;
+            echo '├── Test case: '. $test_case .'  (test count: '. count($reports) .')'. PHP_EOL;
             echo '|   |'. PHP_EOL;
 
             $total_cases ++;
@@ -236,8 +236,8 @@ class PhTestRun {
                   echo '|   |   |'. PHP_EOL;
                   echo '|   |   └── OUTPUT: '. $report['output'] . PHP_EOL;
                }
-
                echo '|   |'. PHP_EOL;
+
             }
 
             if ($failed > 0)
@@ -268,298 +268,184 @@ class PhTestRun {
 
    public function render_reports_html($path, $test_time)
    {
+      /** @var String $html_report, contains the result of all the report suites, test assets
+       *  @var String $name_test_cases, extract only the suite name
+       *  @var String $failed_Summ, renders the content of the summary table failed cases
+       *  @var String $succ_Summ, renders the content of the summary table $successful cases
+       *  @var int $successful, count successful asserts per test
+       *  @var int $failed, count failed asserts per test
+       *  @var String $names, extracts only the names of the suites from the array
+       *  @var int $total_cases, stores the total cases number
+       *  @var int $total_failed, stores the total failed cases number
+       *  @var int $total_successful, stores the total successful cases number
+       */
       global $html_report, $content, $total_suites, $total_cases, $total_tests, $total_asserts, $total_failed, $total_successful;
 
       $total_cases_failed = $total_cases_successful = [];
-      
-      $html_report = '<h1>Test report<h1>';
 
-      $item3 = "";
-      $item4 = "";
-      
-      foreach ($this->reports as $i => $test_suite_reports)
+      $html_report = '';
+      $name_test_cases = '';
+
+      $failed_Summ = "";
+      $succ_Summ = "";
+
+      foreach ($this->reports as $i => $test_suite_reports) 
       {
-         $html_report .= '<ul>';
-         $total_suites ++;
+         $total_suites++;
 
-         foreach ($test_suite_reports as $test_case => $reports)
+         foreach ($test_suite_reports as $test_case => $reports) 
          {
             $successful = 0;
             $failed = 0;
-            
-            $html_report .= '<ul>';
-            $html_report .= '<li class="container"><p>Test case: '. $test_case .'</p>';
 
-            $total_cases ++;
+            $names = explode("\\", $test_case);
 
-            foreach ($reports as $test_function => $report)
+            $total_cases++;
+
+            $html_report .= ' <!-- Content Row -->
+               <div class="row" id = "' . $names[2] . '">
+                  <div class="col-xl-12 col-lg-12">
+                    <div class="card shadow mb-4">
+                        <!-- Card Header - Dropdown -->
+                        <div  class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                           <h6 class="m-0 font-weight-bold text-primary">' . $names[2] . '</h6>
+                        </div>
+                           <!-- Card Body -->
+                        <div class="card-body">
+                           <table class="table table-borderless" style="margin: -0.5rem;">
+                              <thead>
+                                 <tr class ="border-bottom">
+                                    <th scope="col">Class</th>
+                                    <th scope="col">Asserts</th>
+                                    <th scope="col"></th>
+                                 </tr>
+                              </thead>
+                              <tbody><tr>';
+
+            foreach ($reports as $test_function => $report) 
             {
-               $html_report .= '<ul>';
-               $html_report .= '<li class="container" style="margin-top: 10px;"><p>Test: '. $test_function .'</p>';
+               $html_report .= '<td>' . $test_function . '</td>';
 
-               $total_tests ++;
+               $total_tests++;
 
-               if (isset($report['asserts']))
+               if (isset($report['asserts'])) 
                {
-                  foreach ($report['asserts'] as $assert_report)
+                  foreach ($report['asserts'] as $assert_report) 
                   {
-                     if ($assert_report['type'] == 'ERROR')
+                     if ($assert_report['type'] == 'ERROR') 
                      {
-                        $html_report .= '<li><p style="color:red">ERROR: '. $assert_report['msg'] .'</p></li>';
+                        $html_report .= '<td class ="text-danger">ERROR: ' . $assert_report['msg'] . '</td>';
 
-                        $total_failed ++;
-                        $failed ++;
-                     }
-                     else if ($assert_report['type'] == 'OK')
+                        $total_failed++;
+                        $failed++;
+                     } 
+                     else if ($assert_report['type'] == 'OK') 
                      {
-                        $html_report .= '<li><p style="color:green">OK: '. $assert_report['msg'] .'</p></li>';
+                        $html_report .= '<td class="text-success">OK: ' . $assert_report['msg'] . '</td>';
 
-                        $total_successful ++;
-                        $successful ++;
-                     }
-                     else if ($assert_report['type'] == 'EXCEPTION')
+                        $total_successful++;
+                        $successful++;
+                     } 
+                     else if ($assert_report['type'] == 'EXCEPTION') 
                      {
-                        $html_report .= '<li><p style="color:blue">EXCEPTION: '. $assert_report['msg'] .'</p></li>';
+                        $html_report .= '<td class="text-primary">EXCEPTION: ' . $assert_report['msg'] . '</td>';
                      }
 
-                     if (!empty($report['output']))
+                     if (!empty($report['output'])) 
                      {
-                        $html_report .= '<li><p style="color:gray">OUTPUT: '. $report['output'] .'</p></li>';
+                        $html_report .= '<td class="text-secondary">OUTPUT: ' . $report['output'] . '</td>';
                      }
+                     $html_report .= '</tr>';
                   }
 
-                  $total_asserts ++;
+                  $total_asserts++;
                }
-
-               $html_report .= '</li>';
-               $html_report .= '</ul>';
             }
+            $html_report .= '</tbody></table></div></div></div></div>';
 
-            $html_report .= '</li><br>';
-            $html_report .= '</ul>';
-
-            if ($failed > 0)
+            if ($failed > 0) 
             {
                $total_cases_failed[] = [
                   'case' => $test_case,
-                  'case_failed' => $failed, 
+                  'case_failed' => $failed,
                   'case_successful' => $successful
                ];
             }
 
-            if ($successful > 0 && $failed == 0)
+            if ($successful > 0 && $failed == 0) 
             {
                $total_cases_successful[] = [
-                  'case' => $test_case, 
-                  'case_failed' => $failed, 
+                  'case' => $test_case,
+                  'case_failed' => $failed,
                   'case_successful' => $successful
                ];
             }
+
+            $name_test_cases .= '<li class="nav-item">
+               <a class="nav-link collapsed" href="#"
+                  aria-expanded="true" aria-controls="collapseTwo">';
+
+            if ($failed > 0) 
+            {
+               $name_test_cases .= '<i class="fas fa-times-circle text-warning"></i>';
+            } 
+            else 
+            {
+               $name_test_cases .= '<i class="fa fa-check text-success"></i>';
+            }
+
+            $name_test_cases .= '<span>' . $names[2] . '</span>
+               </a>
+               </li>';
          }
 
-         $html_report .= '</ul><br>';
       }
 
-      if (count($total_cases_failed) >= 1)
+      if (count($total_cases_failed) >= 1) 
       {
          $failed_cases = count($total_cases_failed);
 
-         $item3 .= "<h1>Failed Summary:</h1> 
-            <table>
-               <tr>
-               <th>Suite</th>
-               <th>Class</th>
-               <th>Successful</th>
-               <th>Failed</th>
-               </tr>";
-         
-         foreach ($total_cases_failed as $total_case_failed)
-         {
+         foreach ($total_cases_failed as $total_case_failed) {
             $names_failed = explode("\\", $total_case_failed['case']);
 
-            $item3 .= "<tr>
-               <td>". $names_failed[1] ."</td>
-               <td>". $names_failed[2] ."</td>
-               <td>". $total_case_failed['case_successful'] ."</td>
-               <td>". $total_case_failed['case_failed'] ."</td>
-            </tr>";
+            $failed_Summ .= '<tr>
+               <td>' . $names_failed[1] . '</td>
+               <td>' . $names_failed[2] . '</td>
+               <td class="text-right">' . $total_case_failed['case_successful'] . '</td>
+               <td class="text-right">' . $total_case_failed['case_failed'] . '</td>
+            </tr>';
          }
-
-         $item3 .="</table>";
-      }
-      else
+      } 
+      else 
       {
          $failed_cases = 0;
       }
 
-      if (count($total_cases_successful) >= 1)
+      if (count($total_cases_successful) >= 1) 
       {
          $successful_case = count($total_cases_successful);
 
-         $item4 .= "<h1>Successful Summary:</h1>
-            <table>
-               <tr>
-                  <th>Suite</th>
-                  <th>Class</th>
-                  <th>Successful</th>
-               </tr>";
-
-         foreach ($total_cases_successful as $total_case_successful)
+         foreach ($total_cases_successful as $total_case_successful) 
          {
             $names_successful = explode("\\", $total_case_successful['case']);
 
-            $item4 .= "<tr>
-               <td>". $names_successful[1] ."</td>
-               <td>". $names_successful[2] ."</td>
-               <td>". $total_case_successful["case_successful"] ."</td>
-            </tr>";
+            $succ_Summ .= '<tr>
+               <td>' . $names_successful[1] . '</td>
+               <td>' . $names_successful[2] . '</td>
+               <td class="text-right">' . $total_case_successful["case_successful"] . '</td>
+            </tr>';
          }
-
-         $item4 .= "</table>";
-      }
-      else
+      } 
+      else 
       {
          $successful_case = 0;
       }
 
-      //css provisional
-      $content = <<< EOD
-         <!DOCTYPE html>
-         <html lang="en">
-         <head>
-         <meta charset="UTF-8">
-         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-         <title>Document</title>
-         </head>
-         <style>
-         body{
-            font-size: 10px;
-            line-height: 35px;
-         }
-         ul,
-         li {
-         list-style: none;
-         margin: 0;
-         padding: 0;
-         }
-         ul {
-         padding-left: 1em;
-         }
-         li {
-         padding-left: 1em;
-         border: 1px dotted black;
-         border-width: 0 0 1px 1px;
-         }
-         li.container {
-         border-bottom: 0px;
-         }
-         li.empty {
-         font-style: italic;
-         color: silver;
-         border-color: silver;
-         }
-         li p {
-         margin: 0;
-         background: white;
-         position: relative;
-         top: 0.5em;
-         }
-         li ul {
-         border-top: 1px dotted black;
-         margin-left: -1em;
-         padding-left: 2em;
-         }
-         ul li:last-child ul {
-            border-left: 1px solid white;
-            margin-left: -17px;
-         }
+      $content = new \CaboLabs\PhTest\PhTestHtmlTemplate;
 
-         .grid-container {
-            display: grid;
-            gap: 10px;
-            padding: 10px;
-         }
-         .grid-item {
-            padding: 20px;
-            border: 1px dotted black;
-            text-align: center;
-         }
-          
-         .item1 {
-            grid-column: 1;
-            grid-row: 1;
-         }
-         .item2 {
-            grid-column: 2;
-            grid-row: 1;
-         }
-         .item3 {
-            grid-column: 3;
-            grid-row: 1;
-         }
-         .item4 {
-            grid-column: 4;
-            grid-row: 1;
-         }
-         table, th, td{
-            border: 1px solid gray;
-            border-collapse: collapse;
-            font-size: 18px;
-            padding: 5px;
-         }
-         td {
-            text-align: right;
-         }
-         </style><body>
+      $content->Html_template($total_suites, $total_cases, $failed_cases, $successful_case, $html_report, $test_time, $total_tests, $total_successful, $total_failed, $total_asserts, $failed_Summ, $succ_Summ, $name_test_cases);
 
-         <div class="grid-container">
-         <div class="grid-item item1">
-            <h1>Total suites: $total_suites </h1>
-         </div>
-         <div class="grid-item item2">
-            <h1>Total tests cases: $total_cases </h1>
-         </div>
-         <div class="grid-item item3">
-            <h1>Cases failed: $failed_cases</h1>
-         </div>
-         <div class="grid-item item4">
-            <h1>Cases successful: $successful_case</h1>
-         </div> 
-         </div>
-
-         $html_report
-
-         <h1>Total Summary:</h1>
-         <h2>total time: $test_time μs</h2>
-         <table>
-            <tr>
-               <th>Total suites</th>
-               <th>Total test classes</th>
-               <th>Total tests</th>
-               <th>Asserts successful</th>
-               <th>Asserts failed</th>
-               <th>Total asserts</th>
-            </tr>
-            <tr>
-               <td>$total_suites</td>
-               <td>$total_cases</td>
-               <td>$total_tests</td> 
-               <td>$total_successful</td>
-               <td>$total_failed</td>
-               <td>$total_asserts</td>
-            </tr>
-         </table>
-         <br> 
-         $item3
-         <br>
-         $item4
-         <br>
-         </body></html>
-      EOD;
-      // end css provisional
-
-      if ($path == './')
+      if ($path == './') 
       {
          $path = 'test_report.html';
       }
@@ -808,9 +694,9 @@ class PhTestRun {
       
       return $summary_case = [
          'row_separator_cases1' => $row_separator_cases . PHP_EOL,
-         'row_headers_failed'  => $row_headers . PHP_EOL,
+         'row_headers_failed'   => $row_headers . PHP_EOL,
          'row_separator_cases2' => $row_separator_cases . PHP_EOL,
-         'row_cells_failed'    => $row_cells,
+         'row_cells_failed'     => $row_cells,
          'row_separator_cases3' => $row_separator_cases . PHP_EOL
       ];
    }
