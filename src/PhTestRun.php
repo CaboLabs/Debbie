@@ -283,13 +283,15 @@ class PhTestRun {
       global $html_report, $content, $total_suites, $total_cases, $total_tests, $total_asserts, $total_failed, $total_successful;
 
       $total_cases_failed = $total_cases_successful = [];
+      $namesSuitessubmenu = [];
 
       $html_report = '';
       $menu_items = '';
-      $menu_subitems = '';
 
       $failed_Summ = "";
       $succ_Summ = "";
+
+      $h = 0;
 
       foreach ($this->reports as $i => $test_suite_reports) 
       {
@@ -301,6 +303,10 @@ class PhTestRun {
             $failed = 0;
 
             $names = explode("\\", $test_case);
+
+            $namesSuitesMenu[] = $names[1];
+
+            $namesSuitessubmenu[] = $test_case;
 
             $total_cases++;
 
@@ -323,12 +329,11 @@ class PhTestRun {
                                  </tr>
                               </thead>
                               <tbody><tr>';
-            $menu_subitems .= '<a class="collapse-item" href="#">' . $names[2] . '</a>';
-
+            
             foreach ($reports as $test_function => $report) 
             {
                $html_report .= '<td>' . $test_function . '</td>';
-
+               
                $total_tests++;
 
                if (isset($report['asserts'])) 
@@ -384,11 +389,55 @@ class PhTestRun {
                ];
             }
 
+            /*if ($h > 0 && $namesSuitesMenu[$h - 1] == $names[1]) 
+            {
+               $menu_items .= '';
+            }
+            else
+            {
+               $menu_items .= '<li class="nav-item">
+                  <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities_' . $names[1] . '"
+                  aria-expanded="true" aria-controls="collapseUtilities">';
+
+               if ($failed > 0) 
+               {
+                  $menu_items .= '<i class="fas fa-times-circle text-warning"></i>';
+               } 
+               else 
+               {
+                  $menu_items .= '<i class="fa fa-check text-success"></i>';
+               }
+
+               $menu_items .= '<span>' . $names[1] . '</span></a>
+                  <div id="collapseUtilities_' . $names[1] . '" class="collapse" aria-labelledby="headingUtilities"
+                  data-parent="#accordionSidebar">
+                  <div id="collapse_' . $names[1] . '" class="bg-white py-2 collapse-inner rounded">
+                  <h6 class="collapse-header">Test case:</h6>';
+               
+               //$menu_items .= '<a class="collapse-item" href="#">' . $names[2] . '</a>';   
+                  
+               $menu_items .= '</div></div></li>';
+            }
+            $h++;*/
+         }
+      }
+      var_dump(in_array("tests\suite1\TestCase12", $total_cases_failed));
+      var_dump($total_cases_failed);
+      foreach ($namesSuitessubmenu as $item) 
+      {
+         $names = explode("\\", $item);
+
+         if ($h > 0 && $namesSuitesMenu[$h - 1] == $names[1]) 
+         {
+            $menu_items .= '';
+         }
+         else
+         {
             $menu_items .= '<li class="nav-item">
-               <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+               <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities_' . $names[1] . '"
                aria-expanded="true" aria-controls="collapseUtilities">';
 
-            if ($failed > 0) 
+            if (in_array($item, $total_cases_failed)) 
             {
                $menu_items .= '<i class="fas fa-times-circle text-warning"></i>';
             } 
@@ -398,15 +447,16 @@ class PhTestRun {
             }
 
             $menu_items .= '<span>' . $names[1] . '</span></a>
-               <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+               <div id="collapseUtilities_' . $names[1] . '" class="collapse" aria-labelledby="headingUtilities"
                data-parent="#accordionSidebar">
-               <div class="bg-white py-2 collapse-inner rounded">
+               <div id="collapse_' . $names[1] . '" class="bg-white py-2 collapse-inner rounded">
                <h6 class="collapse-header">Test case:</h6>';
-
-            $menu_items .= $menu_subitems;
             
+            //$menu_items .= '<a class="collapse-item" href="#">' . $names[2] . '</a>';   
+               
             $menu_items .= '</div></div></li>';
          }
+         $h++;
       }
 
       if (count($total_cases_failed) >= 1) 

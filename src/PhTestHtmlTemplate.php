@@ -81,6 +81,20 @@ class PhTestHtmlTemplate {
       
                     <!-- Nav Item -->
                     $menu_items
+
+                    <!-- Divider -->
+                    <hr class="sidebar-divider">
+      
+                    <!-- Heading -->
+                    <div class="sidebar-heading">
+                      Summary
+                    </div>
+                    
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">
+                      <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                      <span>Summary report</span></a>
+                    </li>
                 </ul>
                 <!-- End of Sidebar -->
       
