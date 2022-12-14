@@ -21,10 +21,8 @@ namespace CaboLabs\PhTest;
 
 class PhTestHtmlTemplate {
 
-  public function Html_template($total_suites, $total_cases, $failed_cases, $successful_case, $html_report, $test_time, $total_tests, $total_successful, $total_failed, $total_asserts, $failed_Summ, $succ_Summ, $menu_items)
-  {
-    global $content;
-
+  function Html_template($total_suites, $total_cases, $failed_cases, $successful_case, $html_report, $test_time, $total_tests, $total_successful, $total_failed, $total_asserts, $failed_Summ, $succ_Summ, $menu_items)
+  { 
     $content = <<< EOD
       <!DOCTYPE html>
       <html lang="en">

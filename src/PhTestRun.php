@@ -292,6 +292,7 @@ class PhTestRun {
       $succ_Summ = "";
 
       $h = 0;
+      $m = 0;
 
       foreach ($this->reports as $i => $test_suite_reports) 
       {
@@ -421,44 +422,34 @@ class PhTestRun {
             $h++;*/
          }
       }
-      var_dump(in_array("tests\suite1\TestCase12", $total_cases_failed));
-      var_dump($total_cases_failed);
-      foreach ($namesSuitessubmenu as $item) 
+     
+      foreach ($namesSuitesMenu as $item) 
       {
-         $names = explode("\\", $item);
-
-         if ($h > 0 && $namesSuitesMenu[$h - 1] == $names[1]) 
+         if ($h > 0 && $namesSuitesMenu[$h - 1] == $item) 
          {
             $menu_items .= '';
          }
          else
          {
             $menu_items .= '<li class="nav-item">
-               <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities_' . $names[1] . '"
+               <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities_' . $item . '"
                aria-expanded="true" aria-controls="collapseUtilities">';
 
-            if (in_array($item, $total_cases_failed)) 
-            {
-               $menu_items .= '<i class="fas fa-times-circle text-warning"></i>';
-            } 
-            else 
-            {
-               $menu_items .= '<i class="fa fa-check text-success"></i>';
-            }
 
-            $menu_items .= '<span>' . $names[1] . '</span></a>
-               <div id="collapseUtilities_' . $names[1] . '" class="collapse" aria-labelledby="headingUtilities"
+
+            $menu_items .= '<span>' . $item . '</span></a>
+               <div id="collapseUtilities_' . $item . '" class="collapse" aria-labelledby="headingUtilities"
                data-parent="#accordionSidebar">
-               <div id="collapse_' . $names[1] . '" class="bg-white py-2 collapse-inner rounded">
+               <div id="collapse_' . $item . '" class="bg-white py-2 collapse-inner rounded">
                <h6 class="collapse-header">Test case:</h6>';
-            
-            //$menu_items .= '<a class="collapse-item" href="#">' . $names[2] . '</a>';   
-               
+
+               $menu_items .=  $this->names_tests($item, $namesSuitessubmenu, $menu_items);
+
             $menu_items .= '</div></div></li>';
          }
          $h++;
       }
-
+     
       if (count($total_cases_failed) >= 1) 
       {
          $failed_cases = count($total_cases_failed);
@@ -501,14 +492,30 @@ class PhTestRun {
 
       $content = new \CaboLabs\PhTest\PhTestHtmlTemplate;
 
-      $content->Html_template($total_suites, $total_cases, $failed_cases, $successful_case, $html_report, $test_time, $total_tests, $total_successful, $total_failed, $total_asserts, $failed_Summ, $succ_Summ, $menu_items);
+      $render = $content->Html_template($total_suites, $total_cases, $failed_cases, $successful_case, $html_report, $test_time, $total_tests, $total_successful, $total_failed, $total_asserts, $failed_Summ, $succ_Summ, $menu_items);
 
       if ($path == './') 
       {
          $path = 'test_report.html';
       }
 
-      file_put_contents($path, $content);
+      file_put_contents($path, $render);
+   }
+
+   public function names_tests($item, $namesSuitessubmenu, $menu_items)
+   {
+      $m = 0;
+      while ($m < count($namesSuitessubmenu)) 
+               {
+                  $suites = explode("\\", $namesSuitessubmenu[$m]);
+                  if(in_array($item, $suites))
+                  {
+                     $menu_items .= '<a class="collapse-item" href="#">' . $suites[2] . '</a>'; 
+                  }
+                  $m++;
+               }
+
+      return $menu_items;
    }
 
    public function get_reports()
