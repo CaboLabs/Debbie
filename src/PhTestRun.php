@@ -389,37 +389,6 @@ class PhTestRun {
                   'case_successful' => $successful
                ];
             }
-
-            /*if ($h > 0 && $namesSuitesMenu[$h - 1] == $names[1]) 
-            {
-               $menu_items .= '';
-            }
-            else
-            {
-               $menu_items .= '<li class="nav-item">
-                  <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities_' . $names[1] . '"
-                  aria-expanded="true" aria-controls="collapseUtilities">';
-
-               if ($failed > 0) 
-               {
-                  $menu_items .= '<i class="fas fa-times-circle text-warning"></i>';
-               } 
-               else 
-               {
-                  $menu_items .= '<i class="fa fa-check text-success"></i>';
-               }
-
-               $menu_items .= '<span>' . $names[1] . '</span></a>
-                  <div id="collapseUtilities_' . $names[1] . '" class="collapse" aria-labelledby="headingUtilities"
-                  data-parent="#accordionSidebar">
-                  <div id="collapse_' . $names[1] . '" class="bg-white py-2 collapse-inner rounded">
-                  <h6 class="collapse-header">Test case:</h6>';
-               
-               //$menu_items .= '<a class="collapse-item" href="#">' . $names[2] . '</a>';   
-                  
-               $menu_items .= '</div></div></li>';
-            }
-            $h++;*/
          }
       }
      
@@ -435,7 +404,16 @@ class PhTestRun {
                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities_' . $item . '"
                aria-expanded="true" aria-controls="collapseUtilities">';
 
+            $is_failed = self::is_faild($item, $total_cases_failed);
 
+            if ($is_failed)
+            {
+               $menu_items .= '<i class="fas fa-times-circle text-warning"></i>';
+            } 
+            else 
+            {
+               $menu_items .= '<i class="fa fa-check text-success"></i>';
+            }
 
             $menu_items .= '<span>' . $item . '</span></a>
                <div id="collapseUtilities_' . $item . '" class="collapse" aria-labelledby="headingUtilities"
@@ -443,7 +421,7 @@ class PhTestRun {
                <div id="collapse_' . $item . '" class="bg-white py-2 collapse-inner rounded">
                <h6 class="collapse-header">Test case:</h6>';
 
-               $menu_items .=  $this->names_tests($item, $namesSuitessubmenu, $menu_items);
+            $menu_items .=  self::names_tests($item, $namesSuitessubmenu);
 
             $menu_items .= '</div></div></li>';
          }
@@ -501,21 +479,40 @@ class PhTestRun {
 
       file_put_contents($path, $render);
    }
-
-   public function names_tests($item, $namesSuitessubmenu, $menu_items)
+  
+   public function names_tests($item, $namesSuitessubmenu)
    {
-      $m = 0;
-      while ($m < count($namesSuitessubmenu)) 
-               {
-                  $suites = explode("\\", $namesSuitessubmenu[$m]);
-                  if(in_array($item, $suites))
-                  {
-                     $menu_items .= '<a class="collapse-item" href="#">' . $suites[2] . '</a>'; 
-                  }
-                  $m++;
-               }
+      $menu_subitems = '';
+      
+      foreach ($namesSuitessubmenu as $submenu)
+      {
+         $suites = explode("\\", $submenu);
+         if(in_array($item, $suites))
+         {
+            $menu_subitems .= '<a class="collapse-item" href="#">' . $suites[2] . '</a>'; 
+         }
+      }
 
-      return $menu_items;
+      return $menu_subitems;
+   }
+
+   public function is_faild($item, $total_cases_failed)
+   {
+      foreach ($total_cases_failed as $suiteFaild)
+      {
+         $suites = explode("\\", $suiteFaild["case"]);
+         if(array_search($item, $suites))
+         {
+            $faildSuite = true;
+            break;
+         }
+         else
+         {
+            $faildSuite = false;
+         }
+      }
+      
+      return $faildSuite;
    }
 
    public function get_reports()
