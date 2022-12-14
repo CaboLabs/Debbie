@@ -292,7 +292,6 @@ class PhTestRun {
       $succ_Summ = "";
 
       $h = 0;
-      $m = 0;
 
       foreach ($this->reports as $i => $test_suite_reports) 
       {
