@@ -311,7 +311,8 @@ class PhTestRun {
             $total_cases++;
 
             $html_report .= ' <!-- Content Row -->
-               <div class="row" id = "' . $names[2] . '">
+            <div class="card_' . $names[1] . '" style="display:none;">
+               <div class="row" id = "card_' . $names[2] . '">
                   <div class="col-xl-12 col-lg-12">
                     <div class="card shadow mb-4">
                         <!-- Card Header - Dropdown -->
@@ -369,7 +370,7 @@ class PhTestRun {
                   $total_asserts++;
                }
             }
-            $html_report .= '</tbody></table></div></div></div></div>';
+            $html_report .= '</tbody></table></div></div></div></div></div>';
 
             if ($failed > 0) 
             {
@@ -400,7 +401,7 @@ class PhTestRun {
          else
          {
             $menu_items .= '<li class="nav-item">
-               <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities_' . $item . '"
+               <a id="' . $item . '" class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities_' . $item . '"
                aria-expanded="true" aria-controls="collapseUtilities">';
 
             $is_failed = self::is_faild($item, $total_cases_failed);

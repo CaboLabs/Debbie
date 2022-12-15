@@ -64,7 +64,7 @@ class PhTestHtmlTemplate {
       
                     <!-- Nav Item - Dashboard -->
                     <li class="nav-item active">
-                        <a class="nav-link" href="test_report.html">
+                        <a id="dashboard" class="nav-link" href="test_report.html">
                             <i class="fas fa-fw fa-tachometer-alt"></i>
                             <span>Dashboard</span></a>
                     </li>
@@ -89,7 +89,7 @@ class PhTestHtmlTemplate {
                     </div>
                     
                     <li class="nav-item">
-                      <a class="nav-link" href="#">
+                      <a id="summaryTable" class="nav-link" href="#">
                       <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
                       <span>Summary report</span></a>
                     </li>
@@ -197,7 +197,7 @@ class PhTestHtmlTemplate {
 
                           $html_report
                                   
-                          <div class="row">
+                          <div id="cardSummaryTables" class="row">
                             <div class="col-xl-12 col-lg-12">
                                 <div class="card shadow mb-4">
                                   <!-- Card Header - Dropdown -->
@@ -279,9 +279,8 @@ class PhTestHtmlTemplate {
             <script src="assets/bootstrap-sb-admin-2/js/jquery-easing/jquery.easing.min.js"></script>
       
             <!-- Custom scripts for all pages-->
-            <script src="assets/bootstrap-sb-admin-2/js/sb-admin-2.min.js"></script>
-      
-      
+            <script src="assets/bootstrap-sb-admin-2/js/sb-admin-2.min.js"></script>   
+            <script src="assets/js/views/test_report_index.js"></script>
         </body>
       </html>
      EOD;
