@@ -408,11 +408,11 @@ class PhTestRun {
 
             if ($is_failed)
             {
-               $menu_items .= '<i class="fas fa-times-circle text-warning"></i>';
+               $menu_items .= '<i class="fas fa-times text-warning"></i> ';
             } 
             else 
             {
-               $menu_items .= '<i class="fa fa-check text-success"></i>';
+               $menu_items .= '<i class="fa fa-check text-success"></i> ';
             }
 
             $menu_items .= '<span>' . $item . '</span></a>

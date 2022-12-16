@@ -63,8 +63,8 @@ class PhTestHtmlTemplate {
                     <hr class="sidebar-divider my-0">
       
                     <!-- Nav Item - Dashboard -->
-                    <li class="nav-item active">
-                        <a id="dashboard" class="nav-link" href="test_report.html">
+                    <li id="dashboard" class="nav-item active">
+                        <a class="nav-link" href="test_report.html">
                             <i class="fas fa-fw fa-tachometer-alt"></i>
                             <span>Dashboard</span></a>
                     </li>
@@ -74,25 +74,12 @@ class PhTestHtmlTemplate {
       
                     <!-- Heading -->
                     <div class="sidebar-heading">
-                      Test case
+                      Test suites
                     </div>
       
                     <!-- Nav Item -->
                     $menu_items
 
-                    <!-- Divider -->
-                    <hr class="sidebar-divider">
-      
-                    <!-- Heading -->
-                    <div class="sidebar-heading">
-                      Summary
-                    </div>
-                    
-                    <li class="nav-item">
-                      <a id="summaryTable" class="nav-link" href="#">
-                      <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                      <span>Summary report</span></a>
-                    </li>
                 </ul>
                 <!-- End of Sidebar -->
       
@@ -111,9 +98,6 @@ class PhTestHtmlTemplate {
       
                       <!-- Begin Page Content -->
                       <div class="container-fluid">
-                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2">
-                          <h4 class="h4 text-gray-800">Summary</h4>
-                        </div>
                           <!-- Content Row -->
                           <div class="row">
       

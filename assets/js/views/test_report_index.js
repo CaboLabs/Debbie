@@ -1,10 +1,11 @@
-$(".nav-link").on("click",function(e){
-  e.preventDefault();
+$( document ).ready(function() {
+$("li.nav-item").on("click",function(){
 
-  var id_li = $(this).attr("id");
+  var id_li = $("a", this).attr("id");
+  //var li_expanded = $('#' + id_li).attr("aria-expanded","false");
   var class_card = 'card_' + id_li;
 
-  if (id_li == 'summaryTable' || id_li == 'dashboard') 
+  if (id_li == 'dashboard') 
   {
     $('#cardSummaryTables').css("display", "block");
   }
@@ -12,14 +13,25 @@ $(".nav-link").on("click",function(e){
   {
     $('#cardSummaryTables').css("display", "none");
   }
-  
-  if (id_li == class_card.substring(5)) 
+
+ 
+  if (id_li === class_card.substring(5)) 
   {
-    $('.' + class_card).css("display", "block"); 
-  } 
-  else 
-  {
-    $('.' + class_card).css("display", "none");
+    console.log(class_card);
+    $('.' + class_card).toggle();
+    $(this).addClass("active");
+    $('#dashboard').removeClass("active");
   }
+
+  if ($('li.nav-item > a').hasClass(className))
+  {
+
+  }
+  
+
+  
 });
 
+
+  
+});
