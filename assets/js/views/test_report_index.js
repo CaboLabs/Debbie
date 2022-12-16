@@ -1,4 +1,3 @@
-$( document ).ready(function() {
 $("li.nav-item").on("click",function(){
 
   var id_li = $("a", this).attr("id");
@@ -22,16 +21,13 @@ $("li.nav-item").on("click",function(){
     $(this).addClass("active");
     $('#dashboard').removeClass("active");
   }
-
-  if ($('li.nav-item > a').hasClass(className))
-  {
-
-  }
-  
-
   
 });
 
-
-  
+$(document).ready(function() {
+  $('li.nav-item > a').each(function() {
+    if ($(this).hasClass(".collapsed")) {
+      
+    }
+  });
 });
