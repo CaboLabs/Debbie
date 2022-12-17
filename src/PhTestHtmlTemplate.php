@@ -179,7 +179,9 @@ class PhTestHtmlTemplate {
                               </div>
                           </div>
 
-                          $html_report
+                          <div id="Card_suites">
+                            $html_report
+                          </div>
                                   
                           <div id="cardSummaryTables" class="row">
                             <div class="col-xl-12 col-lg-12">

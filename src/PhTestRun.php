@@ -292,6 +292,7 @@ class PhTestRun {
       $succ_Summ = "";
 
       $h = 0;
+      $c = 0;
 
       foreach ($this->reports as $i => $test_suite_reports) 
       {
@@ -311,7 +312,7 @@ class PhTestRun {
             $total_cases++;
 
             $html_report .= ' <!-- Content Row -->
-            <div class="card_' . $names[1] . '" style="display:none;">
+            <div id="card_tests' . $names[1] . $c .'" class="card_' . $names[1] . ' suites_test" style="display:none;">
                <div class="row" id = "card_' . $names[2] . '">
                   <div class="col-xl-12 col-lg-12">
                     <div class="card shadow mb-4">
@@ -389,6 +390,7 @@ class PhTestRun {
                   'case_successful' => $successful
                ];
             }
+            $c++;
          }
       }
      
