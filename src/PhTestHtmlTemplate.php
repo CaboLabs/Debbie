@@ -63,10 +63,11 @@ class PhTestHtmlTemplate {
                     <hr class="sidebar-divider my-0">
       
                     <!-- Nav Item - Dashboard -->
-                    <li id="dashboard" class="nav-item active">
-                        <a class="nav-link" href="test_report.html">
-                            <i class="fas fa-fw fa-tachometer-alt"></i>
-                            <span>Dashboard</span></a>
+                    <li class="nav-item active">
+                      <a id="dashboard" class="nav-link" href="#">
+                      <i class="fas fa-fw fa-tachometer-alt"></i>
+                      <span>Dashboard</span>
+                      </a>
                     </li>
       
                     <!-- Divider -->
@@ -99,7 +100,7 @@ class PhTestHtmlTemplate {
                       <!-- Begin Page Content -->
                       <div class="container-fluid">
                           <!-- Content Row -->
-                          <div class="row">
+                          <div id= "headCardSummary" class="row">
       
                               <!-- Total suites Card Example -->
                               <div class="col-xl-3 col-md-6 mb-4">

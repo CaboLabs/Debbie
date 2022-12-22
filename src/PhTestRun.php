@@ -311,7 +311,7 @@ class PhTestRun {
 
             $total_cases++;
 
-            $html_report .= ' <!-- Content Row -->
+            $html_report .= '<!-- Content Row -->
             <div id="card_tests' . $names[1] . $c .'" class="card_' . $names[1] . ' suites_test" style="display:none;">
                <div class="row" id = "card_' . $names[2] . '">
                   <div class="col-xl-12 col-lg-12">
@@ -420,8 +420,7 @@ class PhTestRun {
             $menu_items .= '<span>' . $item . '</span></a>
                <div id="collapseUtilities_' . $item . '" class="collapse" aria-labelledby="headingUtilities"
                data-parent="#accordionSidebar">
-               <div id="collapse_' . $item . '" class="bg-white py-2 collapse-inner rounded">
-               <h6 class="collapse-header">Test case:</h6>';
+               <div id="collapse_' . $item . '" class="bg-white py-2 collapse-inner rounded">';
 
             $menu_items .=  self::names_tests($item, $namesSuitessubmenu);
 
