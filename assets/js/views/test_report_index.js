@@ -1,6 +1,4 @@
 
-$(document).ready(function() {
-
 $("li.nav-item").on("click",function(e){
   var id_li = $("a", this).attr("id");
   var class_card = 'card_' + id_li;
@@ -28,6 +26,4 @@ $("li.nav-item").on("click",function(e){
     $('#cardSummaryTables').hide();
   }
   $('.nav-item').not(this).removeClass("active"); 
-});
-
 });
