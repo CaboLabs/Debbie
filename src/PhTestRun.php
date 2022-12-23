@@ -334,14 +334,13 @@ class PhTestRun {
             
             foreach ($reports as $test_function => $report) 
             {
-               $html_report .= '<td>' . $test_function . '</td>';
-               
                $total_tests++;
 
                if (isset($report['asserts'])) 
                {
                   foreach ($report['asserts'] as $assert_report) 
                   {
+                     $html_report .= '<td>' . $test_function . '</td>';
                      if ($assert_report['type'] == 'ERROR') 
                      {
                         $html_report .= '<td class ="text-danger">ERROR: ' . $assert_report['msg'] . '</td>';
@@ -369,6 +368,13 @@ class PhTestRun {
                   }
 
                   $total_asserts++;
+               }
+               else
+               {
+                  $html_report .= '<td>' . $test_function . '</td>';
+                  $html_report .= '<td></td>';
+                  $html_report .= '<td></td>';
+                  $html_report .= '</tr>';
                }
             }
             $html_report .= '</tbody></table></div></div></div></div></div>';
