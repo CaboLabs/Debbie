@@ -10,7 +10,12 @@ $("li.nav-item").on("click",function(e){
     $(this).addClass("active");
     $('#title_suite').hide();
     $('#Card_suites').hide();
-    $('#collapseUtilities_' + id_li).collapse('hide');
+
+      if($('li > div').hasClass('show'))
+      {
+        $('li > div').collapse('hide');
+        console.log($('li > div'));
+      }
   }
   else
   if (id_li === class_card.substring(5)) 
