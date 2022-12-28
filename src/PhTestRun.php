@@ -269,7 +269,8 @@ class PhTestRun {
    public function render_reports_html($path, $test_time)
    {
       /** @var String $html_report, contains the result of all the report suites, test assets
-       *  @var String $name_test_cases, extract only the suite name
+       *  @var String $menu_items, extract only the suite name
+       *  @var String $menu_subitems, extract only the tests name
        *  @var String $failed_Summ, renders the content of the summary table failed cases
        *  @var String $succ_Summ, renders the content of the summary table $successful cases
        *  @var int $successful, count successful asserts per test
@@ -282,12 +283,16 @@ class PhTestRun {
       global $html_report, $content, $total_suites, $total_cases, $total_tests, $total_asserts, $total_failed, $total_successful;
 
       $total_cases_failed = $total_cases_successful = [];
+      $namesSuitessubmenu = [];
 
       $html_report = '';
-      $name_test_cases = '';
+      $menu_items = '';
 
       $failed_Summ = "";
       $succ_Summ = "";
+
+      $h = 0;
+      $c = 0;
 
       foreach ($this->reports as $i => $test_suite_reports) 
       {
@@ -300,10 +305,15 @@ class PhTestRun {
 
             $names = explode("\\", $test_case);
 
+            $namesSuitesMenu[] = $names[1];
+
+            $namesSuitessubmenu[] = $test_case;
+
             $total_cases++;
 
-            $html_report .= ' <!-- Content Row -->
-               <div class="row" id = "' . $names[2] . '">
+            $html_report .= '<!-- Content Row -->
+            <div id="card_tests' . $names[1] . $c .'" class="card_' . $names[1] . ' suites_test" style="display:none;">
+               <div class="row" id = "card_' . $names[2] . '">
                   <div class="col-xl-12 col-lg-12">
                     <div class="card shadow mb-4">
                         <!-- Card Header - Dropdown -->
@@ -321,17 +331,16 @@ class PhTestRun {
                                  </tr>
                               </thead>
                               <tbody><tr>';
-
+            
             foreach ($reports as $test_function => $report) 
             {
-               $html_report .= '<td>' . $test_function . '</td>';
-
                $total_tests++;
 
                if (isset($report['asserts'])) 
                {
                   foreach ($report['asserts'] as $assert_report) 
                   {
+                     $html_report .= '<td>' . $test_function . '</td>';
                      if ($assert_report['type'] == 'ERROR') 
                      {
                         $html_report .= '<td class ="text-danger">ERROR: ' . $assert_report['msg'] . '</td>';
@@ -360,8 +369,15 @@ class PhTestRun {
 
                   $total_asserts++;
                }
+               else
+               {
+                  $html_report .= '<td>' . $test_function . '</td>';
+                  $html_report .= '<td></td>';
+                  $html_report .= '<td></td>';
+                  $html_report .= '</tr>';
+               }
             }
-            $html_report .= '</tbody></table></div></div></div></div>';
+            $html_report .= '</tbody></table></div></div></div></div></div>';
 
             if ($failed > 0) 
             {
@@ -380,27 +396,45 @@ class PhTestRun {
                   'case_successful' => $successful
                ];
             }
+            $c++;
+         }
+      }
+     
+      foreach ($namesSuitesMenu as $item) 
+      {
+         if ($h > 0 && $namesSuitesMenu[$h - 1] == $item) 
+         {
+            $menu_items .= '';
+         }
+         else
+         {
+            $menu_items .= '<li class="nav-item">
+               <a id="' . $item . '" class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities_' . $item . '"
+               aria-expanded="true" aria-controls="collapseUtilities">';
 
-            $name_test_cases .= '<li class="nav-item">
-               <a class="nav-link collapsed" href="#"
-                  aria-expanded="true" aria-controls="collapseTwo">';
+            $is_failed = self::is_faild($item, $total_cases_failed);
 
-            if ($failed > 0) 
+            if ($is_failed)
             {
-               $name_test_cases .= '<i class="fas fa-times-circle text-warning"></i>';
+               $menu_items .= '<i class="fas fa-times text-warning"></i> ';
             } 
             else 
             {
-               $name_test_cases .= '<i class="fa fa-check text-success"></i>';
+               $menu_items .= '<i class="fa fa-check text-success"></i> ';
             }
 
-            $name_test_cases .= '<span>' . $names[2] . '</span>
-               </a>
-               </li>';
+            $menu_items .= '<span>' . $item . '</span></a>
+               <div id="collapseUtilities_' . $item . '" class="collapse" aria-labelledby="headingUtilities"
+               data-parent="#accordionSidebar">
+               <div id="collapse_' . $item . '" class="bg-white py-2 collapse-inner rounded">';
+
+            $menu_items .=  self::names_tests($item, $namesSuitessubmenu);
+
+            $menu_items .= '</div></div></li>';
          }
-
+         $h++;
       }
-
+     
       if (count($total_cases_failed) >= 1) 
       {
          $failed_cases = count($total_cases_failed);
@@ -443,14 +477,49 @@ class PhTestRun {
 
       $content = new \CaboLabs\PhTest\PhTestHtmlTemplate;
 
-      $content->Html_template($total_suites, $total_cases, $failed_cases, $successful_case, $html_report, $test_time, $total_tests, $total_successful, $total_failed, $total_asserts, $failed_Summ, $succ_Summ, $name_test_cases);
+      $render = $content->Html_template($total_suites, $total_cases, $failed_cases, $successful_case, $html_report, $test_time, $total_tests, $total_successful, $total_failed, $total_asserts, $failed_Summ, $succ_Summ, $menu_items);
 
       if ($path == './') 
       {
          $path = 'test_report.html';
       }
 
-      file_put_contents($path, $content);
+      file_put_contents($path, $render);
+   }
+  
+   public function names_tests($item, $namesSuitessubmenu)
+   {
+      $menu_subitems = '';
+      
+      foreach ($namesSuitessubmenu as $submenu)
+      {
+         $suites = explode("\\", $submenu);
+         if(in_array($item, $suites))
+         {
+            $menu_subitems .= '<a class="collapse-item" href="#">' . $suites[2] . '</a>'; 
+         }
+      }
+
+      return $menu_subitems;
+   }
+
+   public function is_faild($item, $total_cases_failed)
+   {
+      foreach ($total_cases_failed as $suiteFaild)
+      {
+         $suites = explode("\\", $suiteFaild["case"]);
+         if(array_search($item, $suites))
+         {
+            $faildSuite = true;
+            break;
+         }
+         else
+         {
+            $faildSuite = false;
+         }
+      }
+      
+      return $faildSuite;
    }
 
    public function get_reports()
