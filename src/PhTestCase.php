@@ -32,7 +32,7 @@ abstract class PhTestCase {
       $this->suite->report_output(get_class($this), $test_name, $output);
    }
 
-   public function assert($cond, $msg = '', $params = array())
+   public function assert($cond, $msg = '', $params = [])
    {
       // TODO: obtener un mensaje que diga mas, linea, clase y
       //       metodo donde se intenta verificar la condicion

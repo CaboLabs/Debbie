@@ -4,14 +4,17 @@ namespace CaboLabs\PhTest;
 
 use \CaboLabs\PhBasic\BasicString as str;
 
-class PhTestRun {
+class PhTestRun
+{
 
    // root folder where all the test suites have their own folder
    private $test_suite_root = './tests';
 
-   private $reports = array();
+   private $reports = [];
 
    private $after_each_test_function;
+
+   private $execution_time;
 
    public function init($test_suite_root = './tests')
    {
@@ -27,6 +30,7 @@ class PhTestRun {
       }
 
       $this->test_suite_root = $test_suite_root;
+      $this->execution_time = 0;
    }
 
    public function run_all()
@@ -35,14 +39,16 @@ class PhTestRun {
 
       if ($root_dir === FALSE)
       {
-         echo "Can't read ". $root_dir ."\n";
+         echo "Can't read " . $root_dir . "\n";
          exit();
       }
 
       while (false !== ($test_suite = $root_dir->read()))
       {
-         if (!is_dir($this->test_suite_root . $test_suite) ||
-             in_array($test_suite, array('.', '..', 'data'))) continue;
+         if (
+            !is_dir($this->test_suite_root . $test_suite) ||
+            in_array($test_suite, array('.', '..', 'data'))
+         ) continue;
 
          $path = $this->test_suite_root . $test_suite;
 
@@ -55,11 +61,11 @@ class PhTestRun {
 
          if ($suite_dir === FALSE)
          {
-            echo "Can't read ". $suite_dir ."\n";
+            echo "Can't read " . $suite_dir . "\n";
             exit();
          }
 
-         $test_cases = array();
+         $test_cases = [];
 
          // $test_case is a class name
          while (false !== ($test_case = $suite_dir->read()))
@@ -70,7 +76,7 @@ class PhTestRun {
                $test_case_path = $path . $test_case;
 
                $namespaced_class = substr(str_replace(['./', '/'], ['', '\\'], $test_case_path), 0, -4);
-               
+
                if (is_file($test_case_path))
                {
                   $test_cases[$namespaced_class] = $test_case_path;
@@ -82,7 +88,8 @@ class PhTestRun {
 
          $phsuite = new PhTestSuite($test_suite, $test_cases);
          $phsuite->run($this->after_each_test_function);
-         $this->reports[] = $phsuite->get_reports();
+         $this->reports[] = $phsuite->get_reports(); // NOTE: this adds one report per suite
+         $this->execution_time += $phsuite->get_execution_time();
       }
 
       // TODO: should close all directory handles!
@@ -113,7 +120,7 @@ class PhTestRun {
 
       $namespaced_class = substr(str_replace(['./', '/'], ['', '\\'], $test_case_path), 0, -4);
 
-      $test_cases = array();
+      $test_cases = [];
       if (is_file($test_case_path))
       {
          $test_cases[$namespaced_class] = $test_case_path;
@@ -122,6 +129,7 @@ class PhTestRun {
       $phsuite = new PhTestSuite($suite, $test_cases);
       $phsuite->run($this->after_each_test_function, $method);
       $this->reports[] = $phsuite->get_reports();
+      $this->execution_time = $phsuite->get_execution_time();
    }
 
    public function run_cases($suite, ...$cases)
@@ -137,11 +145,11 @@ class PhTestRun {
 
       if ($suite_dir === FALSE)
       {
-         echo "Can't read ". $suite_dir ."\n";
+         echo "Can't read " . $suite_dir . "\n";
          exit();
       }
-      
-      $test_cases = array();
+
+      $test_cases = [];
 
       // $test_case is a class name
       while (false !== ($test_case = $suite_dir->read()))
@@ -154,14 +162,13 @@ class PhTestRun {
          {
             $test_case_path = $path . $cases[0] . '.php';
          }
-         
+
          $namespaced_class = substr(str_replace(['./', '/'], ['', '\\'], $test_case_path), 0, -4);
-           
+
          if (is_file($test_case_path))
          {
             $test_cases[$namespaced_class] = $test_case_path;
          }
-   
       }
 
       $suite_dir->close();
@@ -169,35 +176,36 @@ class PhTestRun {
       $phsuite = new PhTestSuite($suite, $test_cases);
       $phsuite->run($this->after_each_test_function);
       $this->reports[] = $phsuite->get_reports();
+      $this->execution_time = $phsuite->get_execution_time();
    }
 
-   public function render_reports($test_time)
+   public function render_reports()
    {
       global $total_suites, $total_cases, $total_tests, $total_asserts, $total_failed, $total_successful;
 
       $total_cases_failed = $total_cases_successful = [];
 
-      echo 'Test report: '. PHP_EOL . PHP_EOL;
-      
+      echo 'Test report: ' . PHP_EOL . PHP_EOL;
+
       foreach ($this->reports as $i => $test_suite_reports)
       {
-         $total_suites ++;
+         $total_suites++;
 
          foreach ($test_suite_reports as $test_case => $reports)
          {
             $successful = 0;
             $failed = 0;
 
-            echo '├── Test case: '. $test_case .'  (test count: '. count($reports) .')'. PHP_EOL;
-            echo '|   |'. PHP_EOL;
+            echo '├── Test case: ' . $test_case . '  (test count: ' . count($reports) . ')' . PHP_EOL;
+            echo '|   |' . PHP_EOL;
 
-            $total_cases ++;
+            $total_cases++;
 
             foreach ($reports as $test_function => $report)
             {
-               echo '|   ├── Test: '. $test_function . PHP_EOL;
+               echo '|   ├── Test: ' . $test_function . PHP_EOL;
 
-               $total_tests ++;
+               $total_tests++;
 
                //print_r($report['asserts']);
 
@@ -207,44 +215,43 @@ class PhTestRun {
                   {
                      if ($assert_report['type'] == 'ERROR')
                      {
-                        echo '|   |   |'. PHP_EOL;
-                        echo "|   |   └── \033[91mERROR: ". $assert_report['msg'] ."\033[0m". PHP_EOL;
-                     
-                        $total_failed ++;
-                        $failed ++;
+                        echo '|   |   |' . PHP_EOL;
+                        echo "|   |   └── \033[91mERROR: " . $assert_report['msg'] . "\033[0m" . PHP_EOL;
+
+                        $total_failed++;
+                        $failed++;
                      }
                      else if ($assert_report['type'] == 'OK')
                      {
-                        echo '|   |   |'. PHP_EOL;
-                        echo "|   |   └── \033[92mOK: ". $assert_report['msg'] ."\033[0m". PHP_EOL;
-                     
-                        $total_successful ++;
-                        $successful ++;
+                        echo '|   |   |' . PHP_EOL;
+                        echo "|   |   └── \033[92mOK: " . $assert_report['msg'] . "\033[0m" . PHP_EOL;
+
+                        $total_successful++;
+                        $successful++;
                      }
                      else if ($assert_report['type'] == 'EXCEPTION')
                      {
-                        echo '|   |   |'. PHP_EOL;
-                        echo "|   |   └── \033[94mEXCEPTION: ". $assert_report['msg'] ."\033[0m". PHP_EOL;
+                        echo '|   |   |' . PHP_EOL;
+                        echo "|   |   └── \033[94mEXCEPTION: " . $assert_report['msg'] . "\033[0m" . PHP_EOL;
                      }
                   }
 
-                  $total_asserts ++;
+                  $total_asserts++;
                }
 
                if (!empty($report['output']))
                {
-                  echo '|   |   |'. PHP_EOL;
-                  echo '|   |   └── OUTPUT: '. $report['output'] . PHP_EOL;
+                  echo '|   |   |' . PHP_EOL;
+                  echo '|   |   └── OUTPUT: ' . $report['output'] . PHP_EOL;
                }
-               echo '|   |'. PHP_EOL;
-
+               echo '|   |' . PHP_EOL;
             }
 
             if ($failed > 0)
             {
                $total_cases_failed[] = [
                   'case' => $test_case,
-                  'case_failed' => $failed, 
+                  'case_failed' => $failed,
                   'case_successful' => $successful
                ];
             }
@@ -252,21 +259,20 @@ class PhTestRun {
             if ($successful > 0 && $failed == 0)
             {
                $total_cases_successful[] = [
-                  'case' => $test_case, 
-                  'case_failed' => $failed, 
+                  'case' => $test_case,
+                  'case_failed' => $failed,
                   'case_successful' => $successful
                ];
             }
-            
          }
       }
 
       echo PHP_EOL;
-      
-      $this->get_summary_report($test_time, $total_suites, $total_cases, $total_tests, $total_asserts, $total_failed, $total_successful, $total_cases_failed, $total_cases_successful);
+
+      $this->get_summary_report($this->execution_time, $total_suites, $total_cases, $total_tests, $total_asserts, $total_failed, $total_successful, $total_cases_failed, $total_cases_successful);
    }
 
-   public function render_reports_html($path, $test_time)
+   public function render_reports_html($path)
    {
       /** @var String $html_report, contains the result of all the report suites, test assets
        *  @var String $menu_items, extract only the suite name
@@ -294,11 +300,11 @@ class PhTestRun {
       $h = 0;
       $c = 0;
 
-      foreach ($this->reports as $i => $test_suite_reports) 
+      foreach ($this->reports as $i => $test_suite_reports)
       {
          $total_suites++;
 
-         foreach ($test_suite_reports as $test_case => $reports) 
+         foreach ($test_suite_reports as $test_case => $reports)
          {
             $successful = 0;
             $failed = 0;
@@ -312,7 +318,7 @@ class PhTestRun {
             $total_cases++;
 
             $html_report .= '<!-- Content Row -->
-            <div id="card_tests' . $names[1] . $c .'" class="card_' . $names[1] . ' suites_test" style="display:none;">
+            <div id="card_tests' . $names[1] . $c . '" class="card_' . $names[1] . ' suites_test" style="display:none;">
                <div class="row" id = "card_' . $names[2] . '">
                   <div class="col-xl-12 col-lg-12">
                     <div class="card shadow mb-4">
@@ -331,36 +337,36 @@ class PhTestRun {
                                  </tr>
                               </thead>
                               <tbody><tr>';
-            
-            foreach ($reports as $test_function => $report) 
+
+            foreach ($reports as $test_function => $report)
             {
                $total_tests++;
 
-               if (isset($report['asserts'])) 
+               if (isset($report['asserts']))
                {
-                  foreach ($report['asserts'] as $assert_report) 
+                  foreach ($report['asserts'] as $assert_report)
                   {
                      $html_report .= '<td>' . $test_function . '</td>';
-                     if ($assert_report['type'] == 'ERROR') 
+                     if ($assert_report['type'] == 'ERROR')
                      {
                         $html_report .= '<td class ="text-danger">ERROR: ' . $assert_report['msg'] . '</td>';
 
                         $total_failed++;
                         $failed++;
-                     } 
-                     else if ($assert_report['type'] == 'OK') 
+                     }
+                     else if ($assert_report['type'] == 'OK')
                      {
                         $html_report .= '<td class="text-success">OK: ' . $assert_report['msg'] . '</td>';
 
                         $total_successful++;
                         $successful++;
-                     } 
-                     else if ($assert_report['type'] == 'EXCEPTION') 
+                     }
+                     else if ($assert_report['type'] == 'EXCEPTION')
                      {
                         $html_report .= '<td class="text-primary">EXCEPTION: ' . $assert_report['msg'] . '</td>';
                      }
 
-                     if (!empty($report['output'])) 
+                     if (!empty($report['output']))
                      {
                         $html_report .= '<td class="text-secondary">OUTPUT: ' . $report['output'] . '</td>';
                      }
@@ -379,7 +385,7 @@ class PhTestRun {
             }
             $html_report .= '</tbody></table></div></div></div></div></div>';
 
-            if ($failed > 0) 
+            if ($failed > 0)
             {
                $total_cases_failed[] = [
                   'case' => $test_case,
@@ -388,7 +394,7 @@ class PhTestRun {
                ];
             }
 
-            if ($successful > 0 && $failed == 0) 
+            if ($successful > 0 && $failed == 0)
             {
                $total_cases_successful[] = [
                   'case' => $test_case,
@@ -399,10 +405,10 @@ class PhTestRun {
             $c++;
          }
       }
-     
-      foreach ($namesSuitesMenu as $item) 
+
+      foreach ($namesSuitesMenu as $item)
       {
-         if ($h > 0 && $namesSuitesMenu[$h - 1] == $item) 
+         if ($h > 0 && $namesSuitesMenu[$h - 1] == $item)
          {
             $menu_items .= '';
          }
@@ -417,8 +423,8 @@ class PhTestRun {
             if ($is_failed)
             {
                $menu_items .= '<i class="fas fa-times text-warning"></i> ';
-            } 
-            else 
+            }
+            else
             {
                $menu_items .= '<i class="fa fa-check text-success"></i> ';
             }
@@ -434,12 +440,13 @@ class PhTestRun {
          }
          $h++;
       }
-     
-      if (count($total_cases_failed) >= 1) 
+
+      if (count($total_cases_failed) >= 1)
       {
          $failed_cases = count($total_cases_failed);
 
-         foreach ($total_cases_failed as $total_case_failed) {
+         foreach ($total_cases_failed as $total_case_failed)
+         {
             $names_failed = explode("\\", $total_case_failed['case']);
 
             $failed_Summ .= '<tr>
@@ -449,17 +456,17 @@ class PhTestRun {
                <td class="text-right">' . $total_case_failed['case_failed'] . '</td>
             </tr>';
          }
-      } 
-      else 
+      }
+      else
       {
          $failed_cases = 0;
       }
 
-      if (count($total_cases_successful) >= 1) 
+      if (count($total_cases_successful) >= 1)
       {
          $successful_case = count($total_cases_successful);
 
-         foreach ($total_cases_successful as $total_case_successful) 
+         foreach ($total_cases_successful as $total_case_successful)
          {
             $names_successful = explode("\\", $total_case_successful['case']);
 
@@ -469,34 +476,48 @@ class PhTestRun {
                <td class="text-right">' . $total_case_successful["case_successful"] . '</td>
             </tr>';
          }
-      } 
-      else 
+      }
+      else
       {
          $successful_case = 0;
       }
 
       $content = new \CaboLabs\PhTest\PhTestHtmlTemplate;
 
-      $render = $content->Html_template($total_suites, $total_cases, $failed_cases, $successful_case, $html_report, $test_time, $total_tests, $total_successful, $total_failed, $total_asserts, $failed_Summ, $succ_Summ, $menu_items);
+      $render = $content->Html_template(
+         $total_suites,
+         $total_cases,
+         $failed_cases,
+         $successful_case,
+         $html_report,
+         $this->execution_time,
+         $total_tests,
+         $total_successful,
+         $total_failed,
+         $total_asserts,
+         $failed_Summ,
+         $succ_Summ,
+         $menu_items
+      );
 
-      if ($path == './') 
+      if ($path == './')
       {
          $path = 'test_report.html';
       }
 
       file_put_contents($path, $render);
    }
-  
+
    public function names_tests($item, $namesSuitessubmenu)
    {
       $menu_subitems = '';
-      
+
       foreach ($namesSuitessubmenu as $submenu)
       {
          $suites = explode("\\", $submenu);
-         if(in_array($item, $suites))
+         if (in_array($item, $suites))
          {
-            $menu_subitems .= '<a class="collapse-item" href="#">' . $suites[2] . '</a>'; 
+            $menu_subitems .= '<a class="collapse-item" href="#">' . $suites[2] . '</a>';
          }
       }
 
@@ -508,7 +529,7 @@ class PhTestRun {
       foreach ($total_cases_failed as $suiteFaild)
       {
          $suites = explode("\\", $suiteFaild["case"]);
-         if(array_search($item, $suites))
+         if (array_search($item, $suites))
          {
             $faildSuite = true;
             break;
@@ -518,7 +539,7 @@ class PhTestRun {
             $faildSuite = false;
          }
       }
-      
+
       return $faildSuite;
    }
 
@@ -532,7 +553,7 @@ class PhTestRun {
       $this->after_each_test_function = $callback;
    }
 
-   public function get_summary_report($test_time, $total_suites, $total_cases, $total_tests, $total_asserts, $total_failed, $total_successful, $total_cases_failed, $total_cases_successful)
+   public function get_summary_report($total_suites, $total_cases, $total_tests, $total_asserts, $total_failed, $total_successful, $total_cases_failed, $total_cases_successful)
    {
       /**
        * render tables summary
@@ -546,7 +567,7 @@ class PhTestRun {
        * @param String $column_width, default column width that will increase if any cell data is greater than this
        * @param Array $tableSummary, array with table data
        */
-    
+
       $gap_x = 1;
       $joins = '+';
       $axi_x = '-';
@@ -575,17 +596,17 @@ class PhTestRun {
 
       echo PHP_EOL;
 
-      echo 'Summary reports --> total time: '. $test_time .' μs'. PHP_EOL . PHP_EOL;
- 
+      echo 'Summary reports --> total time: '. $this->execution_time .' μs' . PHP_EOL . PHP_EOL;
+
       //render table totals summary (suites,cases,tests)
-      foreach ($summary1 as $table1) 
+      foreach ($summary1 as $table1)
       {
          echo $table1 . PHP_EOL;
       }
 
       echo PHP_EOL;
 
-       //render table totals asserts summary
+      //render table totals asserts summary
       foreach ($summary2 as $table2)
       {
          echo $table2 . PHP_EOL;
@@ -599,15 +620,15 @@ class PhTestRun {
       {
          $failed_cases = count($total_cases_failed);
 
-         echo 'Failed Summary: Cases failed ('. $failed_cases . ')'. PHP_EOL;
+         echo 'Failed Summary: Cases failed (' . $failed_cases . ')' . PHP_EOL;
 
-         $cases_failed_head = ['Suite' , 'Class', 'Failed', 'Successful'];
-         
+         $cases_failed_head = ['Suite', 'Class', 'Failed', 'Successful'];
+
          //generate table failed cases summary
          $summary_cases_failed = self::generate_table_cases_summary(5, $cases_failed_head, $total_cases_failed, $gap_x, $joins, $axi_x, $axi_y);
 
          // render table cases failded summary
-         foreach ($summary_cases_failed as $cases_failed) 
+         foreach ($summary_cases_failed as $cases_failed)
          {
             echo $cases_failed;
          }
@@ -617,8 +638,8 @@ class PhTestRun {
       else
       {
          $failed_cases = 0;
-         
-         echo 'Cases failed ('. $failed_cases . ')'. PHP_EOL;
+
+         echo 'Cases failed (' . $failed_cases . ')' . PHP_EOL;
       }
 
       echo PHP_EOL;
@@ -628,15 +649,15 @@ class PhTestRun {
       {
          $successful_case = count($total_cases_successful);
 
-         echo 'Successful Summary: Cases successful ('. $successful_case . ')'. PHP_EOL;
+         echo 'Successful Summary: Cases successful (' . $successful_case . ')' . PHP_EOL;
 
-         $cases_success_head = ['Suite' , 'Class', 'Successful'];
-         
+         $cases_success_head = ['Suite', 'Class', 'Successful'];
+
          //generate table success cases summary
          $summary_cases_success = self::generate_table_cases_summary(5, $cases_success_head, $total_cases_successful, $gap_x, $joins, $axi_x, $axi_y);
 
          // render table cases success summary
-         foreach ($summary_cases_success as $cases_success) 
+         foreach ($summary_cases_success as $cases_success)
          {
             echo $cases_success;
          }
@@ -646,7 +667,7 @@ class PhTestRun {
       else
       {
          $successful_case = 0;
-         echo 'Cases Successful ('. $successful_case . ')'. PHP_EOL;
+         echo 'Cases Successful (' . $successful_case . ')' . PHP_EOL;
       }
    }
 
@@ -654,23 +675,23 @@ class PhTestRun {
    {
       /**
        * generate summary table of totales
-       * 
+       *
        */
       $row_separator = '';
       $row_headers = '';
       $row_cells = '';
-   
+
       foreach ($tableSummary as $head => $row)
       {
          $length = strlen($head);
 
-         if ($length > $column_width) 
+         if ($length > $column_width)
          {
             $column_width = $length;
          }
 
          /* separator character is created line by line - adds spaces to the string and adds the number
-          of characters of max width - space between the characters and finally the alignment that 
+          of characters of max width - space between the characters and finally the alignment that
           the string will have*/
          $row_headers .= $axi_y . str_pad($head, ($gap_x * 2) + $column_width, ' ', STR_PAD_BOTH) . ' ';
          $row_cells .= $axi_y . str_pad($row, ($gap_x * 2) + $column_width, ' ', STR_PAD_LEFT) . ' ';
@@ -686,7 +707,7 @@ class PhTestRun {
       $row_cells .= $axi_y;
 
       $row_separator .= $joins;
-     
+
       return $dataTable = [
          '$row_separator1' => $row_separator,
          'row_headers'     => $row_headers,
@@ -700,15 +721,15 @@ class PhTestRun {
    {
       /**
        * generate summary table of successful summary and faild summary
-       * 
+       *
        */
 
       $row_separator_cases = '';
       $row_headers = '';
       $row_cells = '';
-      
+
       //make the width of the column ('Suite' , 'Class') adapted to the content
-      for ($i=0; $i < count($arr_cases) ; $i++) 
+      for ($i = 0; $i < count($arr_cases); $i++)
       {
          $name_cas = explode("\\", $arr_cases[$i]['case']);
          $len1 = strlen($name_cas[2]);
@@ -718,7 +739,7 @@ class PhTestRun {
          {
             $column_width = $len1;
          }
-         
+
          if ($len2 > $len1)
          {
             $column_width = $len2;
@@ -726,13 +747,13 @@ class PhTestRun {
       }
 
       //create the table header with its separators
-      foreach ($arr_head as $head) 
-      { 
-         /* separator character is created line by line - adds spaces to the string and adds the number 
-            of characters of max width - space between the characters and finally the alignment that 
+      foreach ($arr_head as $head)
+      {
+         /* separator character is created line by line - adds spaces to the string and adds the number
+            of characters of max width - space between the characters and finally the alignment that
             the string will have*/
          $row_headers .= $axi_y . ' ' . str_pad($head, ($gap_x * 2) + $column_width, ' ', STR_PAD_BOTH) . ' ';
-         $row_separator_cases .= $joins . $axi_x. str_repeat($axi_x, ($gap_x * 2) + $column_width) . $axi_x;
+         $row_separator_cases .= $joins . $axi_x . str_repeat($axi_x, ($gap_x * 2) + $column_width) . $axi_x;
       }
 
       $row_headers .= $axi_y;
@@ -751,16 +772,16 @@ class PhTestRun {
          if (count($arr_head) == 4)
          {
             $row_cells .= $axi_y . ' ' . str_pad($total_case['case_failed'], ($gap_x * 2) + $column_width, ' ', STR_PAD_LEFT) . ' ' .
-              $axi_y . ' ' . str_pad($total_case['case_successful'], ($gap_x * 2) + $column_width, ' ', STR_PAD_LEFT). ' ' . $axi_y . PHP_EOL;
+               $axi_y . ' ' . str_pad($total_case['case_successful'], ($gap_x * 2) + $column_width, ' ', STR_PAD_LEFT) . ' ' . $axi_y . PHP_EOL;
          }
          else
          {
-            $row_cells .= $axi_y . ' ' . str_pad($total_case['case_successful'], ($gap_x * 2) + $column_width, ' ', STR_PAD_LEFT). ' ' . $axi_y . PHP_EOL;
+            $row_cells .= $axi_y . ' ' . str_pad($total_case['case_successful'], ($gap_x * 2) + $column_width, ' ', STR_PAD_LEFT) . ' ' . $axi_y . PHP_EOL;
          }
       }
 
       $row_separator_cases .= $joins;
-      
+
       return $summary_case = [
          'row_separator_cases1' => $row_separator_cases . PHP_EOL,
          'row_headers_failed'   => $row_headers . PHP_EOL,
@@ -770,5 +791,3 @@ class PhTestRun {
       ];
    }
 }
-
-?>
