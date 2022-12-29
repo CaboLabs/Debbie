@@ -2,19 +2,22 @@
 
 namespace CaboLabs\PhTest;
 
-class PhTestSuite {
-
+class PhTestSuite
+{
    // name of the folder where the test cases for the suite are defined
    // should be the prefix of the $test_cases paths
    private $test_suite_name;
 
    // paths to test case files
-   private $test_cases = array();
+   private $test_cases = [];
 
    // Reportes de resultados del test
-   private $reports = array();
+   private $reports = [];
 
-   function __construct($test_suite_name, $test_cases = array())
+   // total execution time in microseconds
+   private $execution_time;
+
+   function __construct($test_suite_name, $test_cases = [])
    {
       $this->test_suite_name = $test_suite_name;
 
@@ -35,12 +38,16 @@ class PhTestSuite {
 
    public function run($after_each_test_callback = NULL, $specific_methods = NULL)
    {
+      // for execution time calculation
+      $test_start_time = microtime(true);
+
       foreach ($this->test_cases as $test_case_class => $test_case_object)
       {
          $test_names = $specific_methods ?? get_class_methods($test_case_object);
 
          // execute only methods that starts with 'test'
-         $test_names = array_filter($test_names, function($n) {
+         $test_names = array_filter($test_names, function ($n)
+         {
             return (strncmp($n, 'test', strlen('test')) === 0);
          });
 
@@ -48,7 +55,7 @@ class PhTestSuite {
          foreach ($test_names as $i => $test_name)
          {
             //echo 'test: '. $test_name . PHP_EOL;
-            if(!method_exists($test_case_object, $test_name))
+            if (!method_exists($test_case_object, $test_name))
             {
                echo "Method $test_name not found \n";
                continue;
@@ -66,7 +73,7 @@ class PhTestSuite {
             }
             catch (\Exception $e)
             {
-               echo "UPS: ". $e->getMessage() . PHP_EOL;
+               echo "UPS: " . $e->getMessage() . PHP_EOL;
                $this->report_exception($test_case_class, $test_name, $e);
             }
 
@@ -82,12 +89,15 @@ class PhTestSuite {
                // TEST: dont execute for the last one
                //if (($i+1) < count($test_names))
                //{
-                  //echo "TRUNCATE $i of ". count($test_names) . PHP_EOL;
-                  $after_each_test_callback();
+               //echo "TRUNCATE $i of ". count($test_names) . PHP_EOL;
+               $after_each_test_callback();
                //}
             }
          }
       }
+
+      $test_end_time = microtime(true);
+      $this->execution_time = round($test_end_time - $test_start_time, 5);
    }
 
    public function report_start($test_case_object, $test_name)
@@ -100,57 +110,57 @@ class PhTestSuite {
       $test_case_object->after_test($test_name, $output);
    }
 
-   public function report_assert($test_case_class, $test_name, $type, $msg, $trace = array(), $params = array())
+   public function report_assert($test_case_class, $test_name, $type, $msg, $trace = [], $params = [])
    {
       // Esto se podria poner en la vista
       // Muestra variables con valor y tipo
       $_params = '';
-      foreach ($params as $key=>$value)
+      foreach ($params as $key => $value)
       {
-         $_params .= $key.'='.$value.'('.gettype($value).')'."\n";
+         $_params .= $key . '=' . $value . '(' . gettype($value) . ')' . "\n";
       }
 
       if (!isset($this->reports[$test_case_class]))
       {
-         $this->reports[$test_case_class] = array();
+         $this->reports[$test_case_class] = [];
       }
       if (!isset($this->reports[$test_case_class][$test_name]))
       {
-         $this->reports[$test_case_class][$test_name] = array();
-         $this->reports[$test_case_class][$test_name]['asserts'] = array();
+         $this->reports[$test_case_class][$test_name] = [];
+         $this->reports[$test_case_class][$test_name]['asserts'] = [];
       }
-      $this->reports[$test_case_class][$test_name]['asserts'][] = array('type'=>$type, 'msg'=>$msg, 'trace'=>$trace, 'params'=>$_params);
+      $this->reports[$test_case_class][$test_name]['asserts'][] = array('type' => $type, 'msg' => $msg, 'trace' => $trace, 'params' => $_params);
    }
 
    public function report_output($test_case_class, $test_case_name, $output)
    {
       if (!isset($this->reports[$test_case_class]))
       {
-         $this->reports[$test_case_class] = array();
+         $this->reports[$test_case_class] = [];
       }
       if (!isset($this->reports[$test_case_class][$test_case_name]))
       {
-         $this->reports[$test_case_class][$test_case_name] = array();
+         $this->reports[$test_case_class][$test_case_name] = [];
       }
       $this->reports[$test_case_class][$test_case_name]['output'] = $output;
    }
 
-   public function report_exception($test_case_class, $test_name, $exception, $params = array())
+   public function report_exception($test_case_class, $test_name, $exception, $params = [])
    {
       $_params = '';
-      foreach ($params as $key=>$value)
+      foreach ($params as $key => $value)
       {
-         $_params .= $key.'='.$value.'('.gettype($value).')'."\n";
+         $_params .= $key . '=' . $value . '(' . gettype($value) . ')' . "\n";
       }
 
       if (!isset($this->reports[$test_case_class]))
       {
-         $this->reports[$test_case_class] = array();
+         $this->reports[$test_case_class] = [];
       }
       if (!isset($this->reports[$test_case_class][$test_name]))
       {
-         $this->reports[$test_case_class][$test_name] = array();
-         $this->reports[$test_case_class][$test_name]['asserts'] = array();
+         $this->reports[$test_case_class][$test_name] = [];
+         $this->reports[$test_case_class][$test_name]['asserts'] = [];
       }
 
       $trace = $exception->getTrace();
@@ -177,6 +187,9 @@ class PhTestSuite {
       // TODO
       print_r($this->reports);
    }
-}
 
-?>
+   public function get_execution_time()
+   {
+      return $this->execution_time;
+   }
+}

@@ -92,12 +92,9 @@ else
    $run->run_all();
 }
 
-$test_end_time = microtime(true);
-$test_time = round($test_end_time - $test_start_time, 5);
-
 if ($report == 'html')
 {
-   $run->render_reports_html($output, $test_time);
+   $run->render_reports_html($output);
 }
 else
 if ($report != 'html' && $report != 'text')
@@ -108,11 +105,11 @@ if ($report != 'html' && $report != 'text')
 else
 if ($report == 'text')
 {
-   $run->render_reports($test_time);
+   $run->render_reports();
 }
 else
 {
-   $run->render_reports_html($output, $test_time);
+   $run->render_reports_html($output);
 }
 
 ?>
