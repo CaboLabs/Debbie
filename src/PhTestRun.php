@@ -269,7 +269,16 @@ class PhTestRun
 
       echo PHP_EOL;
 
-      $this->get_summary_report($this->execution_time, $total_suites, $total_cases, $total_tests, $total_asserts, $total_failed, $total_successful, $total_cases_failed, $total_cases_successful);
+      $this->get_summary_report(
+         $total_suites,
+         $total_cases,
+         $total_tests,
+         $total_asserts,
+         $total_failed,
+         $total_successful,
+         $total_cases_failed,
+         $total_cases_successful
+      );
    }
 
    public function render_reports_html($path)
