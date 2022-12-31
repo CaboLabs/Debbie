@@ -26,7 +26,7 @@ class PhTestHtmlTemplate
     // NOTE: this path is relative to this file using __DIR__ so it should work when running from other cli's
     //       if the path is relative, it will be relative to the running script, if cli.php is on a different
     //       folder than this package folder, then it won't find the js file.
-    $test_report_js = file_get_contents(__DIR__ .'../assets/js/views/test_report_index.js');
+    $test_report_js = file_get_contents(__DIR__ .'/../assets/js/views/test_report_index.js');
 
     $content = <<< EOD
       <!DOCTYPE html>
