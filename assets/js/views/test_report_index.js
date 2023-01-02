@@ -32,3 +32,22 @@ $("li.nav-item").on("click", function (e)
 
   $('.nav-item').not(this).removeClass("active");
 });
+
+$(".collapse-item").on("click", function (e)
+{
+  var id_test_case = $(this).attr("id");
+  var card_test = 'card_' + id_test_case;
+
+  var id_li_suite_this = $(this).parent().attr("id");
+  var class_card = 'card_' + id_li_suite_this.substring(9);
+
+
+  if (id_test_case === card_test.substring(5))
+  {
+    $(this).addClass("active");
+
+  }
+
+  $('.collapse-item').not(this).removeClass("active");
+  console.log(class_card);
+});

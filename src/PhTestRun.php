@@ -526,7 +526,7 @@ class PhTestRun
          $suites = explode("\\", $submenu);
          if (in_array($item, $suites))
          {
-            $menu_subitems .= '<a class="collapse-item" href="#">' . $suites[2] . '</a>';
+            $menu_subitems .= '<a id="' . $suites[2] . '" class="collapse-item" href="#">' . $suites[2] . '</a>';
          }
       }
 
