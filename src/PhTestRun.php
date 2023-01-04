@@ -328,7 +328,7 @@ class PhTestRun
 
             $html_report .= '<!-- Content Row -->
             <div id="card_tests' . $names[1] . $c . '" class="card_' . $names[1] . ' suites_test" style="display:none;">
-               <div class="row" id = "card_' . $names[2] . '">
+               <div class="row row_testcases" id = "card_' . $names[2] . '">
                   <div class="col-xl-12 col-lg-12">
                     <div class="card shadow mb-4">
                         <!-- Card Header - Dropdown -->

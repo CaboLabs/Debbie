@@ -1,53 +1,62 @@
-$("li.nav-item").on("click", function (e)
+$(document).ready(function() 
 {
-  var id_li = $("a", this).attr("id");
-  var class_card = 'card_' + id_li;
-
-  if (id_li === 'dashboard')
+  $("li.nav-item").on("click", function (e)
   {
-    $('#cardSummaryTables').show();
-    $('#headCardSummary').show();
-    $(this).addClass("active");
-    $('#title_suite').hide();
-    $('#Card_suites').hide();
+    var id_li = $("a", this).attr("id");
+    var class_card = 'card_' + id_li;
 
-    if ($('li > div').hasClass('show'))
+    if (id_li === 'dashboard')
     {
-      $('li > div').collapse('hide');
-      console.log($('li > div'));
+      $('#cardSummaryTables').show();
+      $('#headCardSummary').show();
+      $(this).addClass("active");
+      $('#title_suite').hide();
+      $('#Card_suites').hide();
+
+      if ($('li > div').hasClass('show'))
+      {
+        $('li > div').collapse('hide');
+      }
     }
-  }
-  else if (id_li === class_card.substring(5))
+    else if (id_li === class_card.substring(5))
+    {
+      $('#Card_suites').show();
+      $('#Card_suites > div').show();
+      
+      $('#title_suite').show();
+      $('#title_suite').html(id_li);
+      $('#Card_suites').find('.' + class_card).show();
+      $(this).addClass("active");
+
+      $('.suites_test').not('.' + class_card).hide();
+      $('#headCardSummary').hide();
+      $('#cardSummaryTables').hide();
+    }
+
+    $('.nav-item').not(this).removeClass("active");
+  });
+
+  $(".collapse-item").on("click", function (e)
   {
-    $('#Card_suites').show();
-    $('#title_suite').show();
-    $('#title_suite').html(id_li);
-    $('#Card_suites').find('.' + class_card).show();
-    $(this).addClass("active");
+    var id_test_case = $(this).attr("id");
+    var card_test = 'card_' + id_test_case;
 
-    $('.suites_test').not('.' + class_card).hide();
-    $('#headCardSummary').hide();
-    $('#cardSummaryTables').hide();
-  }
+    var id_li_suite_this = $(this).parent().attr("id");
+    var class_card = 'card_' + id_li_suite_this.substring(9);
+    
+    if (id_test_case === card_test.substring(5))
+    {
+      $(this).addClass("active");
+      $('#Card_suites').show();
+      $('.row_testcases').show();
+      $('.suites_test').show();
 
-  $('.nav-item').not(this).removeClass("active");
-});
+      $('.row_testcases').not('#card_' + id_test_case).hide();
 
-$(".collapse-item").on("click", function (e)
-{
-  var id_test_case = $(this).attr("id");
-  var card_test = 'card_' + id_test_case;
-
-  var id_li_suite_this = $(this).parent().attr("id");
-  var class_card = 'card_' + id_li_suite_this.substring(9);
-
-
-  if (id_test_case === card_test.substring(5))
-  {
-    $(this).addClass("active");
-
-  }
-
-  $('.collapse-item').not(this).removeClass("active");
-  console.log(class_card);
+      $('#headCardSummary').hide();
+      $('#cardSummaryTables').hide();
+    }
+  
+    $('.collapse-item').not(this).removeClass("active");
+  });
 });
