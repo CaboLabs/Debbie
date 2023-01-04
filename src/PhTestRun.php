@@ -526,6 +526,19 @@ class PhTestRun
          $suites = explode("\\", $submenu);
          if (in_array($item, $suites))
          {
+            foreach ($this->reports as $i => $test_suite_reports) {
+               foreach ($test_suite_reports as $reports) {
+                  foreach ($reports as $report) {
+                     foreach ($report['asserts'] as $assert_report) {
+                        if ($assert_report['type'] == 'ERROR') {
+
+                        } else if ($assert_report['type'] == 'OK') {
+
+                        }
+                     }
+                  }
+               }
+            }
             $menu_subitems .= '<a id="' . $suites[2] . '" class="collapse-item" href="#">' . $suites[2] . '</a>';
          }
       }
