@@ -312,24 +312,25 @@ class PhTestRun
 
       $h = 0;
       $c = 0;
-
+      
       foreach ($this->reports as $i => $test_suite_reports)
       {
          $total_suites++;
-
+         $Ttests = 0;
+         
          foreach ($test_suite_reports as $test_case => $reports)
          {
+            $Ttests = 1;
             $successful = 0;
             $failed = 0;
             $total_class_test_x_suites = 0;
-
+            
             $names = explode("\\", $test_case);
 
             $namesSuitesMenu[] = $names[1];
 
             $namesSuitessubmenu[] = $test_case;
-            $ArrTestCase[] = $test_case;
-
+            
             $total_cases++;
 
             $html_report .= '<!-- Content Row -->
@@ -352,11 +353,11 @@ class PhTestRun
                                  </tr>
                               </thead>
                               <tbody><tr>';
-
+            
             foreach ($reports as $test_function => $report)
             {
                $total_tests++;
-
+                              
                if (isset($report['asserts']))
                {
                   foreach ($report['asserts'] as $assert_report)
@@ -398,16 +399,6 @@ class PhTestRun
                   $html_report .= '<td></td>';
                   $html_report .= '</tr>';
                }
-
-               $ArrSummaryTestCase[] = [
-                  "suite" => $names[1],
-                  "class" => $total_class_test_x_suites,
-                  "success" => $successful,
-                  "failed" => $failed
-               ];
-
-               $t = self::summaryXsuites($ArrSummaryTestCase);
-
             }
             $html_report .= '</tbody></table></div></div></div></div></div>';
             
@@ -429,94 +420,104 @@ class PhTestRun
                ];
             }
             $c++;
+            
+            $ArrSummaryTestCase [] = [
+               "suite" => $names[1],
+               "totalTestSuites" => $Ttests,
+               "classes" => $total_class_test_x_suites,
+               'failed' => $failed,
+               'success' => $successful
+            ];
+            $Ttests++;
          }
+   
+      }
+      $totalSummaryXSuite = self::summaryXsuites($ArrSummaryTestCase);
+      print_r($totalSummaryXSuite);
 
-        /* foreach ($namesSuitesMenu as $suite) {
-            $cards_summary_suites .= '<div id="card_summary_'. $suite .'" class="card_summary_suites" style="">
-               <!-- Total suites Card Example -->
-               <div class="row">
-               <div class="col-xl-3 col-md-6 mb-4">
-                  <div class="card border-left-primary shadow h-100 py-2">
-                     <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                              <div class="col mr-2">
-                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                    Total tests</div>
-                                 <div class="h5 mb-0 font-weight-bold text-gray-800">' . count($ArrTestCase) . '</div>
-                              </div>
-                              <div class="col-auto">
-                              <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                              </div>
-                        </div>
+      foreach ($totalSummaryXSuite as $suite => $suiteSummarySuite) {
+         $cards_summary_suites .= '<div id="card_summary_'. $suite.'" class="card_summary_suites" style="">
+            <!-- Total suites Card Example -->
+            <div class="row">
+            <div class="col-xl-3 col-md-6 mb-4">
+               <div class="card border-left-primary shadow h-100 py-2">
+                  <div class="card-body">
+                     <div class="row no-gutters align-items-center">
+                           <div class="col mr-2">
+                              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                 Total tests</div>
+                              <div class="h5 mb-0 font-weight-bold text-gray-800">' . $suiteSummarySuite['totalTestSuites'] . '</div>
+                           </div>
+                           <div class="col-auto">
+                           <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                           </div>
                      </div>
                   </div>
                </div>
+            </div>
 
-               <!-- Total tests Card Example -->
-               <div class="col-xl-3 col-md-6 mb-4">
-                  <div class="card border-left-warning shadow h-100 py-2">
-                     <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                              <div class="col mr-2">
-                                 <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                    Total classes</div>
-                                 <div class="h5 mb-0 font-weight-bold text-gray-800">' . $total_class_test_x_suites . '</div>
-                              </div>
-                              <div class="col-auto">
-                              <i class="fas fa-project-diagram fa-2x text-gray-300"></i></i>
-                              </div>
-                        </div>
+            <!-- Total tests Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+               <div class="card border-left-warning shadow h-100 py-2">
+                  <div class="card-body">
+                     <div class="row no-gutters align-items-center">
+                           <div class="col mr-2">
+                              <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                 Total classes</div>
+                              <div class="h5 mb-0 font-weight-bold text-gray-800">' . $suiteSummarySuite['class'] . '</div>
+                           </div>
+                           <div class="col-auto">
+                           <i class="fas fa-project-diagram fa-2x text-gray-300"></i></i>
+                           </div>
                      </div>
                   </div>
                </div>
+            </div>
 
-               <!-- test failed Card Example -->
-               <div class="col-xl-3 col-md-6 mb-4">
-                  <div class="card border-left-danger shadow h-100 py-2">
-                     <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                              <div class="col mr-2">
-                                 <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                 Asserts failed
+            <!-- test failed Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+               <div class="card border-left-danger shadow h-100 py-2">
+                  <div class="card-body">
+                     <div class="row no-gutters align-items-center">
+                           <div class="col mr-2">
+                              <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                              Asserts failed
+                              </div>
+                              <div class="row no-gutters align-items-center">
+                                 <div class="col-auto">
+                                       <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">' . $suiteSummarySuite['fail'] . '</div>
                                  </div>
-                                 <div class="row no-gutters align-items-center">
-                                    <div class="col-auto">
-                                          <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">' . $failed . '</div>
-                                    </div>
-                                 </div>
                               </div>
-                              <div class="col-auto">
-                                 <i class="fas fa-times-circle fa-2x text-gray-300"></i>
-                              </div>
-                        </div>
+                           </div>
+                           <div class="col-auto">
+                              <i class="fas fa-times-circle fa-2x text-gray-300"></i>
+                           </div>
                      </div>
                   </div>
                </div>
+            </div>
 
-               <!-- test successful Card Example -->
-               <div class="col-xl-3 col-md-6 mb-4">
-                  <div class="card border-left-success shadow h-100 py-2">
-                     <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                              <div class="col mr-2">
-                                 <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                 Asserts successful</div>
-                                 <div class="h5 mb-0 font-weight-bold text-gray-800">.' . $successful . '</div>
-                              </div>
-                              <div class="col-auto">
-                              <i class="fas fa-clipboard-check fa-2x text-gray-300"></i>
-                              </div>
+            <!-- test successful Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+               <div class="card border-left-success shadow h-100 py-2">
+                  <div class="card-body">
+                     <div class="row no-gutters align-items-center">
+                           <div class="col mr-2">
+                              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                              Asserts successful</div>
+                              <div class="h5 mb-0 font-weight-bold text-gray-800">.' . $suiteSummarySuite['success'] . '</div>
+                           </div>
+                           <div class="col-auto">
+                           <i class="fas fa-clipboard-check fa-2x text-gray-300"></i>
                            </div>
                         </div>
                      </div>
                   </div>
                </div>
-            </div>';
-         }*/
-   
+            </div>
+         </div>';
       }
 
-      print_r($t);
       foreach ($namesSuitesMenu as $item)
       {
          if ($h > 0 && $namesSuitesMenu[$h - 1] == $item)
@@ -647,31 +648,46 @@ class PhTestRun
 
    public function summaryXsuites($ArrSummaryTestCase)
    {
+      $TotalTests = 0;
       $TotalClass = 0;
       $Totalsuccess = 0;
       $Totalfail = 0;
+      $Arr = [];
+
       for ($i=0; $i < count($ArrSummaryTestCase); $i++) 
       {
          $a = $i - 1;
          if ($i > 0) {
             if ($ArrSummaryTestCase[$i]["suite"] === $ArrSummaryTestCase[$a]["suite"]) {
-               $TotalClass += $ArrSummaryTestCase[$i]["class"];
+               $TotalTests += $ArrSummaryTestCase[$i]["totalTestSuites"];
+               $TotalClass += $ArrSummaryTestCase[$i]["classes"];
                $Totalsuccess += $ArrSummaryTestCase[$i]["success"];
                $Totalfail += $ArrSummaryTestCase[$i]["failed"];
-            } else {
-               $TotalClass = $ArrSummaryTestCase[$i]["class"];
+            } 
+            else 
+            {
+               $TotalTests = $ArrSummaryTestCase[$i]["totalTestSuites"];
+               $TotalClass = $ArrSummaryTestCase[$i]["classes"];
                $Totalsuccess = $ArrSummaryTestCase[$i]["success"];
                $Totalfail = $ArrSummaryTestCase[$i]["failed"];
             }
+
+            $Arr[$ArrSummaryTestCase[$i]["suite"]] = [
+               "totalTestSuites" => $TotalTests,
+               "class" => $TotalClass,
+               "success" => $Totalsuccess,
+               "fail" => $Totalfail
+            ];     
          }
-         unset($Arr);
-         $Arr[] = [
-            "suite" => $ArrSummaryTestCase[$i]["suite"],
-            "class" => $TotalClass,
-            "success" => $Totalsuccess,
-            "fail" => $Totalfail
-         ];
-         
+         else
+         {
+            $Arr[$ArrSummaryTestCase[$i]["suite"]] = [
+               "totalTestSuites" => $ArrSummaryTestCase[$i]["totalTestSuites"],
+               "class" => $ArrSummaryTestCase[$i]["classes"],
+               "success" => $ArrSummaryTestCase[$i]["success"],
+               "fail" => $ArrSummaryTestCase[$i]["failed"]
+            ];
+         }
       }
       return $Arr;
    }
