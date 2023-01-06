@@ -21,7 +21,7 @@ namespace CaboLabs\PhTest;
 
 class PhTestHtmlTemplate
 {
-  function Html_template($total_suites, $total_cases, $failed_cases, $successful_case, $html_report, $test_time, $total_tests, $total_successful, $total_failed, $total_asserts, $failed_Summ, $succ_Summ, $menu_items)
+  function Html_template($total_suites, $total_cases, $failed_cases, $successful_case, $html_report, $test_time, $total_tests, $total_successful, $total_failed, $total_asserts, $failed_Summ, $succ_Summ, $menu_items, $cards_summary_suites)
   {
     // NOTE: this path is relative to this file using __DIR__ so it should work when running from other cli's
     //       if the path is relative, it will be relative to the running script, if cli.php is on a different
@@ -185,6 +185,7 @@ class PhTestHtmlTemplate
                   </div>
 
                   <div id="Card_suites">
+                    $cards_summary_suites
                     $html_report
                   </div>
 

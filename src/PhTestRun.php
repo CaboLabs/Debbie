@@ -299,12 +299,16 @@ class PhTestRun
 
       $total_cases_failed = $total_cases_successful = [];
       $namesSuitessubmenu = [];
+      $ArrSummaryTestCase = [];
+      $namesSuitesMenu = [];
 
       $html_report = '';
       $menu_items = '';
 
       $failed_Summ = "";
       $succ_Summ = "";
+
+      $cards_summary_suites = "";
 
       $h = 0;
       $c = 0;
@@ -317,12 +321,14 @@ class PhTestRun
          {
             $successful = 0;
             $failed = 0;
+            $total_class_test_x_suites = 0;
 
             $names = explode("\\", $test_case);
 
             $namesSuitesMenu[] = $names[1];
 
             $namesSuitessubmenu[] = $test_case;
+            $ArrTestCase[] = $test_case;
 
             $total_cases++;
 
@@ -355,6 +361,7 @@ class PhTestRun
                {
                   foreach ($report['asserts'] as $assert_report)
                   {
+                     $total_class_test_x_suites++;
                      $html_report .= '<td>' . $test_function . '</td>';
                      if ($assert_report['type'] == 'ERROR')
                      {
@@ -391,9 +398,19 @@ class PhTestRun
                   $html_report .= '<td></td>';
                   $html_report .= '</tr>';
                }
+
+               $ArrSummaryTestCase[] = [
+                  "suite" => $names[1],
+                  "class" => $total_class_test_x_suites,
+                  "success" => $successful,
+                  "failed" => $failed
+               ];
+
+               $t = self::summaryXsuites($ArrSummaryTestCase);
+
             }
             $html_report .= '</tbody></table></div></div></div></div></div>';
-
+            
             if ($failed > 0)
             {
                $total_cases_failed[] = [
@@ -413,8 +430,93 @@ class PhTestRun
             }
             $c++;
          }
+
+        /* foreach ($namesSuitesMenu as $suite) {
+            $cards_summary_suites .= '<div id="card_summary_'. $suite .'" class="card_summary_suites" style="">
+               <!-- Total suites Card Example -->
+               <div class="row">
+               <div class="col-xl-3 col-md-6 mb-4">
+                  <div class="card border-left-primary shadow h-100 py-2">
+                     <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                              <div class="col mr-2">
+                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    Total tests</div>
+                                 <div class="h5 mb-0 font-weight-bold text-gray-800">' . count($ArrTestCase) . '</div>
+                              </div>
+                              <div class="col-auto">
+                              <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                              </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
+               <!-- Total tests Card Example -->
+               <div class="col-xl-3 col-md-6 mb-4">
+                  <div class="card border-left-warning shadow h-100 py-2">
+                     <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                              <div class="col mr-2">
+                                 <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                    Total classes</div>
+                                 <div class="h5 mb-0 font-weight-bold text-gray-800">' . $total_class_test_x_suites . '</div>
+                              </div>
+                              <div class="col-auto">
+                              <i class="fas fa-project-diagram fa-2x text-gray-300"></i></i>
+                              </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
+               <!-- test failed Card Example -->
+               <div class="col-xl-3 col-md-6 mb-4">
+                  <div class="card border-left-danger shadow h-100 py-2">
+                     <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                              <div class="col mr-2">
+                                 <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                 Asserts failed
+                                 </div>
+                                 <div class="row no-gutters align-items-center">
+                                    <div class="col-auto">
+                                          <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">' . $failed . '</div>
+                                    </div>
+                                 </div>
+                              </div>
+                              <div class="col-auto">
+                                 <i class="fas fa-times-circle fa-2x text-gray-300"></i>
+                              </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
+               <!-- test successful Card Example -->
+               <div class="col-xl-3 col-md-6 mb-4">
+                  <div class="card border-left-success shadow h-100 py-2">
+                     <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                              <div class="col mr-2">
+                                 <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                 Asserts successful</div>
+                                 <div class="h5 mb-0 font-weight-bold text-gray-800">.' . $successful . '</div>
+                              </div>
+                              <div class="col-auto">
+                              <i class="fas fa-clipboard-check fa-2x text-gray-300"></i>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>';
+         }*/
+   
       }
 
+      print_r($t);
       foreach ($namesSuitesMenu as $item)
       {
          if ($h > 0 && $namesSuitesMenu[$h - 1] == $item)
@@ -443,7 +545,7 @@ class PhTestRun
                data-parent="#accordionSidebar">
                <div id="collapse_' . $item . '" class="bg-white py-2 collapse-inner rounded">';
 
-            $menu_items .=  self::names_tests($item, $namesSuitessubmenu);
+            $menu_items .=  self::names_tests($item, $namesSuitessubmenu, $total_cases_failed);
 
             $menu_items .= '</div></div></li>';
          }
@@ -506,7 +608,8 @@ class PhTestRun
          $total_asserts,
          $failed_Summ,
          $succ_Summ,
-         $menu_items
+         $menu_items,
+         $cards_summary_suites
       );
 
       if ($path == './')
@@ -517,7 +620,7 @@ class PhTestRun
       file_put_contents($path, $render);
    }
 
-   public function names_tests($item, $namesSuitessubmenu)
+   public function names_tests($item, $namesSuitessubmenu, $total_cases_failed)
    {
       $menu_subitems = '';
 
@@ -526,24 +629,51 @@ class PhTestRun
          $suites = explode("\\", $submenu);
          if (in_array($item, $suites))
          {
-            foreach ($this->reports as $i => $test_suite_reports) {
-               foreach ($test_suite_reports as $reports) {
-                  foreach ($reports as $report) {
-                     foreach ($report['asserts'] as $assert_report) {
-                        if ($assert_report['type'] == 'ERROR') {
+            $is_failed = self::is_faild($item, $total_cases_failed);
 
-                        } else if ($assert_report['type'] == 'OK') {
-
-                        }
-                     }
-                  }
-               }
+            if ($is_failed)
+            {
+               $menu_subitems .= '<a id="' . $suites[2] . '" class="collapse-item" style="color:red" href="#">' . $suites[2] . '</a>';
             }
-            $menu_subitems .= '<a id="' . $suites[2] . '" class="collapse-item" href="#">' . $suites[2] . '</a>';
+            else
+            {
+               $menu_subitems .= '<a id="' . $suites[2] . '" class="collapse-item" style="color:green" href="#">' . $suites[2] . '</a>';
+            }
          }
       }
 
       return $menu_subitems;
+   }
+
+   public function summaryXsuites($ArrSummaryTestCase)
+   {
+      $TotalClass = 0;
+      $Totalsuccess = 0;
+      $Totalfail = 0;
+      for ($i=0; $i < count($ArrSummaryTestCase); $i++) 
+      {
+         $a = $i - 1;
+         if ($i > 0) {
+            if ($ArrSummaryTestCase[$i]["suite"] === $ArrSummaryTestCase[$a]["suite"]) {
+               $TotalClass += $ArrSummaryTestCase[$i]["class"];
+               $Totalsuccess += $ArrSummaryTestCase[$i]["success"];
+               $Totalfail += $ArrSummaryTestCase[$i]["failed"];
+            } else {
+               $TotalClass = $ArrSummaryTestCase[$i]["class"];
+               $Totalsuccess = $ArrSummaryTestCase[$i]["success"];
+               $Totalfail = $ArrSummaryTestCase[$i]["failed"];
+            }
+         }
+         unset($Arr);
+         $Arr[] = [
+            "suite" => $ArrSummaryTestCase[$i]["suite"],
+            "class" => $TotalClass,
+            "success" => $Totalsuccess,
+            "fail" => $Totalfail
+         ];
+         
+      }
+      return $Arr;
    }
 
    public function is_faild($item, $total_cases_failed)
@@ -618,7 +748,7 @@ class PhTestRun
 
       echo PHP_EOL;
 
-      echo 'Summary reports --> total time: '. $this->execution_time .' μs' . PHP_EOL . PHP_EOL;
+      echo 'Summary reports --> total time: ' . $this->execution_time . ' μs' . PHP_EOL . PHP_EOL;
 
       //render table totals summary (suites,cases,tests)
       foreach ($summary1 as $table1)

@@ -11,7 +11,7 @@ $("li.nav-item").on("click", function (e)
     $(this).addClass("active");
     $('#title_suite').hide();
     $('#Card_suites').hide();
-
+   
     if ($('li > div').hasClass('show'))
     {
       $('li > div').collapse('hide');
