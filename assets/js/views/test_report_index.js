@@ -1,3 +1,4 @@
+// when each test is clicked
 $(".collapse-item").on("click", function ()
 {
   var id_test_case = $(this).attr("id");
@@ -16,7 +17,7 @@ $(".collapse-item").on("click", function ()
     $('.suites_test').show();
 
     $('.row_testcases').not('#card_' + id_test_case).hide();
-
+    $('.card_summary_suites').hide();
     $('#headCardSummary').hide();
     $('#cardSummaryTables').hide();
   }
@@ -29,6 +30,8 @@ $(".collapse-item").on("click", function ()
   });
 });
 
+
+//when you click on each suite on the menu
 $('.nav-link').on("click", function ()
 {
   var id_li = $(this).attr("id");

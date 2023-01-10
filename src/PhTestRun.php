@@ -332,6 +332,7 @@ class PhTestRun
             
             $total_cases++;
 
+            //create the card with each test of the suite
             $html_report .= '<!-- Content Row -->
             <div id="card_tests' . $names[1] . $c . '" class="card_' . $names[1] . ' suites_test" style="display:none;">
                <div class="row row_testcases" id = "card_' . $names[2] . '">
@@ -368,14 +369,14 @@ class PhTestRun
                         $html_report .= '<td class ="text-danger">ERROR: ' . $assert_report['msg'] . '</td>';
 
                         $total_failed++;
-                        $failed++;
+                        $failed++; //count the assert fail of each test per suite
                      }
                      else if ($assert_report['type'] == 'OK')
                      {
                         $html_report .= '<td class="text-success">OK: ' . $assert_report['msg'] . '</td>';
 
                         $total_successful++;
-                        $successful++;
+                        $successful++; //count the assert successful of each test per suite
                      }
                      else if ($assert_report['type'] == 'EXCEPTION')
                      {
@@ -433,6 +434,7 @@ class PhTestRun
       }
       $totalSummaryXSuite = self::summaryXsuites($ArrSummaryTestCase);
      
+      // render the summary for each suite
       foreach ($totalSummaryXSuite as $suite => $suiteSummarySuite) {
          $cards_summary_suites .= '<div id="card_summary_'. $suite.'" class="card_summary_suites" style="display:none">
             <!-- Total suites Card Example -->
@@ -646,6 +648,7 @@ class PhTestRun
 
    public function summaryXsuites($ArrSummaryTestCase)
    {
+      /** create the summary for each suite */
       $TotalTests = 0;
       $TotalClass = 0;
       $Totalsuccess = 0;
