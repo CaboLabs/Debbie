@@ -23,9 +23,11 @@ $("li.nav-item").on("click", function (e)
     $('#title_suite').show();
     $('#title_suite').html(id_li);
     $('#Card_suites').find('.' + class_card).show();
+    $('#card_summary_' + id_li).show();
     $(this).addClass("active");
 
     $('.suites_test').not('.' + class_card).hide();
+    $('.card_summary_suites').not('#card_summary_' + id_li).hide();
     $('#headCardSummary').hide();
     $('#cardSummaryTables').hide();
   }

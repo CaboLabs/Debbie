@@ -316,11 +316,10 @@ class PhTestRun
       foreach ($this->reports as $i => $test_suite_reports)
       {
          $total_suites++;
-         $Ttests = 0;
+         $Ttests = 1;
          
          foreach ($test_suite_reports as $test_case => $reports)
          {
-            $Ttests = 1;
             $successful = 0;
             $failed = 0;
             $total_class_test_x_suites = 0;
@@ -433,10 +432,9 @@ class PhTestRun
    
       }
       $totalSummaryXSuite = self::summaryXsuites($ArrSummaryTestCase);
-      print_r($totalSummaryXSuite);
-
+     
       foreach ($totalSummaryXSuite as $suite => $suiteSummarySuite) {
-         $cards_summary_suites .= '<div id="card_summary_'. $suite.'" class="card_summary_suites" style="">
+         $cards_summary_suites .= '<div id="card_summary_'. $suite.'" class="card_summary_suites" style="display:none">
             <!-- Total suites Card Example -->
             <div class="row">
             <div class="col-xl-3 col-md-6 mb-4">
@@ -505,7 +503,7 @@ class PhTestRun
                            <div class="col mr-2">
                               <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                               Asserts successful</div>
-                              <div class="h5 mb-0 font-weight-bold text-gray-800">.' . $suiteSummarySuite['success'] . '</div>
+                              <div class="h5 mb-0 font-weight-bold text-gray-800">' . $suiteSummarySuite['success'] . '</div>
                            </div>
                            <div class="col-auto">
                            <i class="fas fa-clipboard-check fa-2x text-gray-300"></i>
@@ -659,7 +657,7 @@ class PhTestRun
          $a = $i - 1;
          if ($i > 0) {
             if ($ArrSummaryTestCase[$i]["suite"] === $ArrSummaryTestCase[$a]["suite"]) {
-               $TotalTests += $ArrSummaryTestCase[$i]["totalTestSuites"];
+               $TotalTests = $ArrSummaryTestCase[$i]["totalTestSuites"];
                $TotalClass += $ArrSummaryTestCase[$i]["classes"];
                $Totalsuccess += $ArrSummaryTestCase[$i]["success"];
                $Totalfail += $ArrSummaryTestCase[$i]["failed"];
