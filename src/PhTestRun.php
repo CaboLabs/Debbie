@@ -655,10 +655,11 @@ class PhTestRun
       for ($i=0; $i < count($ArrSummaryTestCase); $i++) 
       {
          $a = $i - 1;
-         if ($i > 0) {
+         if ($i > 0) 
+         {
             if ($ArrSummaryTestCase[$i]["suite"] === $ArrSummaryTestCase[$a]["suite"]) {
                $TotalTests = $ArrSummaryTestCase[$i]["totalTestSuites"];
-               $TotalClass += $ArrSummaryTestCase[$i]["classes"];
+               $TotalClass = $ArrSummaryTestCase[$i]["classes"];
                $Totalsuccess += $ArrSummaryTestCase[$i]["success"];
                $Totalfail += $ArrSummaryTestCase[$i]["failed"];
             } 
@@ -668,24 +669,22 @@ class PhTestRun
                $TotalClass = $ArrSummaryTestCase[$i]["classes"];
                $Totalsuccess = $ArrSummaryTestCase[$i]["success"];
                $Totalfail = $ArrSummaryTestCase[$i]["failed"];
-            }
-
-            $Arr[$ArrSummaryTestCase[$i]["suite"]] = [
-               "totalTestSuites" => $TotalTests,
-               "class" => $TotalClass,
-               "success" => $Totalsuccess,
-               "fail" => $Totalfail
-            ];     
+            }   
          }
          else
          {
-            $Arr[$ArrSummaryTestCase[$i]["suite"]] = [
-               "totalTestSuites" => $ArrSummaryTestCase[$i]["totalTestSuites"],
-               "class" => $ArrSummaryTestCase[$i]["classes"],
-               "success" => $ArrSummaryTestCase[$i]["success"],
-               "fail" => $ArrSummaryTestCase[$i]["failed"]
-            ];
+            $TotalTests = $ArrSummaryTestCase[$i]["totalTestSuites"];
+            $TotalClass = $ArrSummaryTestCase[$i]["classes"];
+            $Totalsuccess = $ArrSummaryTestCase[$i]["success"];
+            $Totalfail = $ArrSummaryTestCase[$i]["failed"];
          }
+
+         $Arr[$ArrSummaryTestCase[$i]["suite"]] = [
+            "totalTestSuites" => $TotalTests,
+            "class" => $TotalClass,
+            "success" => $Totalsuccess,
+            "fail" => $Totalfail
+         ];
       }
       return $Arr;
    }
