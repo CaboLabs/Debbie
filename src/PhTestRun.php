@@ -535,6 +535,7 @@ class PhTestRun
 
    public function is_faild($item, $total_cases_failed)
    {
+      $faildSuite = false;
       foreach ($total_cases_failed as $suiteFaild)
       {
          $suites = explode("\\", $suiteFaild["case"]);
