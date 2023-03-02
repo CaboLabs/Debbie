@@ -301,6 +301,10 @@ class PhTestRun
 
       $total_cases = 0;
       $total_suites = 0;
+      $total_tests = 0;
+      $total_failed = 0;
+      $total_successful = 0;
+      $total_asserts = 0;
 
       $html_report = '';
       $menu_items = '';
@@ -328,7 +332,7 @@ class PhTestRun
 
             $total_cases++;
 
-           /* $html_report .= '<!-- Content Row -->
+            $html_report .= '<!-- Content Row -->
             <div id="card_tests' . $names[1] . $c . '" class="card_' . $names[1] . ' suites_test" style="display:none;">
                <div class="row" id = "card_' . $names[2] . '">
                   <div class="col-xl-12 col-lg-12">
@@ -394,7 +398,7 @@ class PhTestRun
                   $html_report .= '</tr>';
                }
             }
-            $html_report .= '</tbody></table></div></div></div></div></div>';*/
+            $html_report .= '</tbody></table></div></div></div></div></div>';
 
             if ($failed > 0)
             {
@@ -495,9 +499,26 @@ class PhTestRun
 
       $html_report = self::template_email()->render('html_reports/body_report', ['reports' => $this->reports]);
 
-      $content = new \CaboLabs\PhTest\PhTestHtmlTemplate;
+     // $content = new \CaboLabs\PhTest\PhTestHtmlTemplate;
 
-      $render = $content->Html_template(
+      $render = self::template_email()->render('html_reports/content_report', [
+         'total_suites' => $total_suites, 
+         'total_cases' => $total_cases, 
+         'failed_cases' => $failed_cases, 
+         'successful_case' => $successful_case, 
+         'html_report' => $html_report, 
+         'test_time' => $test_time, 
+         'total_tests' => $total_tests, 
+         '$total_successful' => $total_successful, 
+         'total_failed' => $total_failed, 
+         'total_asserts' => $total_asserts, 
+         'failed_Summ'=> $failed_Summ, 
+         'succ_Summ' => $succ_Summ, 
+         'menu_items' => $menu_items
+      ]);
+      
+      
+      /*$content->Html_template(
          $total_suites,
          $total_cases,
          $failed_cases,
@@ -511,7 +532,7 @@ class PhTestRun
          $failed_Summ,
          $succ_Summ,
          $menu_items
-      );
+      );*/
 
       if ($path == './')
       {
