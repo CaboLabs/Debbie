@@ -295,10 +295,12 @@ class PhTestRun
        *  @var int $total_failed, stores the total failed cases number
        *  @var int $total_successful, stores the total successful cases number
        */
-      global $html_report, $content, $total_suites, $total_cases, $total_tests, $total_asserts, $total_failed, $total_successful;
-
+      
       $total_cases_failed = $total_cases_successful = [];
       $namesSuitessubmenu = [];
+
+      $total_cases = 0;
+      $total_suites = 0;
 
       $html_report = '';
       $menu_items = '';
@@ -326,7 +328,7 @@ class PhTestRun
 
             $total_cases++;
 
-            $html_report .= '<!-- Content Row -->
+           /* $html_report .= '<!-- Content Row -->
             <div id="card_tests' . $names[1] . $c . '" class="card_' . $names[1] . ' suites_test" style="display:none;">
                <div class="row" id = "card_' . $names[2] . '">
                   <div class="col-xl-12 col-lg-12">
@@ -392,7 +394,7 @@ class PhTestRun
                   $html_report .= '</tr>';
                }
             }
-            $html_report .= '</tbody></table></div></div></div></div></div>';
+            $html_report .= '</tbody></table></div></div></div></div></div>';*/
 
             if ($failed > 0)
             {
@@ -490,6 +492,8 @@ class PhTestRun
       {
          $successful_case = 0;
       }
+
+      $html_report = self::template_email()->render('html_reports/body_report', ['reports' => $this->reports]);
 
       $content = new \CaboLabs\PhTest\PhTestHtmlTemplate;
 
@@ -800,4 +804,10 @@ class PhTestRun
          'row_separator_cases3' => $row_separator_cases . PHP_EOL
       ];
    }
+
+   public static function template_email()
+  {
+    global $_BASE;
+    return new \League\Plates\Engine($_BASE . '../views/html_reports');      
+  }
 }

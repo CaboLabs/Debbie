@@ -24,7 +24,7 @@
     Test suites
   </div>
   <!-- Nav Item -->
-  <?= $menu_items ?>
+  <?=$menu_items?>
 </ul>
 <!-- End of Sidebar -->
 <!-- Content Wrapper -->
@@ -53,7 +53,7 @@
                     Total suites
                   </div>
                   <div class="h5 mb-0 font-weight-bold text-gray-800">
-                    <?= $total_suites ?>
+                    <?=$total_suites?>
                   </div>
                 </div>
                 <div class="col-auto">
@@ -73,7 +73,7 @@
                     Total tests cases
                   </div>
                   <div class="h5 mb-0 font-weight-bold text-gray-800">
-                    <?= $total_cases ?>
+                    <?=$total_cases?>
                   </div>
                 </div>
                 <div class="col-auto">
@@ -95,7 +95,7 @@
                   <div class="row no-gutters align-items-center">
                     <div class="col-auto">
                       <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
-                        <?= $failed_cases ?>
+                        <?=$failed_cases?>
                       </div>
                     </div>
                   </div>
@@ -117,7 +117,7 @@
                     Cases successful
                   </div>
                   <div class="h5 mb-0 font-weight-bold text-gray-800">
-                    <?= $successful_case ?>
+                    <?=$successful_case?>
                   </div>
                 </div>
                 <div class="col-auto">
@@ -129,7 +129,7 @@
         </div>
       </div>
       <div id="Card_suites">
-        <?= $html_report ?>
+        <?=$html_report?>
       </div>
       <div id="cardSummaryTables" class="row">
         <div class="col-xl-12 col-lg-12">
@@ -137,7 +137,7 @@
             <!-- Card Header - Dropdown -->
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
               <h6 class="m-0 font-weight-bold text-success">Total time:
-                <?= $test_time ?> μs
+                <?=$test_time?> μs
               </h6>
             </div>
             <!-- Card Body -->
@@ -158,31 +158,31 @@
                 <tbody>
                   <tr>
                     <td class="text-right">
-                      <?= $total_suites ?>
+                      <?=$total_suites?>
                     </td>
                     <td class="text-right">
-                      <?= $total_cases ?>
+                      <?=$total_cases?>
                     </td>
                     <td class="text-right">
-                      <?= $total_tests ?>
+                      <?=$total_tests?>
                     </td>
                     <td class="text-right">
-                      <?= $total_successful ?>
+                      <?=$total_successful?>
                     </td>
                     <td class="text-right">
-                      <?= $total_failed ?>
+                      <?=$total_failed?>
                     </td>
                     <td class="text-right">
-                      <?= $total_asserts ?>
+                      <?=$total_asserts?>
                     </td>
                   </tr>
                 </tbody>
               </table>
               <h6 class="m-0 font-weight-bold text-primary">Failed Summary</h6><br>
-              <?= $failed_Summ ?>
+              <?=$failed_Summ?>
               <br>
               <h6 class="m-0 font-weight-bold text-primary">Successful Summary</h6><br>
-              <?= $succ_Summ ?>
+              <?=$succ_Summ?>
             </div>
           </div>
         </div>
