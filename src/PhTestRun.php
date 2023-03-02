@@ -313,7 +313,6 @@ class PhTestRun
       $succ_Summ = "";
 
       $h = 0;
-      $c = 0;
 
       foreach ($this->reports as $i => $test_suite_reports)
       {
@@ -332,27 +331,6 @@ class PhTestRun
 
             $total_cases++;
 
-            $html_report .= '<!-- Content Row -->
-            <div id="card_tests' . $names[1] . $c . '" class="card_' . $names[1] . ' suites_test" style="display:none;">
-               <div class="row" id = "card_' . $names[2] . '">
-                  <div class="col-xl-12 col-lg-12">
-                    <div class="card shadow mb-4">
-                        <!-- Card Header - Dropdown -->
-                        <div  class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                           <h6 class="m-0 font-weight-bold text-primary">' . $names[2] . '</h6>
-                        </div>
-                           <!-- Card Body -->
-                        <div class="card-body">
-                           <table class="table table-borderless" style="margin: -0.5rem;">
-                              <thead>
-                                 <tr class ="border-bottom">
-                                    <th scope="col">Class</th>
-                                    <th scope="col">Asserts</th>
-                                    <th scope="col"></th>
-                                 </tr>
-                              </thead>
-                              <tbody><tr>';
-
             foreach ($reports as $test_function => $report)
             {
                $total_tests++;
@@ -361,44 +339,21 @@ class PhTestRun
                {
                   foreach ($report['asserts'] as $assert_report)
                   {
-                     $html_report .= '<td>' . $test_function . '</td>';
                      if ($assert_report['type'] == 'ERROR')
                      {
-                        $html_report .= '<td class ="text-danger">ERROR: ' . $assert_report['msg'] . '</td>';
-
                         $total_failed++;
                         $failed++;
                      }
                      else if ($assert_report['type'] == 'OK')
                      {
-                        $html_report .= '<td class="text-success">OK: ' . $assert_report['msg'] . '</td>';
-
                         $total_successful++;
                         $successful++;
                      }
-                     else if ($assert_report['type'] == 'EXCEPTION')
-                     {
-                        $html_report .= '<td class="text-primary">EXCEPTION: ' . $assert_report['msg'] . '</td>';
-                     }
-
-                     if (!empty($report['output']))
-                     {
-                        $html_report .= '<td class="text-secondary">OUTPUT: ' . $report['output'] . '</td>';
-                     }
-                     $html_report .= '</tr>';
                   }
 
                   $total_asserts++;
                }
-               else
-               {
-                  $html_report .= '<td>' . $test_function . '</td>';
-                  $html_report .= '<td></td>';
-                  $html_report .= '<td></td>';
-                  $html_report .= '</tr>';
-               }
             }
-            $html_report .= '</tbody></table></div></div></div></div></div>';
 
             if ($failed > 0)
             {
@@ -417,7 +372,6 @@ class PhTestRun
                   'case_successful' => $successful
                ];
             }
-            $c++;
          }
       }
 
@@ -502,18 +456,18 @@ class PhTestRun
      // $content = new \CaboLabs\PhTest\PhTestHtmlTemplate;
 
       $render = self::template_email()->render('html_reports/content_report', [
-         'total_suites' => $total_suites, 
-         'total_cases' => $total_cases, 
-         'failed_cases' => $failed_cases, 
-         'successful_case' => $successful_case, 
-         'html_report' => $html_report, 
-         'test_time' => $test_time, 
-         'total_tests' => $total_tests, 
-         '$total_successful' => $total_successful, 
-         'total_failed' => $total_failed, 
-         'total_asserts' => $total_asserts, 
-         'failed_Summ'=> $failed_Summ, 
-         'succ_Summ' => $succ_Summ, 
+         'total_suites' => $total_suites,
+         'total_cases' => $total_cases,
+         'failed_cases' => $failed_cases,
+         'successful_case' => $successful_case,
+         'html_report' => $html_report,
+         'test_time' => $this->execution_time,
+         'total_tests' => $total_tests,
+         '$total_successful' => $total_successful,
+         'total_failed' => $total_failed,
+         'total_asserts' => $total_asserts,
+         'failed_Summ'=> $failed_Summ,
+         'succ_Summ' => $succ_Summ,
          'menu_items' => $menu_items
       ]);
       
