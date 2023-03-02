@@ -53,6 +53,6 @@
         if the path is relative, it will be relative to the running script, if cli.php is on a different
         folder than this package folder, then it won't find the js file. -->
 
-  <script src="<?= __DIR__ ?>/../assets/js/views/test_report_index.js"></script>
+  <script src="<?=$_BASE?>/../assets/js/views/test_report_index.js"></script>
 </body>
 </html>

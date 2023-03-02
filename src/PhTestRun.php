@@ -451,11 +451,11 @@ class PhTestRun
          $successful_case = 0;
       }
 
-      $html_report = self::template_email()->render('html_reports/body_report', ['reports' => $this->reports]);
+      $html_report = self::template_email()->render('body_report', ['this_reports' => $this->reports]);
 
      // $content = new \CaboLabs\PhTest\PhTestHtmlTemplate;
 
-      $render = self::template_email()->render('html_reports/content_report', [
+      $render = self::template_email()->render('content_report', [
          'total_suites' => $total_suites,
          'total_cases' => $total_cases,
          'failed_cases' => $failed_cases,
@@ -783,6 +783,6 @@ class PhTestRun
    public static function template_email()
   {
     global $_BASE;
-    return new \League\Plates\Engine($_BASE . '../views/html_reports');      
+    return new \League\Plates\Engine($_BASE . 'views\html_reports');      
   }
 }
