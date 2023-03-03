@@ -53,8 +53,8 @@ foreach ($this_reports as $i => $test_suite_reports):
                   <?php if  (!empty($report['output'])): ?>
                     <td class="text-secondary">OUTPUT: <?=$report['output']?></td>
                   <?php endif; ?>
-                <?php endforeach; ?>
-              </tr>
+                </tr>
+                <?php endforeach; ?>              
               <?php else : ?>
                 <td><?=$test_function?></td>
                 <td></td>

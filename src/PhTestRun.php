@@ -451,9 +451,8 @@ class PhTestRun
          $successful_case = 0;
       }
 
-      $html_report = self::template_email()->render('body_report', ['this_reports' => $this->reports]);
-
      // $content = new \CaboLabs\PhTest\PhTestHtmlTemplate;
+      $html_report = self::template_email()->render('body_report', ['this_reports' => $this->reports]);
 
       $render = self::template_email()->render('content_report', [
          'total_suites' => $total_suites,
@@ -463,10 +462,10 @@ class PhTestRun
          'html_report' => $html_report,
          'test_time' => $this->execution_time,
          'total_tests' => $total_tests,
-         '$total_successful' => $total_successful,
+         'total_successful' => $total_successful,
          'total_failed' => $total_failed,
          'total_asserts' => $total_asserts,
-         'failed_Summ'=> $failed_Summ,
+         'failed_Summ' => $failed_Summ,
          'succ_Summ' => $succ_Summ,
          'menu_items' => $menu_items
       ]);
