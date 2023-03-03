@@ -414,17 +414,7 @@ class PhTestRun
       {
          $failed_cases = count($total_cases_failed);
 
-         foreach ($total_cases_failed as $total_case_failed)
-         {
-            $names_failed = explode("\\", $total_case_failed['case']);
-
-            $failed_Summ .= '<tr>
-               <td>' . $names_failed[1] . '</td>
-               <td>' . $names_failed[2] . '</td>
-               <td class="text-right">' . $total_case_failed['case_successful'] . '</td>
-               <td class="text-right">' . $total_case_failed['case_failed'] . '</td>
-            </tr>';
-         }
+         $failed_Summ = self::template_email()->render('failed_summary', ['total_cases_failed' => $total_cases_failed]);
       }
       else
       {
@@ -435,23 +425,13 @@ class PhTestRun
       {
          $successful_case = count($total_cases_successful);
 
-         foreach ($total_cases_successful as $total_case_successful)
-         {
-            $names_successful = explode("\\", $total_case_successful['case']);
-
-            $succ_Summ .= '<tr>
-               <td>' . $names_successful[1] . '</td>
-               <td>' . $names_successful[2] . '</td>
-               <td class="text-right">' . $total_case_successful["case_successful"] . '</td>
-            </tr>';
-         }
+         $succ_Summ = self::template_email()->render('success_summary', ['total_cases_successful' => $total_cases_successful]);
       }
       else
       {
          $successful_case = 0;
       }
 
-     // $content = new \CaboLabs\PhTest\PhTestHtmlTemplate;
       $html_report = self::template_email()->render('body_report', ['this_reports' => $this->reports]);
 
       $render = self::template_email()->render('content_report', [
@@ -469,23 +449,6 @@ class PhTestRun
          'succ_Summ' => $succ_Summ,
          'menu_items' => $menu_items
       ]);
-      
-      
-      /*$content->Html_template(
-         $total_suites,
-         $total_cases,
-         $failed_cases,
-         $successful_case,
-         $html_report,
-         $this->execution_time,
-         $total_tests,
-         $total_successful,
-         $total_failed,
-         $total_asserts,
-         $failed_Summ,
-         $succ_Summ,
-         $menu_items
-      );*/
 
       if ($path == './')
       {
