@@ -299,6 +299,7 @@ class PhTestRun
 
       $total_cases_failed = $total_cases_successful = [];
       $namesSuitessubmenu = [];
+      $namesSuitesMenu = [];
 
       $html_report = '';
       $menu_items = '';
@@ -415,39 +416,41 @@ class PhTestRun
          }
       }
 
-      foreach ($namesSuitesMenu as $item)
-      {
-         if ($h > 0 && $namesSuitesMenu[$h - 1] == $item)
+      if (count($namesSuitesMenu) != 0) {
+         foreach ($namesSuitesMenu as $item)
          {
-            $menu_items .= '';
-         }
-         else
-         {
-            $menu_items .= '<li class="nav-item">
-               <a id="' . $item . '" class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities_' . $item . '"
-               aria-expanded="true" aria-controls="collapseUtilities">';
-
-            $is_failed = self::is_faild($item, $total_cases_failed);
-
-            if ($is_failed)
+            if ($h > 0 && $namesSuitesMenu[$h - 1] == $item)
             {
-               $menu_items .= '<i class="fas fa-times text-warning"></i> ';
+               $menu_items .= '';
             }
             else
             {
-               $menu_items .= '<i class="fa fa-check text-success"></i> ';
+               $menu_items .= '<li class="nav-item">
+                  <a id="' . $item . '" class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities_' . $item . '"
+                  aria-expanded="true" aria-controls="collapseUtilities">';
+
+               $is_failed = self::is_faild($item, $total_cases_failed);
+
+               if ($is_failed)
+               {
+                  $menu_items .= '<i class="fas fa-times text-warning"></i> ';
+               }
+               else
+               {
+                  $menu_items .= '<i class="fa fa-check text-success"></i> ';
+               }
+
+               $menu_items .= '<span>' . $item . '</span></a>
+                  <div id="collapseUtilities_' . $item . '" class="collapse" aria-labelledby="headingUtilities"
+                  data-parent="#accordionSidebar">
+                  <div id="collapse_' . $item . '" class="bg-white py-2 collapse-inner rounded">';
+
+               $menu_items .=  self::names_tests($item, $namesSuitessubmenu);
+
+               $menu_items .= '</div></div></li>';
             }
-
-            $menu_items .= '<span>' . $item . '</span></a>
-               <div id="collapseUtilities_' . $item . '" class="collapse" aria-labelledby="headingUtilities"
-               data-parent="#accordionSidebar">
-               <div id="collapse_' . $item . '" class="bg-white py-2 collapse-inner rounded">';
-
-            $menu_items .=  self::names_tests($item, $namesSuitessubmenu);
-
-            $menu_items .= '</div></div></li>';
+            $h++;
          }
-         $h++;
       }
 
       if (count($total_cases_failed) >= 1)
