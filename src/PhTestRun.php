@@ -242,7 +242,7 @@ class PhTestRun
                if (!empty($report['output']))
                {
                   echo '|   |   |' . PHP_EOL;
-                  echo '|   |   └── OUTPUT: ' . $report['output'] . PHP_EOL;
+                  echo '|   |   └── OUTPUT: '. $report['output'] . PHP_EOL;
                }
                echo '|   |' . PHP_EOL;
             }
@@ -377,7 +377,7 @@ class PhTestRun
 
                      if (!empty($report['output']))
                      {
-                        $html_report .= '<td class="text-secondary">OUTPUT: ' . $report['output'] . '</td>';
+                        $html_report .= '<td class="text-secondary">OUTPUT: <pre>' . $report['output'] . '</pre></td>';
                      }
                      $html_report .= '</tr>';
                   }
@@ -491,7 +491,7 @@ class PhTestRun
          $successful_case = 0;
       }
 
-      $content = new \CaboLabs\PhTest\PhTestHtmlTemplate;
+      $content = new \CaboLabs\PhTest\PhTestHtmlTemplate();
 
       $render = $content->Html_template(
          $total_suites,
