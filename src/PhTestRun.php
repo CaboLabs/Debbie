@@ -438,7 +438,10 @@ class PhTestRun
                $menu_items .= '<i class="fa fa-check text-success"></i> ';
             }
 
-            $menu_items .= '<span>' . $item . '</span></a>
+            $badge = self::get_badge($total_cases_failed, $total_cases_successful);
+
+            $menu_items .= '<span>' . $item . '</span></a>'
+               . $badge. '
                <div id="collapseUtilities_' . $item . '" class="collapse" aria-labelledby="headingUtilities"
                data-parent="#accordionSidebar">
                <div id="collapse_' . $item . '" class="bg-white py-2 collapse-inner rounded">';
@@ -799,5 +802,10 @@ class PhTestRun
          'row_cells_failed'     => $row_cells,
          'row_separator_cases3' => $row_separator_cases . PHP_EOL
       ];
+   }
+
+   public function get_badge($total_cases_failed, $total_cases_successful)
+   {
+      return '<span class="badge badge-success"> ' . $total_cases_successful . '</span><span class="badge badge-danger">' . $total_cases_failed . '</span>';
    }
 }
