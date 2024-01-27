@@ -32,3 +32,15 @@ $("li.nav-item").on("click", function (e)
 
   $('.nav-item').not(this).removeClass("active");
 });
+
+$("#table_failed_cases").on("click", function (e)
+{
+  $('#headCardSummary').hide();
+  $('#cardSummaryTables').hide();
+  $('.suites_test').show();
+});
+
+$("#table_failed_cases").on("mouseover", function (e)
+{
+  $(this).css( 'cursor', 'pointer' );
+});

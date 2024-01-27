@@ -197,58 +197,66 @@ class PhTestHtmlTemplate
                         </div>
                         <!-- Card Body -->
                         <div class="card-body">
-                          <br><h6 class="m-0 font-weight-bold text-primary">Total Summary</h6><br>
-                          <table class="table">
-                            <thead>
-                              <tr>
-                                <th scope="col">Total suites</th>
-                                <th scope="col">Total test classes</th>
-                                <th scope="col">Total tests</th>
-                                <th scope="col">Asserts successful</th>
-                                <th scope="col">Asserts failed</th>
-                                <th scope="col">Total asserts</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td class="text-right">$total_suites</td>
-                                <td class="text-right">$total_cases</td>
-                                <td class="text-right">$total_tests</td>
-                                <td class="text-right">$total_successful</td>
-                                <td class="text-right">$total_failed</td>
-                                <td class="text-right">$total_asserts</td>
-                              </tr>
-                            </tbody>
-                          </table>
+                          <br>
+                          <div class="shadow p-3 mb-5 bg-body rounded">
+                            <h6 class="m-0 font-weight-bold text-primary">Total Summary</h6><br>
+                            <table class="table">
+                              <thead>
+                                <tr>
+                                  <th scope="col">Total suites</th>
+                                  <th scope="col">Total test classes</th>
+                                  <th scope="col">Total tests</th>
+                                  <th scope="col">Asserts successful</th>
+                                  <th scope="col">Asserts failed</th>
+                                  <th scope="col">Total asserts</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td class="text-right">$total_suites</td>
+                                  <td class="text-right">$total_cases</td>
+                                  <td class="text-right">$total_tests</td>
+                                  <td class="text-right">$total_successful</td>
+                                  <td class="text-right">$total_failed</td>
+                                  <td class="text-right">$total_asserts</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
 
-                          <h6 class="m-0 font-weight-bold text-primary">Failed Summary</h6><br>
-                          <table class="table">
-                            <thead>
-                              <tr>
-                                <th scope="col">Suite</th>
-                                <th scope="col">Class</th>
-                                <th class="text-right" scope="col">Successful</th>
-                                <th class="text-right" scope="col">Failed</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              $failed_Summ
-                            </tbody>
-                          </table>
+                          <div class="shadow p-3 mb-5 bg-body rounded" id="table_failed_cases">
+                            <h6 class="m-0 font-weight-bold text-primary">Failed Summary</h6><br>
+                            <table class="table" data-id="failed_cases">
+                              <thead>
+                                <tr>
+                                  <th scope="col">Suite</th>
+                                  <th scope="col">Class</th>
+                                  <th class="text-right" scope="col">Successful</th>
+                                  <th class="text-right" scope="col">Failed</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                $failed_Summ
+                              </tbody>
+                            </table>
+                          </div>
 
-                          <br><h6 class="m-0 font-weight-bold text-primary">Successful Summary</h6><br>
-                          <table class="table">
-                            <thead>
-                              <tr>
-                                <th scope="col">Suite</th>
-                                <th scope="col">Class</th>
-                                <th class="text-right" scope="col">Successful</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              $succ_Summ
-                            </tbody>
-                          </table>
+                          <br>
+                          <div class="shadow p-3 mb-5 bg-body rounded">
+                            <h6 class="m-0 font-weight-bold text-primary">Successful Summary</h6><br>
+                            <table class="table">
+                              <thead>
+                                <tr>
+                                  <th scope="col">Suite</th>
+                                  <th scope="col">Class</th>
+                                  <th class="text-right" scope="col">Successful</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                $succ_Summ
+                              </tbody>
+                            </table>
+                          </div>
                         </div>
                       </div>
                     </div>
