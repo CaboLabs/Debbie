@@ -423,7 +423,7 @@ class PhTestRun
          }
          else
          {
-            $menu_items .= '<li class="nav-item">
+            $menu_items .= '<li class="position-relative nav-item">
                <a id="' . $item . '" class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities_' . $item . '"
                aria-expanded="true" aria-controls="collapseUtilities">';
 
@@ -437,11 +437,10 @@ class PhTestRun
             {
                $menu_items .= '<i class="fa fa-check text-success"></i> ';
             }
+            
+            $badge = self::get_badge($item, $total_cases_failed, $total_cases_successful);
 
-            $badge = self::get_badge($total_cases_failed, $total_cases_successful);
-
-            $menu_items .= '<span>' . $item . '</span></a>'
-               . $badge. '
+            $menu_items .= '<span>' . $item . '</span> ' . $badge. '</a>
                <div id="collapseUtilities_' . $item . '" class="collapse" aria-labelledby="headingUtilities"
                data-parent="#accordionSidebar">
                <div id="collapse_' . $item . '" class="bg-white py-2 collapse-inner rounded">';
@@ -804,8 +803,30 @@ class PhTestRun
       ];
    }
 
-   public function get_badge($total_cases_failed, $total_cases_successful)
+   public function get_badge($item, $total_cases_failed, $total_cases_successful)
    {
-      return '<span class="badge badge-success"> ' . $total_cases_successful . '</span><span class="badge badge-danger">' . $total_cases_failed . '</span>';
+      $case_failed = 0;
+      $case_successfull = 0;
+
+      foreach ($total_cases_failed as $suiteFaild)
+      {
+         $suites = explode("\\", $suiteFaild["case"]);
+         if (array_search($item, $suites))
+         {
+            $case_failed += $suiteFaild['case_failed'];
+            $case_successfull += $suiteFaild['case_successful'];
+         }
+      }
+
+      foreach ($total_cases_successful as $suiteSuccess)
+      {
+         $suites = explode("\\", $suiteSuccess["case"]);
+         if (array_search($item, $suites))
+         {
+            $case_successfull += $suiteSuccess['case_successful'];
+         }
+      }    
+
+      return '<span class="border border-light position-absolute top-0 mx-1 badge badge-success"> ' . $case_successfull . '</span>&nbsp<span class="border border-light position-absolute top-0 ml-4 text-end badge badge-danger">' . $case_failed . '</span>';
    }
 }
