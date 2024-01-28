@@ -226,7 +226,7 @@ class PhTestHtmlTemplate
 
                           <div class="shadow p-3 mb-5 bg-body rounded" id="table_failed_cases">
                             <h6 class="m-0 font-weight-bold text-primary">Failed Summary</h6><br>
-                            <table class="table" data-id="failed_cases">
+                            <table class="table">
                               <thead>
                                 <tr>
                                   <th scope="col">Suite</th>
@@ -244,7 +244,7 @@ class PhTestHtmlTemplate
                           <br>
                           <div class="shadow p-3 mb-5 bg-body rounded">
                             <h6 class="m-0 font-weight-bold text-primary">Successful Summary</h6><br>
-                            <table class="table">
+                            <table class="table" id="success_cases">
                               <thead>
                                 <tr>
                                   <th scope="col">Suite</th>

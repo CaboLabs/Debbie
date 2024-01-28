@@ -291,7 +291,7 @@
                   <div class="card shadow mb-4">
                     <!-- Card Header - Dropdown -->
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                      <h6 class="m-0 font-weight-bold text-success">Total time:  0.00043 μs</h6>
+                      <h6 class="m-0 font-weight-bold text-success">Total time:  0.00038 μs</h6>
                     </div>
                     <!-- Card Body -->
                     <div class="card-body">
@@ -324,7 +324,7 @@
 
                       <div class="shadow p-3 mb-5 bg-body rounded" id="table_failed_cases">
                         <h6 class="m-0 font-weight-bold text-primary">Failed Summary</h6><br>
-                        <table class="table" data-id="failed_cases">
+                        <table class="table">
                           <thead>
                             <tr>
                               <th scope="col">Suite</th>
@@ -362,7 +362,7 @@
                       <br>
                       <div class="shadow p-3 mb-5 bg-body rounded">
                         <h6 class="m-0 font-weight-bold text-primary">Successful Summary</h6><br>
-                        <table class="table">
+                        <table class="table" id="success_cases">
                           <thead>
                             <tr>
                               <th scope="col">Suite</th>
@@ -373,11 +373,11 @@
                           <tbody>
                             <tr>
                <td>suite3</td>
-               <td>TestCase31</td>
+               <td id="TestCase31">TestCase31</td>
                <td class="text-right">2</td>
             </tr><tr>
                <td>suite3</td>
-               <td>TestCase32</td>
+               <td id="TestCase32">TestCase32</td>
                <td class="text-right">2</td>
             </tr>
                           </tbody>
@@ -438,6 +438,11 @@
     $('.suites_test').not('.' + class_card).hide();
     $('#headCardSummary').hide();
     $('#cardSummaryTables').hide();
+
+    $('#success_cases [id]').each(function(){
+      let suites_test = $(this).html();
+      $('#card_' + suites_test).show();
+    });
   }
 
   $('.nav-item').not(this).removeClass("active");
@@ -445,14 +450,22 @@
 
 $("#table_failed_cases").on("click", function (e)
 {
+  $('#title_suite').text('Failed Cases');
+  $('#title_suite').show();
+  $('#Card_suites').show();
   $('#headCardSummary').hide();
   $('#cardSummaryTables').hide();
   $('.suites_test').show();
+ 
+  $('#success_cases [id]').each(function(){
+    let suites_test = $(this).html();
+    $('#card_' + suites_test).hide();
+  });
 });
 
 $("#table_failed_cases").on("mouseover", function (e)
 {
-  $(this).css( 'cursor', 'pointer' );
+  $(this).css('cursor', 'pointer');
 });
       </script>
     </body>

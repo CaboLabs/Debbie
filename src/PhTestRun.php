@@ -481,7 +481,7 @@ class PhTestRun
 
             $succ_Summ .= '<tr>
                <td>' . $names_successful[1] . '</td>
-               <td>' . $names_successful[2] . '</td>
+               <td id="'. $names_successful[2] .'">' . $names_successful[2] . '</td>
                <td class="text-right">' . $total_case_successful["case_successful"] . '</td>
             </tr>';
          }
