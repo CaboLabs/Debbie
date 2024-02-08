@@ -423,8 +423,7 @@ class PhTestRun
          }
          else
          {
-            $Show_item = '';
-            $Show_item = strlen($item) > 20 ? $Show_item = substr($item, 0, 20) . "..." : $item;
+            $show_item = strlen($item) > 20 ? $show_item = substr($item, 0, 20) . "..." : $item;
             $menu_items .= '<li class="nav-item">
                <a id="' . $item . '" class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities_' . $item . '"
                aria-expanded="true" aria-controls="collapseUtilities">';
@@ -440,7 +439,7 @@ class PhTestRun
                $menu_items .= '<i class="fa fa-check text-success"></i> ';
             }
 
-            $menu_items .= '<span title="' . $item . '">' . $Show_item . '</span></a>
+            $menu_items .= '<span title="' . $item . '">' . $show_item . '</span></a>
                <div id="collapseUtilities_' . $item . '" class="collapse" aria-labelledby="headingUtilities"
                data-parent="#accordionSidebar">
                <div id="collapse_' . $item . '" class="bg-white py-2 collapse-inner rounded">';
