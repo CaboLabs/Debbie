@@ -242,7 +242,7 @@ class PhTestRun
                if (!empty($report['output']))
                {
                   echo '|   |   |' . PHP_EOL;
-                  echo '|   |   └── OUTPUT: ' . $report['output'] . PHP_EOL;
+                  echo '|   |   └── OUTPUT: '. $report['output'] . PHP_EOL;
                }
                echo '|   |' . PHP_EOL;
             }
