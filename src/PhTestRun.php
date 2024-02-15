@@ -295,7 +295,7 @@ class PhTestRun
        *  @var int $total_failed, stores the total failed cases number
        *  @var int $total_successful, stores the total successful cases number
        */
-      
+
       $total_cases_failed = $total_cases_successful = [];
       $namesSuitessubmenu = [];
 
@@ -743,8 +743,8 @@ class PhTestRun
    }
 
    public static function template_email()
-  {
-    global $_BASE;
-    return new \League\Plates\Engine($_BASE . 'views\html_reports');      
-  }
+   {
+      global $_BASE;
+      return new \League\Plates\Engine($_BASE . 'views'. DIRECTORY_SEPARATOR .'html_reports');
+   }
 }
