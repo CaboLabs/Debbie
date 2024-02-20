@@ -1,13 +1,4 @@
-<?php
-$c = 0;
-foreach ($this_reports as $i => $test_suite_reports):
-
-  foreach ($test_suite_reports as $test_case => $reports):
-  
-    $names = explode("\\", $test_case)?>
-
-<!-- Content Row -->
-<div id="card_tests<?=$names[1] . $c?>" class="card_<?=$names[1]?> suites_test" style="display:none;">
+<div id="card_tests<?=$names[1] . $i?>" class="card_<?=$names[1]?> suites_test" style="display:none;">
   <div class="row" id="card_<?=$names[2]?>">
     <div class="col-xl-12 col-lg-12">
       <div class="card shadow mb-4">
@@ -17,7 +8,7 @@ foreach ($this_reports as $i => $test_suite_reports):
         </div>
         <!-- Card Body -->
         <div class="card-body">
-          <table class="table table-borderless" style="margin: -0.5rem;">
+          <table class="table table-borderless table-responsive" style="margin: -0.5rem;">
             <thead>
               <tr class="border-bottom">
                 <th scope="col">Class</th>
@@ -26,40 +17,40 @@ foreach ($this_reports as $i => $test_suite_reports):
               </tr>
             </thead>
             <tbody>
-
               <tr>
                 <?php foreach ($reports as $test_function => $report): ?>
-
-                  <?php if (isset($report['asserts'])): ?>
-
-                  <?php foreach  ($report['asserts'] as $assert_report): ?>
-
-                    <td><?=$test_function?></td>
-
-                  <?php if ($assert_report['type'] == 'ERROR'): ?>
-
-                    <td class="text-danger">ERROR: <?=$assert_report['msg']?></td>
-
-                  <?php elseif ($assert_report['type'] == 'OK'): ?>
-
-                    <td class="text-success">OK: <?=$assert_report['msg']?></td>
-
-                  <?php elseif ($assert_report['type'] == 'EXCEPTION'): ?>
-
-                    <td class="text-primary">EXCEPTION: <?=$assert_report['msg'] ?></td>
-
-                  <?php endif; ?>
-
-                  <?php if  (!empty($report['output'])): ?>
-                    <td class="text-secondary">OUTPUT: <?=$report['output']?></td>
-                  <?php endif; ?>
-                </tr>
-                <?php endforeach; ?>              
+                <?php if (isset($report['asserts'])): ?>
+                <?php foreach ($report['asserts'] as $assert_report): ?>
+                <td>
+                  <?=$test_function?>
+                </td>
+                <?php if ($assert_report['type'] == 'ERROR'): ?>
+                <td class="text-danger">
+                  ERROR: <pre><?=$assert_report['msg']?></pre>
+                </td>
+                <?php elseif ($assert_report['type'] == 'OK'): ?>
+                <td class="text-success">
+                  OK: <?=$assert_report['msg']?>
+                </td>
+                <?php elseif ($assert_report['type'] == 'EXCEPTION'): ?>
+                <td class="text-primary">
+                  EXCEPTION: <pre><?=$assert_report['msg'] ?></pre>
+                </td>
+                <?php endif; ?>
+                <?php if  (!empty($report['output'])): ?>
+                <td class="text-secondary">
+                  OUTPUT: <pre><?=$report['output']?></pre>
+                </td>
+                <?php endif; ?>
+              </tr>
+              <?php endforeach; ?>
               <?php else : ?>
-                <td><?=$test_function?></td>
-                <td></td>
-                <td></td>
-                </tr>
+              <td>
+                <?=$test_function?>
+              </td>
+              <td></td>
+              <td></td>
+              </tr>
               <?php endif; ?>
               <?php endforeach; ?>
             </tbody>
@@ -69,5 +60,3 @@ foreach ($this_reports as $i => $test_suite_reports):
     </div>
   </div>
 </div>
-<?php $c++; endforeach; ?>
-<?php endforeach; ?>

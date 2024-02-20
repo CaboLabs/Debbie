@@ -250,8 +250,8 @@ class PhTestRun
             if ($failed > 0)
             {
                $total_cases_failed[] = [
-                  'case' => $test_case,
-                  'case_failed' => $failed,
+                  'case'            => $test_case,
+                  'case_failed'     => $failed,
                   'case_successful' => $successful
                ];
             }
@@ -259,8 +259,8 @@ class PhTestRun
             if ($successful > 0 && $failed == 0)
             {
                $total_cases_successful[] = [
-                  'case' => $test_case,
-                  'case_failed' => $failed,
+                  'case'            => $test_case,
+                  'case_failed'     => $failed,
                   'case_successful' => $successful
                ];
             }
@@ -298,6 +298,8 @@ class PhTestRun
 
       $total_cases_failed = $total_cases_successful = [];
       $namesSuitessubmenu = [];
+      $successful_case = 0;
+      $failed_cases = 0;
 
       $total_cases = 0;
       $total_suites = 0;
@@ -311,8 +313,6 @@ class PhTestRun
 
       $failed_Summ = "";
       $succ_Summ = "";
-
-      $h = 0;
 
       foreach ($this->reports as $i => $test_suite_reports)
       {
@@ -350,7 +350,6 @@ class PhTestRun
                         $successful++;
                      }
                   }
-
                   $total_asserts++;
                }
             }
@@ -358,8 +357,8 @@ class PhTestRun
             if ($failed > 0)
             {
                $total_cases_failed[] = [
-                  'case' => $test_case,
-                  'case_failed' => $failed,
+                  'case'            => $test_case,
+                  'case_failed'     => $failed,
                   'case_successful' => $successful
                ];
             }
@@ -367,15 +366,15 @@ class PhTestRun
             if ($successful > 0 && $failed == 0)
             {
                $total_cases_successful[] = [
-                  'case' => $test_case,
-                  'case_failed' => $failed,
+                  'case'            => $test_case,
+                  'case_failed'     => $failed,
                   'case_successful' => $successful
                ];
             }
          }
       }
 
-      foreach ($namesSuitesMenu as $item)
+      foreach ($namesSuitesMenu as $h => $item)
       {
          if ($h > 0 && $namesSuitesMenu[$h - 1] == $item)
          {
@@ -383,31 +382,13 @@ class PhTestRun
          }
          else
          {
-            $menu_items .= '<li class="nav-item">
-               <a id="' . $item . '" class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities_' . $item . '"
-               aria-expanded="true" aria-controls="collapseUtilities">';
-
             $is_failed = self::is_faild($item, $total_cases_failed);
-
-            if ($is_failed)
-            {
-               $menu_items .= '<i class="fas fa-times text-warning"></i> ';
-            }
-            else
-            {
-               $menu_items .= '<i class="fa fa-check text-success"></i> ';
-            }
-
-            $menu_items .= '<span>' . $item . '</span></a>
-               <div id="collapseUtilities_' . $item . '" class="collapse" aria-labelledby="headingUtilities"
-               data-parent="#accordionSidebar">
-               <div id="collapse_' . $item . '" class="bg-white py-2 collapse-inner rounded">';
-
-            $menu_items .=  self::names_tests($item, $namesSuitessubmenu);
-
-            $menu_items .= '</div></div></li>';
+            $menu_items .= self::template_email()->render('menu_items', [
+               'item'              => $item,
+               'is_failed'          => $is_failed,
+               'namesSuitessubmenu' => $namesSuitessubmenu
+            ]);
          }
-         $h++;
       }
 
       if (count($total_cases_failed) >= 1)
@@ -416,10 +397,6 @@ class PhTestRun
 
          $failed_Summ = self::template_email()->render('failed_summary', ['total_cases_failed' => $total_cases_failed]);
       }
-      else
-      {
-         $failed_cases = 0;
-      }
 
       if (count($total_cases_successful) >= 1)
       {
@@ -427,27 +404,34 @@ class PhTestRun
 
          $succ_Summ = self::template_email()->render('success_summary', ['total_cases_successful' => $total_cases_successful]);
       }
-      else
+
+      foreach ($this->reports as $i => $test_suite_reports)
       {
-         $successful_case = 0;
+         foreach ($test_suite_reports as $test_case => $reports)
+         {
+            $names = explode("\\", $test_case);
+            $html_report .= self::template_email()->render('body_report', [
+               'names'   => $names,
+               'i'       => $i,
+               'reports' => $reports
+            ]);
+         }
       }
 
-      $html_report = self::template_email()->render('body_report', ['this_reports' => $this->reports]);
-
       $render = self::template_email()->render('content_report', [
-         'total_suites' => $total_suites,
-         'total_cases' => $total_cases,
-         'failed_cases' => $failed_cases,
-         'successful_case' => $successful_case,
-         'html_report' => $html_report,
-         'test_time' => $this->execution_time,
-         'total_tests' => $total_tests,
+         'total_suites'     => $total_suites,
+         'total_cases'      => $total_cases,
+         'failed_cases'     => $failed_cases,
+         'successful_case'  => $successful_case,
+         'html_report'      => $html_report,
+         'test_time'        => $this->execution_time,
+         'total_tests'      => $total_tests,
          'total_successful' => $total_successful,
-         'total_failed' => $total_failed,
-         'total_asserts' => $total_asserts,
-         'failed_Summ' => $failed_Summ,
-         'succ_Summ' => $succ_Summ,
-         'menu_items' => $menu_items
+         'total_failed'     => $total_failed,
+         'total_asserts'    => $total_asserts,
+         'failed_Summ'      => $failed_Summ,
+         'succ_Summ'        => $succ_Summ,
+         'menu_items'       => $menu_items
       ]);
 
       if ($path == './')
@@ -456,22 +440,6 @@ class PhTestRun
       }
 
       file_put_contents($path, $render);
-   }
-
-   public function names_tests($item, $namesSuitessubmenu)
-   {
-      $menu_subitems = '';
-
-      foreach ($namesSuitessubmenu as $submenu)
-      {
-         $suites = explode("\\", $submenu);
-         if (in_array($item, $suites))
-         {
-            $menu_subitems .= '<a class="collapse-item" href="#">' . $suites[2] . '</a>';
-         }
-      }
-
-      return $menu_subitems;
    }
 
    public function is_faild($item, $total_cases_failed)
@@ -484,10 +452,6 @@ class PhTestRun
          {
             $faildSuite = true;
             break;
-         }
-         else
-         {
-            $faildSuite = false;
          }
       }
 
