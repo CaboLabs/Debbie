@@ -77,7 +77,7 @@
                   </div>
                 </div>
                 <div class="col-auto">
-                  <i class="fas fa-project-diagram fa-2x text-gray-300"></i></i>
+                  <i class="fas fa-project-diagram fa-2x text-gray-300"></i>
                 </div>
               </div>
             </div>
@@ -141,7 +141,7 @@
               </h6>
             </div>
             <!-- Card Body -->
-            <div class="card-body">
+            <div class="card-body table-responsive">
               <br>
               <h6 class="m-0 font-weight-bold text-primary">Total Summary</h6><br>
               <table class="table">
