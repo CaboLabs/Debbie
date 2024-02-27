@@ -383,10 +383,13 @@ class PhTestRun
          else
          {
             $is_failed = self::is_faild($item, $total_cases_failed);
+            $badge = self::get_badge($item, $total_cases_failed, $total_cases_successful);
+
             $menu_items .= self::template_email()->render('menu_items', [
                'item'              => $item,
                'is_failed'          => $is_failed,
-               'namesSuitessubmenu' => $namesSuitessubmenu
+               'namesSuitessubmenu' => $namesSuitessubmenu,
+               'badge' => $badge
             ]);
          }
       }
@@ -710,6 +713,7 @@ class PhTestRun
    {
       $case_failed = 0;
       $case_successfull = 0;
+      $badge = [];
 
       foreach ($total_cases_failed as $suiteFaild)
       {
@@ -730,7 +734,12 @@ class PhTestRun
          }
       }
 
-      return '<span class="border border-light position-absolute top-0 mx-1 badge badge-success"> ' . $case_successfull . '</span>&nbsp<span class="border border-light position-absolute top-0 ml-4 text-end badge badge-danger">' . $case_failed . '</span>';
+      $badge = [
+         'case_successfull' => $case_successfull,
+         'case_failed' => $case_failed
+      ];
+
+      return $badge;
    }
    public static function template_email()
    {
