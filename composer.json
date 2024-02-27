@@ -17,7 +17,8 @@
   ],
   "require": {
     "php": "^7.0|^8.0",
-    "cabolabs/phbasic": "^0.1"
+    "cabolabs/phbasic": "^0.1",
+    "league/plates": "^3.5"
   },
   "autoload": {
       "psr-4": {
