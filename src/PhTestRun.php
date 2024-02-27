@@ -386,10 +386,10 @@ class PhTestRun
             $badge = self::get_badge($item, $total_cases_failed, $total_cases_successful);
 
             $menu_items .= self::template_email()->render('menu_items', [
-               'item'              => $item,
+               'item'               => $item,
                'is_failed'          => $is_failed,
                'namesSuitessubmenu' => $namesSuitessubmenu,
-               'badge' => $badge
+               'badge'              => $badge
             ]);
          }
       }
@@ -736,7 +736,7 @@ class PhTestRun
 
       $badge = [
          'case_successfull' => $case_successfull,
-         'case_failed' => $case_failed
+         'case_failed'      => $case_failed
       ];
 
       return $badge;
