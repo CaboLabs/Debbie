@@ -6,15 +6,9 @@
   <?php else: ?>
   <i class="fa fa-check text-success"></i>
   <?php endif; ?>
-    <span>
-      <?=$item?>
-    </span>
-    <span class="border border-light position-absolute top-0 mx-1 badge badge-success">
-      <?=$badge['case_successfull']?>
-    </span>&nbsp
-    <span class="border border-light position-absolute top-0 ml-4 text-end badge badge-danger">
-      <?=$badge['case_failed']?>
-    </span>
+    <span class="mr-1"><?=$item?></span>
+    <span class="border border-light position-absolute top-0 badge badge-success"><?=$badge['case_successfull']?></span>
+    <span class="border border-light position-absolute top-0 ml-4 text-end badge badge-danger"><?=$badge['case_failed']?></span>
   </a>
   <div id="collapseUtilities_<?=$item?>" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
     <div id="collapse_<?=$item?>" class="bg-white py-2 collapse-inner rounded">
