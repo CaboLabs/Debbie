@@ -713,6 +713,7 @@ class PhTestRun
    {
       $case_failed = 0;
       $case_successfull = 0;
+      $total_cases = 0;
       $badge = [];
 
       foreach ($total_cases_failed as $suiteFaild)
@@ -733,10 +734,12 @@ class PhTestRun
             $case_successfull += $suiteSuccess['case_successful'];
          }
       }
+      $total_cases = $case_successfull + $case_failed;
 
       $badge = [
          'case_successfull' => $case_successfull,
-         'case_failed'      => $case_failed
+         'case_failed'      => $case_failed,
+         'total_cases'       => $total_cases
       ];
 
       return $badge;
