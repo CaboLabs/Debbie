@@ -386,6 +386,13 @@ class PhTestRun
                'success' => $successful
             ];
             $ttests++;
+
+            $names = explode("\\", $test_case);
+            $html_report .= self::template_email()->render('body_report', [
+               'names'   => $names,
+               'i'       => $i,
+               'reports' => $reports
+            ]);
          }
       }
 
@@ -433,19 +440,6 @@ class PhTestRun
          $successful_case = count($total_cases_successful);
 
          $succ_Summ = self::template_email()->render('success_summary', ['total_cases_successful' => $total_cases_successful]);
-      }
-
-      foreach ($this->reports as $i => $test_suite_reports)
-      {
-         foreach ($test_suite_reports as $test_case => $reports)
-         {
-            $names = explode("\\", $test_case);
-            $html_report .= self::template_email()->render('body_report', [
-               'names'   => $names,
-               'i'       => $i,
-               'reports' => $reports
-            ]);
-         }
       }
 
       $render = self::template_email()->render('content_report', [
