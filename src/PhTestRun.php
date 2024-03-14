@@ -296,8 +296,10 @@ class PhTestRun
        *  @var int $total_successful, stores the total successful cases number
        */
 
-      $total_cases_failed = $total_cases_successful = [];
+      $total_cases_failed = [];
+      $total_cases_successful = [];
       $namesSuitessubmenu = [];
+      $namesSuitesMenu = [];
       $successful_case = 0;
       $failed_cases = 0;
 
@@ -371,23 +373,33 @@ class PhTestRun
                   'case_successful' => $successful
                ];
             }
+
+            $names = explode("\\", $test_case);
+            $html_report .= self::template_email()->render('body_report', [
+               'names'   => $names,
+               'i'       => $i,
+               'reports' => $reports
+            ]);
          }
       }
 
-      foreach ($namesSuitesMenu as $h => $item)
+      if ($namesSuitesMenu)
       {
-         if ($h > 0 && $namesSuitesMenu[$h - 1] == $item)
+         foreach ($namesSuitesMenu as $h => $item)
          {
-            $menu_items .= '';
-         }
-         else
-         {
-            $is_failed = self::is_faild($item, $total_cases_failed);
-            $menu_items .= self::template_email()->render('menu_items', [
-               'item'              => $item,
-               'is_failed'          => $is_failed,
-               'namesSuitessubmenu' => $namesSuitessubmenu
-            ]);
+            if ($h > 0 && $namesSuitesMenu[$h - 1] == $item)
+            {
+               $menu_items .= '';
+            }
+            else
+            {
+               $is_failed = self::is_faild($item, $total_cases_failed);
+               $menu_items .= self::template_email()->render('menu_items', [
+                  'item'              => $item,
+                  'is_failed'          => $is_failed,
+                  'namesSuitessubmenu' => $namesSuitessubmenu
+               ]);
+            }
          }
       }
 
@@ -403,19 +415,6 @@ class PhTestRun
          $successful_case = count($total_cases_successful);
 
          $succ_Summ = self::template_email()->render('success_summary', ['total_cases_successful' => $total_cases_successful]);
-      }
-
-      foreach ($this->reports as $i => $test_suite_reports)
-      {
-         foreach ($test_suite_reports as $test_case => $reports)
-         {
-            $names = explode("\\", $test_case);
-            $html_report .= self::template_email()->render('body_report', [
-               'names'   => $names,
-               'i'       => $i,
-               'reports' => $reports
-            ]);
-         }
       }
 
       $render = self::template_email()->render('content_report', [
