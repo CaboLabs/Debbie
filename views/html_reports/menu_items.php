@@ -6,7 +6,7 @@
       <?php $icon = '<i class="fas fa-times text-warning"></i>' ?>
     <?php endif ?>
     <?=$icon?>
-    <span class="d-inline-block text-truncate" style="max-width: 150px;">
+    <span class="d-inline-block text-truncate align-text-top" style="max-width: 150px;">
       <?=$item?>
     </span>
   </a>
