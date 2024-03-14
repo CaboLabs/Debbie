@@ -8,7 +8,7 @@
   ],
   "homepage": "https://github.com/ppazos/PhTest",
   "license": "Apache-2.0",
-  "version": "0.6.5",
+  "version": "0.6.7",
   "repositories": [
     {
       "type": "vcs",
@@ -17,7 +17,8 @@
   ],
   "require": {
     "php": "^7.0|^8.0",
-    "cabolabs/phbasic": "^0.1"
+    "cabolabs/phbasic": "^0.1",
+    "league/plates": "^3.5"
   },
   "autoload": {
       "psr-4": {

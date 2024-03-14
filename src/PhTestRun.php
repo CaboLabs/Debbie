@@ -242,7 +242,7 @@ class PhTestRun
                if (!empty($report['output']))
                {
                   echo '|   |   |' . PHP_EOL;
-                  echo '|   |   └── OUTPUT: ' . $report['output'] . PHP_EOL;
+                  echo '|   |   └── OUTPUT: '. $report['output'] . PHP_EOL;
                }
                echo '|   |' . PHP_EOL;
             }
@@ -250,8 +250,8 @@ class PhTestRun
             if ($failed > 0)
             {
                $total_cases_failed[] = [
-                  'case' => $test_case,
-                  'case_failed' => $failed,
+                  'case'            => $test_case,
+                  'case_failed'     => $failed,
                   'case_successful' => $successful
                ];
             }
@@ -259,8 +259,8 @@ class PhTestRun
             if ($successful > 0 && $failed == 0)
             {
                $total_cases_successful[] = [
-                  'case' => $test_case,
-                  'case_failed' => $failed,
+                  'case'            => $test_case,
+                  'case_failed'     => $failed,
                   'case_successful' => $successful
                ];
             }
@@ -295,20 +295,24 @@ class PhTestRun
        *  @var int $total_failed, stores the total failed cases number
        *  @var int $total_successful, stores the total successful cases number
        */
-      global $html_report, $content, $total_suites, $total_cases, $total_tests, $total_asserts, $total_failed, $total_successful;
 
       $total_cases_failed = $total_cases_successful = [];
       $namesSuitessubmenu = [];
-      $namesSuitesMenu = [];
+      $successful_case = 0;
+      $failed_cases = 0;
+
+      $total_cases = 0;
+      $total_suites = 0;
+      $total_tests = 0;
+      $total_failed = 0;
+      $total_successful = 0;
+      $total_asserts = 0;
 
       $html_report = '';
       $menu_items = '';
 
       $failed_Summ = "";
       $succ_Summ = "";
-
-      $h = 0;
-      $c = 0;
 
       foreach ($this->reports as $i => $test_suite_reports)
       {
@@ -327,27 +331,6 @@ class PhTestRun
 
             $total_cases++;
 
-            $html_report .= '<!-- Content Row -->
-            <div id="card_tests' . $names[1] . $c . '" class="card_' . $names[1] . ' suites_test" style="display:none;">
-               <div class="row" id = "card_' . $names[2] . '">
-                  <div class="col-xl-12 col-lg-12">
-                    <div class="card shadow mb-4">
-                        <!-- Card Header - Dropdown -->
-                        <div  class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                           <h6 class="m-0 font-weight-bold text-primary">' . $names[2] . '</h6>
-                        </div>
-                           <!-- Card Body -->
-                        <div class="card-body">
-                           <table class="table table-borderless" style="margin: -0.5rem;">
-                              <thead>
-                                 <tr class ="border-bottom">
-                                    <th scope="col">Class</th>
-                                    <th scope="col">Asserts</th>
-                                    <th scope="col"></th>
-                                 </tr>
-                              </thead>
-                              <tbody><tr>';
-
             foreach ($reports as $test_function => $report)
             {
                $total_tests++;
@@ -356,50 +339,26 @@ class PhTestRun
                {
                   foreach ($report['asserts'] as $assert_report)
                   {
-                     $html_report .= '<td>' . $test_function . '</td>';
                      if ($assert_report['type'] == 'ERROR')
                      {
-                        $html_report .= '<td class ="text-danger">ERROR: ' . $assert_report['msg'] . '</td>';
-
                         $total_failed++;
                         $failed++;
                      }
                      else if ($assert_report['type'] == 'OK')
                      {
-                        $html_report .= '<td class="text-success">OK: ' . $assert_report['msg'] . '</td>';
-
                         $total_successful++;
                         $successful++;
                      }
-                     else if ($assert_report['type'] == 'EXCEPTION')
-                     {
-                        $html_report .= '<td class="text-primary">EXCEPTION: ' . $assert_report['msg'] . '</td>';
-                     }
-
-                     if (!empty($report['output']))
-                     {
-                        $html_report .= '<td class="text-secondary">OUTPUT: ' . $report['output'] . '</td>';
-                     }
-                     $html_report .= '</tr>';
                   }
-
                   $total_asserts++;
                }
-               else
-               {
-                  $html_report .= '<td>' . $test_function . '</td>';
-                  $html_report .= '<td></td>';
-                  $html_report .= '<td></td>';
-                  $html_report .= '</tr>';
-               }
             }
-            $html_report .= '</tbody></table></div></div></div></div></div>';
 
             if ($failed > 0)
             {
                $total_cases_failed[] = [
-                  'case' => $test_case,
-                  'case_failed' => $failed,
+                  'case'            => $test_case,
+                  'case_failed'     => $failed,
                   'case_successful' => $successful
                ];
             }
@@ -407,49 +366,28 @@ class PhTestRun
             if ($successful > 0 && $failed == 0)
             {
                $total_cases_successful[] = [
-                  'case' => $test_case,
-                  'case_failed' => $failed,
+                  'case'            => $test_case,
+                  'case_failed'     => $failed,
                   'case_successful' => $successful
                ];
             }
-            $c++;
          }
       }
 
-      if (count($namesSuitesMenu) != 0) {
-         foreach ($namesSuitesMenu as $item)
+      foreach ($namesSuitesMenu as $h => $item)
+      {
+         if ($h > 0 && $namesSuitesMenu[$h - 1] == $item)
          {
-            if ($h > 0 && $namesSuitesMenu[$h - 1] == $item)
-            {
-               $menu_items .= '';
-            }
-            else
-            {
-               $menu_items .= '<li class="nav-item">
-                  <a id="' . $item . '" class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities_' . $item . '"
-                  aria-expanded="true" aria-controls="collapseUtilities">';
-
-               $is_failed = self::is_faild($item, $total_cases_failed);
-
-               if ($is_failed)
-               {
-                  $menu_items .= '<i class="fas fa-times text-warning"></i> ';
-               }
-               else
-               {
-                  $menu_items .= '<i class="fa fa-check text-success"></i> ';
-               }
-
-               $menu_items .= '<span>' . $item . '</span></a>
-                  <div id="collapseUtilities_' . $item . '" class="collapse" aria-labelledby="headingUtilities"
-                  data-parent="#accordionSidebar">
-                  <div id="collapse_' . $item . '" class="bg-white py-2 collapse-inner rounded">';
-
-               $menu_items .=  self::names_tests($item, $namesSuitessubmenu);
-
-               $menu_items .= '</div></div></li>';
-            }
-            $h++;
+            $menu_items .= '';
+         }
+         else
+         {
+            $is_failed = self::is_faild($item, $total_cases_failed);
+            $menu_items .= self::template_email()->render('menu_items', [
+               'item'              => $item,
+               'is_failed'          => $is_failed,
+               'namesSuitessubmenu' => $namesSuitessubmenu
+            ]);
          }
       }
 
@@ -457,60 +395,44 @@ class PhTestRun
       {
          $failed_cases = count($total_cases_failed);
 
-         foreach ($total_cases_failed as $total_case_failed)
-         {
-            $names_failed = explode("\\", $total_case_failed['case']);
-
-            $failed_Summ .= '<tr>
-               <td>' . $names_failed[1] . '</td>
-               <td>' . $names_failed[2] . '</td>
-               <td class="text-right">' . $total_case_failed['case_successful'] . '</td>
-               <td class="text-right">' . $total_case_failed['case_failed'] . '</td>
-            </tr>';
-         }
-      }
-      else
-      {
-         $failed_cases = 0;
+         $failed_Summ = self::template_email()->render('failed_summary', ['total_cases_failed' => $total_cases_failed]);
       }
 
       if (count($total_cases_successful) >= 1)
       {
          $successful_case = count($total_cases_successful);
 
-         foreach ($total_cases_successful as $total_case_successful)
-         {
-            $names_successful = explode("\\", $total_case_successful['case']);
+         $succ_Summ = self::template_email()->render('success_summary', ['total_cases_successful' => $total_cases_successful]);
+      }
 
-            $succ_Summ .= '<tr>
-               <td>' . $names_successful[1] . '</td>
-               <td>' . $names_successful[2] . '</td>
-               <td class="text-right">' . $total_case_successful["case_successful"] . '</td>
-            </tr>';
+      foreach ($this->reports as $i => $test_suite_reports)
+      {
+         foreach ($test_suite_reports as $test_case => $reports)
+         {
+            $names = explode("\\", $test_case);
+            $html_report .= self::template_email()->render('body_report', [
+               'names'   => $names,
+               'i'       => $i,
+               'reports' => $reports
+            ]);
          }
       }
-      else
-      {
-         $successful_case = 0;
-      }
 
-      $content = new \CaboLabs\PhTest\PhTestHtmlTemplate;
-
-      $render = $content->Html_template(
-         $total_suites,
-         $total_cases,
-         $failed_cases,
-         $successful_case,
-         $html_report,
-         $this->execution_time,
-         $total_tests,
-         $total_successful,
-         $total_failed,
-         $total_asserts,
-         $failed_Summ,
-         $succ_Summ,
-         $menu_items
-      );
+      $render = self::template_email()->render('content_report', [
+         'total_suites'     => $total_suites,
+         'total_cases'      => $total_cases,
+         'failed_cases'     => $failed_cases,
+         'successful_case'  => $successful_case,
+         'html_report'      => $html_report,
+         'test_time'        => $this->execution_time,
+         'total_tests'      => $total_tests,
+         'total_successful' => $total_successful,
+         'total_failed'     => $total_failed,
+         'total_asserts'    => $total_asserts,
+         'failed_Summ'      => $failed_Summ,
+         'succ_Summ'        => $succ_Summ,
+         'menu_items'       => $menu_items
+      ]);
 
       if ($path == './')
       {
@@ -518,22 +440,6 @@ class PhTestRun
       }
 
       file_put_contents($path, $render);
-   }
-
-   public function names_tests($item, $namesSuitessubmenu)
-   {
-      $menu_subitems = '';
-
-      foreach ($namesSuitessubmenu as $submenu)
-      {
-         $suites = explode("\\", $submenu);
-         if (in_array($item, $suites))
-         {
-            $menu_subitems .= '<a class="collapse-item" href="#">' . $suites[2] . '</a>';
-         }
-      }
-
-      return $menu_subitems;
    }
 
    public function is_faild($item, $total_cases_failed)
@@ -546,10 +452,6 @@ class PhTestRun
          {
             $faildSuite = true;
             break;
-         }
-         else
-         {
-            $faildSuite = false;
          }
       }
 
@@ -802,5 +704,11 @@ class PhTestRun
          'row_cells_failed'     => $row_cells,
          'row_separator_cases3' => $row_separator_cases . PHP_EOL
       ];
+   }
+
+   public static function template_email()
+   {
+      global $_BASE;
+      return new \League\Plates\Engine($_BASE . 'views'. DIRECTORY_SEPARATOR .'html_reports');
    }
 }

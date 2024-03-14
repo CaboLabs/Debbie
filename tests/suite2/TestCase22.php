@@ -22,6 +22,11 @@ class TestCase22 extends PhTestCase {
       echo "this is another test output";
       $this->assert(false, "This is happening", array(false));
    }
+
+   public function test_xception()
+   {
+      throw new \Exception('This is an Exception.');
+   }
 }
 
 ?>
