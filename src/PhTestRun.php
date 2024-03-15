@@ -296,7 +296,8 @@ class PhTestRun
        *  @var int $total_successful, stores the total successful cases number
        */
 
-      $total_cases_failed = $total_cases_successful = [];
+      $total_cases_failed = [];
+      $total_cases_successful = [];
       $namesSuitessubmenu = [];
       $arrSummaryTestCase = [];
       $namesSuitesMenu = [];

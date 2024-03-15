@@ -30,7 +30,7 @@
                         </td>
                       <?php elseif ($assert_report['type'] == 'OK'): ?>
                         <td class="text-success">
-                          OK: <?=$assert_report['msg']?>
+                          OK: <pre><?=$assert_report['msg']?></pre>
                         </td>
                       <?php elseif ($assert_report['type'] == 'EXCEPTION'): ?>
                         <td class="text-primary">
