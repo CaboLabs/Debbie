@@ -57,7 +57,15 @@ class PhTestRun
             $path .= DIRECTORY_SEPARATOR;
          }
 
-         $suite_dir = dir($path);
+         if (is_dir($path))
+         {
+            $suite_dir = dir($path);
+         }
+         else
+         {
+            echo "Folder $path doesn't exist\n";
+            exit;
+         }
 
          if ($suite_dir === FALSE)
          {
@@ -141,7 +149,15 @@ class PhTestRun
          $path .= DIRECTORY_SEPARATOR;
       }
 
-      $suite_dir = dir($path);
+      if (is_dir($path))
+      {
+         $suite_dir = dir($path);
+      }
+      else
+      {
+         echo "Folder $path doesn't exist\n";
+         exit;
+      }
 
       if ($suite_dir === FALSE)
       {
@@ -298,6 +314,7 @@ class PhTestRun
 
       $total_cases_failed = $total_cases_successful = [];
       $namesSuitessubmenu = [];
+      $namesSuitesMenu = [];
       $successful_case = 0;
       $failed_cases = 0;
 
