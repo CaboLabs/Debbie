@@ -296,10 +296,8 @@ class PhTestRun
        *  @var int $total_successful, stores the total successful cases number
        */
 
-      $total_cases_failed = [];
-      $total_cases_successful = [];
+      $total_cases_failed = $total_cases_successful = [];
       $namesSuitessubmenu = [];
-      $namesSuitesMenu = [];
       $successful_case = 0;
       $failed_cases = 0;
 
@@ -373,33 +371,26 @@ class PhTestRun
                   'case_successful' => $successful
                ];
             }
-
-            $names = explode("\\", $test_case);
-            $html_report .= self::template_email()->render('body_report', [
-               'names'   => $names,
-               'i'       => $i,
-               'reports' => $reports
-            ]);
          }
       }
 
-      if ($namesSuitesMenu)
+      foreach ($namesSuitesMenu as $h => $item)
       {
-         foreach ($namesSuitesMenu as $h => $item)
+         if ($h > 0 && $namesSuitesMenu[$h - 1] == $item)
          {
-            if ($h > 0 && $namesSuitesMenu[$h - 1] == $item)
-            {
-               $menu_items .= '';
-            }
-            else
-            {
-               $is_failed = self::is_faild($item, $total_cases_failed);
-               $menu_items .= self::template_email()->render('menu_items', [
-                  'item'              => $item,
-                  'is_failed'          => $is_failed,
-                  'namesSuitessubmenu' => $namesSuitessubmenu
-               ]);
-            }
+            $menu_items .= '';
+         }
+         else
+         {
+            $is_failed = self::is_faild($item, $total_cases_failed);
+            $badge = self::get_badge($item, $total_cases_failed, $total_cases_successful);
+
+            $menu_items .= self::template_email()->render('menu_items', [
+               'item'               => $item,
+               'is_failed'          => $is_failed,
+               'namesSuitessubmenu' => $namesSuitessubmenu,
+               'badge'              => $badge
+            ]);
          }
       }
 
@@ -415,6 +406,19 @@ class PhTestRun
          $successful_case = count($total_cases_successful);
 
          $succ_Summ = self::template_email()->render('success_summary', ['total_cases_successful' => $total_cases_successful]);
+      }
+
+      foreach ($this->reports as $i => $test_suite_reports)
+      {
+         foreach ($test_suite_reports as $test_case => $reports)
+         {
+            $names = explode("\\", $test_case);
+            $html_report .= self::template_email()->render('body_report', [
+               'names'   => $names,
+               'i'       => $i,
+               'reports' => $reports
+            ]);
+         }
       }
 
       $render = self::template_email()->render('content_report', [
@@ -705,6 +709,41 @@ class PhTestRun
       ];
    }
 
+   public function get_badge($item, $total_cases_failed, $total_cases_successful)
+   {
+      $case_failed = 0;
+      $case_successfull = 0;
+      $total_cases = 0;
+      $badge = [];
+
+      foreach ($total_cases_failed as $suiteFaild)
+      {
+         $suites = explode("\\", $suiteFaild["case"]);
+         if (array_search($item, $suites))
+         {
+            $case_failed += $suiteFaild['case_failed'];
+            $case_successfull += $suiteFaild['case_successful'];
+         }
+      }
+
+      foreach ($total_cases_successful as $suiteSuccess)
+      {
+         $suites = explode("\\", $suiteSuccess["case"]);
+         if (array_search($item, $suites))
+         {
+            $case_successfull += $suiteSuccess['case_successful'];
+         }
+      }
+      $total_cases = $case_successfull + $case_failed;
+
+      $badge = [
+         'case_successfull' => $case_successfull,
+         'case_failed'      => $case_failed,
+         'total_cases'       => $total_cases
+      ];
+
+      return $badge;
+   }
    public static function template_email()
    {
       global $_BASE;
