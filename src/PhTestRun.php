@@ -454,7 +454,7 @@ class PhTestRun
          'menu_items'       => $menu_items
       ]);
 
-      if ($path == './')
+      if ($path == '.'. DIRECTORY_SEPARATOR)
       {
          $path = 'test_report.html';
       }
@@ -763,7 +763,8 @@ class PhTestRun
    }
    public static function template_email()
    {
-      global $_BASE;
-      return new \League\Plates\Engine($_BASE . 'views'. DIRECTORY_SEPARATOR .'html_reports');
+      global $PHP_TEST_BASE;
+      $path = $PHP_TEST_BASE . DIRECTORY_SEPARATOR .'views'. DIRECTORY_SEPARATOR .'templates';
+      return new \League\Plates\Engine($path);
    }
 }

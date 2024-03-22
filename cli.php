@@ -1,10 +1,9 @@
 <?php
 
-$_BASE = __DIR__ . '/';
-
 // composer includes
 require __DIR__ . '/vendor/autoload.php';
 
+$PHP_TEST_BASE = __DIR__;
 
 //print_r($argv);
 //print_r($argc);
@@ -18,7 +17,7 @@ require __DIR__ . '/vendor/autoload.php';
  * argv[5] -> -output="./output/out.html" (optional), if no path is specified it will be saved in the root
  * */
 
-$output = './';
+$output = '.'. DIRECTORY_SEPARATOR;
 $report = 'html';
 $output_index = 0;
 $report_index = 0;
