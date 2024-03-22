@@ -763,8 +763,7 @@ class PhTestRun
    }
    public static function template_email()
    {
-      global $PHP_TEST_BASE;
-      $path = $PHP_TEST_BASE . DIRECTORY_SEPARATOR .'views'. DIRECTORY_SEPARATOR .'templates';
+      $path = __DIR__ . DIRECTORY_SEPARATOR .'..'. DIRECTORY_SEPARATOR .'views'. DIRECTORY_SEPARATOR .'templates';
       return new \League\Plates\Engine($path);
    }
 }

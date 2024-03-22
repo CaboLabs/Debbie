@@ -3,8 +3,6 @@
 // composer includes
 require __DIR__ . '/vendor/autoload.php';
 
-$PHP_TEST_BASE = __DIR__;
-
 //print_r($argv);
 //print_r($argc);
 
