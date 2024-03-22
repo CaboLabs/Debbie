@@ -47,12 +47,41 @@
     integrity="sha512-+QnjQxxaOpoJ+AAeNgvVatHiUWEDbvHja9l46BHhmzvP0blLTXC4LsvwDVeNhGgqqGQYBQLFhdKFyjzPX6HGmw=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-  <!-- Custom scripts for all pages
+  <script>
+    $("li.nav-item").on("click", function (e)
+    {
+      var id_li = $("a", this).attr("id");
+      var class_card = 'card_' + id_li;
 
-  NOTE: this path is relative to this file using __DIR__ so it should work when running from other cli's
-        if the path is relative, it will be relative to the running script, if cli.php is on a different
-        folder than this package folder, then it won't find the js file. -->
+      if (id_li === 'dashboard')
+      {
+        $('#cardSummaryTables').show();
+        $('#headCardSummary').show();
+        $(this).addClass("active");
+        $('#title_suite').hide();
+        $('#Card_suites').hide();
 
-  <script src="assets/js/views/test_report_index.js"></script>
+        if ($('li > div').hasClass('show'))
+        {
+          $('li > div').collapse('hide');
+          console.log($('li > div'));
+        }
+      }
+      else if (id_li === class_card.substring(5))
+      {
+        $('#Card_suites').show();
+        $('#title_suite').show();
+        $('#title_suite').html(id_li);
+        $('#Card_suites').find('.' + class_card).show();
+        $(this).addClass("active");
+
+        $('.suites_test').not('.' + class_card).hide();
+        $('#headCardSummary').hide();
+        $('#cardSummaryTables').hide();
+      }
+
+      $('.nav-item').not(this).removeClass("active");
+    });
+  </script>
 </body>
 </html>
