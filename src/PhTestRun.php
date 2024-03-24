@@ -372,6 +372,13 @@ class PhTestRun
                   }
                   $total_asserts++;
                }
+
+               if (isset($report['output']) && !isset($report['asserts']))
+               {
+                  $fatal_err[] = [
+                     'case' => $test_case
+                  ];
+               }
             }
 
             if ($failed > 0)
@@ -391,6 +398,13 @@ class PhTestRun
                   'case_successful' => $successful
                ];
             }
+
+            $names = explode("\\", $test_case);
+            $html_report .= self::template_report_html()->render('body_report', [
+               'names'   => $names,
+               'i'       => $i,
+               'reports' => $reports
+            ]);
          }
       }
 
@@ -406,29 +420,6 @@ class PhTestRun
          $successful_case = count($total_cases_successful);
 
          $succ_Summ = self::template_report_html()->render('success_summary', ['total_cases_successful' => $total_cases_successful]);
-      }
-
-      foreach ($this->reports as $i => $test_suite_reports)
-      {
-         foreach ($test_suite_reports as $test_case => $reports)
-         {
-            $names = explode("\\", $test_case);
-            $html_report .= self::template_report_html()->render('body_report', [
-               'names'   => $names,
-               'i'       => $i,
-               'reports' => $reports
-            ]);
-
-            foreach ($reports as $test_function => $report)
-            {
-               if (isset($report['output']) && !isset($report['asserts']))
-               {
-                  $fatal_err[] = [
-                     'case' => $test_case
-                  ];
-               }
-            }
-         }
       }
 
       foreach ($namesSuitesMenu as $h => $item)
@@ -786,6 +777,7 @@ class PhTestRun
 
       return $badge;
    }
+
    public static function template_report_html()
    {
       $path = __DIR__ . DIRECTORY_SEPARATOR .'..'. DIRECTORY_SEPARATOR .'views'. DIRECTORY_SEPARATOR .'templates';
