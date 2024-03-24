@@ -69,16 +69,21 @@ class PhTestSuite
             try
             {
                // invokes the test function
-               call_user_func(array($test_case_object, $test_name));
+               try {
+                  ob_start();
+                  call_user_func(array($test_case_object, $test_name));
+                  // all echoes and prints that could happen during execution
+                  $output = ob_get_contents();
+               } catch (\Throwable $e) {
+                  $output = $e->getMessage();
+                  ob_end_clean();
+               }
             }
             catch (\Exception $e)
             {
                echo "UPS: " . $e->getMessage() . PHP_EOL;
                $this->report_exception($test_case_class, $test_name, $e);
             }
-
-            // all echoes and prints that could happen during execution
-            $output = ob_get_contents();
 
             ob_end_clean();
 

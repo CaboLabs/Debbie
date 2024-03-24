@@ -312,9 +312,11 @@ class PhTestRun
        *  @var int $total_successful, stores the total successful cases number
        */
 
-      $total_cases_failed = $total_cases_successful = [];
+      $total_cases_failed = [];
+      $total_cases_successful = [];
       $namesSuitessubmenu = [];
       $namesSuitesMenu = [];
+      $fatal_err = [];
       $successful_case = 0;
       $failed_cases = 0;
 
@@ -324,6 +326,7 @@ class PhTestRun
       $total_failed = 0;
       $total_successful = 0;
       $total_asserts = 0;
+      $output = 0;
 
       $html_report = '';
       $menu_items = '';
@@ -391,26 +394,6 @@ class PhTestRun
          }
       }
 
-      foreach ($namesSuitesMenu as $h => $item)
-      {
-         if ($h > 0 && $namesSuitesMenu[$h - 1] == $item)
-         {
-            $menu_items .= '';
-         }
-         else
-         {
-            $is_failed = self::is_faild($item, $total_cases_failed);
-            $badge = self::get_badge($item, $total_cases_failed, $total_cases_successful);
-
-            $menu_items .= self::template_report_html()->render('menu_items', [
-               'item'               => $item,
-               'is_failed'          => $is_failed,
-               'namesSuitessubmenu' => $namesSuitessubmenu,
-               'badge'              => $badge
-            ]);
-         }
-      }
-
       if (count($total_cases_failed) >= 1)
       {
          $failed_cases = count($total_cases_failed);
@@ -434,6 +417,36 @@ class PhTestRun
                'names'   => $names,
                'i'       => $i,
                'reports' => $reports
+            ]);
+
+            foreach ($reports as $test_function => $report)
+            {
+               if (isset($report['output']) && !isset($report['asserts']))
+               {
+                  $fatal_err[] = [
+                     'case' => $test_case
+                  ];
+               }
+            }
+         }
+      }
+
+      foreach ($namesSuitesMenu as $h => $item)
+      {
+         if ($h > 0 && $namesSuitesMenu[$h - 1] == $item)
+         {
+            $menu_items .= '';
+         }
+         else
+         {
+            $is_failed = self::is_faild($item, $total_cases_failed);
+            $badge = self::get_badge($item, $total_cases_failed, $total_cases_successful, $fatal_err);
+
+            $menu_items .= self::template_report_html()->render('menu_items', [
+               'item'               => $item,
+               'is_failed'          => $is_failed,
+               'namesSuitessubmenu' => $namesSuitessubmenu,
+               'badge'              => $badge
             ]);
          }
       }
@@ -726,12 +739,13 @@ class PhTestRun
       ];
    }
 
-   public function get_badge($item, $total_cases_failed, $total_cases_successful)
+   public function get_badge($item, $total_cases_failed, $total_cases_successful, $fatal_err)
    {
       $case_failed = 0;
       $case_successfull = 0;
       $total_cases = 0;
       $badge = [];
+      $fatal_error_php = false;
 
       foreach ($total_cases_failed as $suiteFaild)
       {
@@ -751,12 +765,23 @@ class PhTestRun
             $case_successfull += $suiteSuccess['case_successful'];
          }
       }
+
+      foreach ($fatal_err as $fatal)
+      {
+         $suites = explode("\\", $fatal["case"]);
+         if (array_search($item, $suites))
+         {
+            $fatal_error_php = true;
+         }
+      }
+
       $total_cases = $case_successfull + $case_failed;
 
       $badge = [
          'case_successfull' => $case_successfull,
          'case_failed'      => $case_failed,
-         'total_cases'       => $total_cases
+         'total_cases'      => $total_cases,
+         'fatal_error_php'  => $fatal_error_php
       ];
 
       return $badge;

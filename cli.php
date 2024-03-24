@@ -23,7 +23,6 @@ $test_start_time = 0;
 $test_end_time = 0;
 $test_time = 0;
 
-
 foreach ($argv as $i => $arg)
 {
    $search = substr($arg, 0, 7);
@@ -108,5 +107,4 @@ else
 {
    $run->render_reports_html($output);
 }
-
 ?>

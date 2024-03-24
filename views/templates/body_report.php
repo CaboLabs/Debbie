@@ -45,6 +45,9 @@
                     </tr>
                   <?php endforeach; ?>
                 <?php endif; ?>
+                <?php if (isset($report['output']) && !isset($report['asserts'])): ?>
+                  FATAL ERROR: <pre><?=$report['output']?></pre>
+                <?php endif; ?>
               <?php endforeach; ?>
             </tbody>
           </table>
