@@ -57,7 +57,15 @@ class PhTestRun
             $path .= DIRECTORY_SEPARATOR;
          }
 
-         $suite_dir = dir($path);
+         if (is_dir($path))
+         {
+            $suite_dir = dir($path);
+         }
+         else
+         {
+            echo "Folder $path doesn't exist\n";
+            exit;
+         }
 
          if ($suite_dir === FALSE)
          {
@@ -141,7 +149,15 @@ class PhTestRun
          $path .= DIRECTORY_SEPARATOR;
       }
 
-      $suite_dir = dir($path);
+      if (is_dir($path))
+      {
+         $suite_dir = dir($path);
+      }
+      else
+      {
+         echo "Folder $path doesn't exist\n";
+         exit;
+      }
 
       if ($suite_dir === FALSE)
       {
@@ -389,7 +405,7 @@ class PhTestRun
             $ttests++;
 
             $names = explode("\\", $test_case);
-            $html_report .= self::template_email()->render('body_report', [
+            $html_report .= self::template_report_html()->render('body_report', [
                'names'   => $names,
                'i'       => $i,
                'reports' => $reports
@@ -402,7 +418,7 @@ class PhTestRun
       // render the summary for each suite
       foreach ($totalSummaryXSuite as $suite => $suiteSummarySuite)
       {
-         $cards_summary_suites .= self::template_email()->render('summary_suite', [
+         $cards_summary_suites .= self::template_report_html()->render('summary_suite', [
             'suite'           => $suite,
             'totalTestSuites' => $suiteSummarySuite['totalTestSuites'],
             'class'           => $suiteSummarySuite['class'],
@@ -422,7 +438,7 @@ class PhTestRun
             $is_failed = self::is_faild($item, $total_cases_failed);
             $badge = self::get_badge($item, $total_cases_failed, $total_cases_successful);
 
-            $menu_items .= self::template_email()->render('menu_items', [
+            $menu_items .= self::template_report_html()->render('menu_items', [
                'item'               => $item,
                'is_failed'          => $is_failed,
                'namesSuitessubmenu' => $namesSuitessubmenu,
@@ -435,17 +451,17 @@ class PhTestRun
       {
          $failed_cases = count($total_cases_failed);
 
-         $failed_Summ = self::template_email()->render('failed_summary', ['total_cases_failed' => $total_cases_failed]);
+         $failed_Summ = self::template_report_html()->render('failed_summary', ['total_cases_failed' => $total_cases_failed]);
       }
 
       if (count($total_cases_successful) >= 1)
       {
          $successful_case = count($total_cases_successful);
 
-         $succ_Summ = self::template_email()->render('success_summary', ['total_cases_successful' => $total_cases_successful]);
+         $succ_Summ = self::template_report_html()->render('success_summary', ['total_cases_successful' => $total_cases_successful]);
       }
 
-      $render = self::template_email()->render('content_report', [
+      $render = self::template_report_html()->render('content_report', [
          'total_suites'         => $total_suites,
          'total_cases'          => $total_cases,
          'failed_cases'         => $failed_cases,
@@ -462,7 +478,38 @@ class PhTestRun
          'cards_summary_suites' => $cards_summary_suites
       ]);
 
-      if ($path == './')
+      /*
+      foreach ($this->reports as $i => $test_suite_reports)
+      {
+         foreach ($test_suite_reports as $test_case => $reports)
+         {
+            $names = explode("\\", $test_case);
+            $html_report .= self::template_report_html()->render('body_report', [
+               'names'   => $names,
+               'i'       => $i,
+               'reports' => $reports
+            ]);
+         }
+      }
+
+      $render = self::template_report_html()->render('content_report', [
+         'total_suites'     => $total_suites,
+         'total_cases'      => $total_cases,
+         'failed_cases'     => $failed_cases,
+         'successful_case'  => $successful_case,
+         'html_report'      => $html_report,
+         'test_time'        => $this->execution_time,
+         'total_tests'      => $total_tests,
+         'total_successful' => $total_successful,
+         'total_failed'     => $total_failed,
+         'total_asserts'    => $total_asserts,
+         'failed_Summ'      => $failed_Summ,
+         'succ_Summ'        => $succ_Summ,
+         'menu_items'       => $menu_items
+      ]);
+      */
+
+      if ($path == '.'. DIRECTORY_SEPARATOR)
       {
          $path = 'test_report.html';
       }
@@ -769,10 +816,10 @@ class PhTestRun
 
       return $badge;
    }
-   public static function template_email()
+   public static function template_report_html()
    {
-      global $_BASE;
-      return new \League\Plates\Engine($_BASE . 'views'. DIRECTORY_SEPARATOR .'html_reports');
+      $path = __DIR__ . DIRECTORY_SEPARATOR .'..'. DIRECTORY_SEPARATOR .'views'. DIRECTORY_SEPARATOR .'templates';
+      return new \League\Plates\Engine($path);
    }
 
    public function summaryXsuites($arrSummaryTestCase)
