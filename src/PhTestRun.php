@@ -816,6 +816,7 @@ class PhTestRun
 
       return $badge;
    }
+
    public static function template_report_html()
    {
       $path = __DIR__ . DIRECTORY_SEPARATOR .'..'. DIRECTORY_SEPARATOR .'views'. DIRECTORY_SEPARATOR .'templates';
