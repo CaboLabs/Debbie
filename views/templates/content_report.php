@@ -129,6 +129,7 @@
         </div>
       </div>
       <div id="Card_suites">
+        <?=$cards_summary_suites?>
         <?=$html_report?>
       </div>
       <div id="cardSummaryTables" class="row">

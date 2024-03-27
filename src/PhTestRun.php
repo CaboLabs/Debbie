@@ -312,8 +312,10 @@ class PhTestRun
        *  @var int $total_successful, stores the total successful cases number
        */
 
-      $total_cases_failed = $total_cases_successful = [];
+      $total_cases_failed = [];
+      $total_cases_successful = [];
       $namesSuitessubmenu = [];
+      $arrSummaryTestCase = [];
       $namesSuitesMenu = [];
       $successful_case = 0;
       $failed_cases = 0;
@@ -330,15 +332,18 @@ class PhTestRun
 
       $failed_Summ = "";
       $succ_Summ = "";
+      $cards_summary_suites = "";
 
       foreach ($this->reports as $i => $test_suite_reports)
       {
          $total_suites++;
+         $ttests = 1;
 
          foreach ($test_suite_reports as $test_case => $reports)
          {
             $successful = 0;
             $failed = 0;
+            $total_class_test_x_suites = 0;
 
             $names = explode("\\", $test_case);
 
@@ -356,15 +361,16 @@ class PhTestRun
                {
                   foreach ($report['asserts'] as $assert_report)
                   {
+                     $total_class_test_x_suites++;
                      if ($assert_report['type'] == 'ERROR')
                      {
                         $total_failed++;
-                        $failed++;
+                        $failed++; //count the assert fail of each test per suite
                      }
                      else if ($assert_report['type'] == 'OK')
                      {
                         $total_successful++;
-                        $successful++;
+                        $successful++; //count the assert successful of each test per suite
                      }
                   }
                   $total_asserts++;
@@ -388,7 +394,37 @@ class PhTestRun
                   'case_successful' => $successful
                ];
             }
+
+            $arrSummaryTestCase [] = [
+               "suite" => $names[1],
+               "totalTestSuites" => $ttests,
+               "classes" => $total_class_test_x_suites,
+               'failed' => $failed,
+               'success' => $successful
+            ];
+            $ttests++;
+
+            $names = explode("\\", $test_case);
+            $html_report .= self::template_report_html()->render('body_report', [
+               'names'   => $names,
+               'i'       => $i,
+               'reports' => $reports
+            ]);
          }
+      }
+
+      $totalSummaryXSuite = self::summaryXsuites($arrSummaryTestCase);
+
+      // render the summary for each suite
+      foreach ($totalSummaryXSuite as $suite => $suiteSummarySuite)
+      {
+         $cards_summary_suites .= self::template_report_html()->render('summary_suite', [
+            'suite'           => $suite,
+            'totalTestSuites' => $suiteSummarySuite['totalTestSuites'],
+            'class'           => $suiteSummarySuite['class'],
+            'fail'            => $suiteSummarySuite['fail'],
+            'success'         => $suiteSummarySuite['success']
+         ]);
       }
 
       foreach ($namesSuitesMenu as $h => $item)
@@ -425,6 +461,24 @@ class PhTestRun
          $succ_Summ = self::template_report_html()->render('success_summary', ['total_cases_successful' => $total_cases_successful]);
       }
 
+      $render = self::template_report_html()->render('content_report', [
+         'total_suites'         => $total_suites,
+         'total_cases'          => $total_cases,
+         'failed_cases'         => $failed_cases,
+         'successful_case'      => $successful_case,
+         'html_report'          => $html_report,
+         'test_time'            => $this->execution_time,
+         'total_tests'          => $total_tests,
+         'total_successful'     => $total_successful,
+         'total_failed'         => $total_failed,
+         'total_asserts'        => $total_asserts,
+         'failed_Summ'          => $failed_Summ,
+         'succ_Summ'            => $succ_Summ,
+         'menu_items'           => $menu_items,
+         'cards_summary_suites' => $cards_summary_suites
+      ]);
+
+      /*
       foreach ($this->reports as $i => $test_suite_reports)
       {
          foreach ($test_suite_reports as $test_case => $reports)
@@ -453,6 +507,7 @@ class PhTestRun
          'succ_Summ'        => $succ_Summ,
          'menu_items'       => $menu_items
       ]);
+      */
 
       if ($path == '.'. DIRECTORY_SEPARATOR)
       {
@@ -531,7 +586,7 @@ class PhTestRun
 
       echo PHP_EOL;
 
-      echo 'Summary reports --> total time: '. $this->execution_time .' μs' . PHP_EOL . PHP_EOL;
+      echo 'Summary reports --> total time: ' . $this->execution_time . ' μs' . PHP_EOL . PHP_EOL;
 
       //render table totals summary (suites,cases,tests)
       foreach ($summary1 as $table1)
@@ -761,9 +816,56 @@ class PhTestRun
 
       return $badge;
    }
+
    public static function template_report_html()
    {
       $path = __DIR__ . DIRECTORY_SEPARATOR .'..'. DIRECTORY_SEPARATOR .'views'. DIRECTORY_SEPARATOR .'templates';
       return new \League\Plates\Engine($path);
+   }
+
+   public function summaryXsuites($arrSummaryTestCase)
+   {
+      /** create the summary for each suite */
+      $totalTests = 0;
+      $totalClass = 0;
+      $totalsuccess = 0;
+      $totalfail = 0;
+      $arr = [];
+
+      for ($i=0; $i < count($arrSummaryTestCase); $i++)
+      {
+         $a = $i - 1;
+         if ($i > 0)
+         {
+            if ($arrSummaryTestCase[$i]["suite"] === $arrSummaryTestCase[$a]["suite"]) {
+               $totalTests = $arrSummaryTestCase[$i]["totalTestSuites"];
+               $totalClass = $arrSummaryTestCase[$i]["classes"];
+               $totalsuccess += $arrSummaryTestCase[$i]["success"];
+               $totalfail += $arrSummaryTestCase[$i]["failed"];
+            }
+            else
+            {
+               $totalTests = $arrSummaryTestCase[$i]["totalTestSuites"];
+               $totalClass = $arrSummaryTestCase[$i]["classes"];
+               $totalsuccess = $arrSummaryTestCase[$i]["success"];
+               $totalfail = $arrSummaryTestCase[$i]["failed"];
+            }
+         }
+         else
+         {
+            $totalTests = $arrSummaryTestCase[$i]["totalTestSuites"];
+            $totalClass = $arrSummaryTestCase[$i]["classes"];
+            $totalsuccess = $arrSummaryTestCase[$i]["success"];
+            $totalfail = $arrSummaryTestCase[$i]["failed"];
+         }
+
+         $arr[$arrSummaryTestCase[$i]["suite"]] = [
+            "totalTestSuites" => $totalTests,
+            "class" => $totalClass,
+            "success" => $totalsuccess,
+            "fail" => $totalfail
+         ];
+      }
+      return $arr;
    }
 }
