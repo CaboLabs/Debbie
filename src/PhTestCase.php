@@ -44,7 +44,7 @@ abstract class PhTestCase {
          array_shift($trace); // removes the call to assert()
          array_pop($trace); // removes the call to cli.run_cases()
 
-         $this->suite->report_assert(get_class($this), $this->current_test, 'ERROR', $msg, $trace, $params);
+         $this->suite->report_assert(get_class($this), $this->current_test, 'FAIL', $msg, $trace, $params);
       }
       else
       {
@@ -63,7 +63,7 @@ abstract class PhTestCase {
 
          $msg = 'Value 1 ('. $value1 .') is different to value 2 ('. $value2 .') '. $msg;
 
-         $this->suite->report_assert(get_class($this), $this->current_test, 'ERROR', $msg, $trace, array());
+         $this->suite->report_assert(get_class($this), $this->current_test, 'FAIL', $msg, $trace, array());
       }
       else
       {
@@ -82,7 +82,7 @@ abstract class PhTestCase {
 
          $msg = 'Value 1 ('. $value1 .') is different to value 2 ('. $value2 .') '. $msg;
 
-         $this->suite->report_assert(get_class($this), $this->current_test, 'ERROR', $msg, $trace, array());
+         $this->suite->report_assert(get_class($this), $this->current_test, 'FAIL', $msg, $trace, array());
       }
       else
       {

@@ -16,6 +16,12 @@ class TestCase42 extends PhTestCase {
    {
       $this->assert(false, "This is happening");
    }
+
+   public function test_exception()
+   {
+      echo 'output before the exception';
+      throw new \Exception('This is an exception!');
+   }
 }
 
 ?>

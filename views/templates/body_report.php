@@ -24,9 +24,9 @@
                       <td>
                         <?=$test_function?>
                       </td>
-                      <?php if ($assert_report['type'] == 'ERROR'): ?>
+                      <?php if ($assert_report['type'] == 'FAIL'): ?>
                         <td class="text-danger">
-                          ERROR: <pre><?=$assert_report['msg']?></pre>
+                          FAIL: <pre><?=$assert_report['msg']?></pre>
                         </td>
                       <?php elseif ($assert_report['type'] == 'OK'): ?>
                         <td class="text-success">
@@ -36,9 +36,13 @@
                         <td class="text-primary">
                           EXCEPTION: <pre><?=$assert_report['msg'] ?></pre>
                         </td>
+                      <?php elseif ($assert_report['type'] == 'ERROR'): ?>
+                        <td class="text-warning">
+                          ERROR: <pre><?=$assert_report['msg'] ?></pre>
+                        </td>
                       <?php endif; ?>
                       <td class="text-secondary">
-                        <?php if  (!empty($report['output'])): ?>
+                        <?php if (!empty($report['output'])): ?>
                           OUTPUT: <pre><?=$report['output']?></pre>
                         <?php endif; ?>
                       </td>

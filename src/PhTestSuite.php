@@ -71,15 +71,13 @@ class PhTestSuite
                // invokes the test function
                call_user_func(array($test_case_object, $test_name));
             }
-            catch (\Exception $e)
+            catch (\Throwable $e) // This catches Exception and Error
             {
-               echo "UPS: " . $e->getMessage() . PHP_EOL;
                $this->report_exception($test_case_class, $test_name, $e);
             }
 
             // all echoes and prints that could happen during execution
             $output = ob_get_contents();
-
             ob_end_clean();
 
             $this->report_end($test_case_object, $test_name, $output);
@@ -147,6 +145,7 @@ class PhTestSuite
 
    public function report_exception($test_case_class, $test_name, $exception, $params = [])
    {
+      $is_fatal = in_array(get_class($exception), ['Error', 'ErrorException']);
       $_params = '';
       foreach ($params as $key => $value)
       {
@@ -170,7 +169,7 @@ class PhTestSuite
       array_pop($trace); // removes call to PhTestSuite
 
       $this->reports[$test_case_class][$test_name]['asserts'][] = array(
-         'type'   => 'EXCEPTION',
+         'type'   => $is_fatal ? 'ERROR' : 'EXCEPTION',
          'msg'    => $exception->getMessage(),
          'trace'  => $trace,
          'params' => $_params
