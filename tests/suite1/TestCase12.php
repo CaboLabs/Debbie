@@ -15,7 +15,7 @@ class TestCase12 extends PhTestCase {
    {
       echo "this is a test output";
       $this->assert(true, "This shouldn't happen");
-      $this->assert(true, "This shouldn't happen");
+      $this->assert(true, "This shouldn't happen2");
    }
 
    public function test_this_is_another_test()

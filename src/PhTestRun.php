@@ -31,6 +31,22 @@ class PhTestRun
 
       $this->test_suite_root = $test_suite_root;
       $this->execution_time = 0;
+
+      // This is to catch FATAL ERRORS throwing the error as an exception that can be catched and reported as such in the test report.
+      $onError = function ($level, $message, $file, $line) {
+         throw new \ErrorException($message, 0, $level, $file, $line);
+      };
+
+      set_error_handler($onError);
+
+      // try {
+      //    set_error_handler($onError);
+      //    define(Pi, 3);
+      // } catch (\Throwable $throwable) {
+      //    echo 'Throwable: ', $throwable->getMessage(), "\n";
+      // } finally {
+      //    restore_error_handler();
+      // }
    }
 
    public function run_all()
@@ -315,8 +331,9 @@ class PhTestRun
       $total_cases_failed = [];
       $total_cases_successful = [];
       $namesSuitessubmenu = [];
+      $arrSummaryTestCase = [];
       $namesSuitesMenu = [];
-      $fatal_err = [];
+      $tests_cases_with_fatal_err = [];
       $successful_case = 0;
       $failed_cases = 0;
 
@@ -333,15 +350,18 @@ class PhTestRun
 
       $failed_Summ = "";
       $succ_Summ = "";
+      $cards_summary_suites = "";
 
       foreach ($this->reports as $i => $test_suite_reports)
       {
          $total_suites++;
+         $ttests = 1;
 
          foreach ($test_suite_reports as $test_case => $reports)
          {
             $successful = 0;
             $failed = 0;
+            $total_class_test_x_suites = 0;
 
             $names = explode("\\", $test_case);
 
@@ -359,25 +379,25 @@ class PhTestRun
                {
                   foreach ($report['asserts'] as $assert_report)
                   {
-                     if ($assert_report['type'] == 'ERROR')
+                     $total_class_test_x_suites++;
+                     if ($assert_report['type'] == 'FAIL') // TODO: EXCEPTION and ERROR should count as fail
                      {
                         $total_failed++;
-                        $failed++;
+                        $failed++; //count the assert fail of each test per suite
                      }
                      else if ($assert_report['type'] == 'OK')
                      {
                         $total_successful++;
-                        $successful++;
+                        $successful++; //count the assert successful of each test per suite
+                     }
+                     else if ($assert_report['type'] == 'ERROR') // fatal error
+                     {
+                        $tests_cases_with_fatal_err[] = [
+                           'case' => $test_case
+                        ];
                      }
                   }
                   $total_asserts++;
-               }
-
-               if (isset($report['output']) && !isset($report['asserts']))
-               {
-                  $fatal_err[] = [
-                     'case' => $test_case
-                  ];
                }
             }
 
@@ -399,11 +419,54 @@ class PhTestRun
                ];
             }
 
+            $arrSummaryTestCase [] = [
+               "suite"           => $names[1],
+               "totalTestSuites" => $ttests,
+               "classes" => $total_class_test_x_suites,
+               'failed'  => $failed,
+               'success' => $successful
+            ];
+            $ttests++;
+
             $names = explode("\\", $test_case);
             $html_report .= self::template_report_html()->render('body_report', [
                'names'   => $names,
                'i'       => $i,
                'reports' => $reports
+            ]);
+         }
+      }
+
+      $totalSummaryXSuite = self::summaryXsuites($arrSummaryTestCase);
+
+      // render the summary for each suite
+      foreach ($totalSummaryXSuite as $suite => $suiteSummarySuite)
+      {
+         $cards_summary_suites .= self::template_report_html()->render('summary_suite', [
+            'suite'           => $suite,
+            'totalTestSuites' => $suiteSummarySuite['totalTestSuites'],
+            'class'           => $suiteSummarySuite['class'],
+            'fail'            => $suiteSummarySuite['fail'],
+            'success'         => $suiteSummarySuite['success']
+         ]);
+      }
+
+      foreach ($namesSuitesMenu as $h => $item)
+      {
+         if ($h > 0 && $namesSuitesMenu[$h - 1] == $item)
+         {
+            $menu_items .= '';
+         }
+         else
+         {
+            $is_failed = self::is_failed($item, $total_cases_failed);
+            $badge = self::get_badge($item, $total_cases_failed, $total_cases_successful, $tests_cases_with_fatal_err);
+
+            $menu_items .= self::template_report_html()->render('menu_items', [
+               'item'               => $item,
+               'is_failed'          => $is_failed,
+               'namesSuitessubmenu' => $namesSuitessubmenu,
+               'badge'              => $badge
             ]);
          }
       }
@@ -422,40 +485,21 @@ class PhTestRun
          $succ_Summ = self::template_report_html()->render('success_summary', ['total_cases_successful' => $total_cases_successful]);
       }
 
-      foreach ($namesSuitesMenu as $h => $item)
-      {
-         if ($h > 0 && $namesSuitesMenu[$h - 1] == $item)
-         {
-            $menu_items .= '';
-         }
-         else
-         {
-            $is_failed = self::is_faild($item, $total_cases_failed);
-            $badge = self::get_badge($item, $total_cases_failed, $total_cases_successful, $fatal_err);
-
-            $menu_items .= self::template_report_html()->render('menu_items', [
-               'item'               => $item,
-               'is_failed'          => $is_failed,
-               'namesSuitessubmenu' => $namesSuitessubmenu,
-               'badge'              => $badge
-            ]);
-         }
-      }
-
       $render = self::template_report_html()->render('content_report', [
-         'total_suites'     => $total_suites,
-         'total_cases'      => $total_cases,
-         'failed_cases'     => $failed_cases,
-         'successful_case'  => $successful_case,
-         'html_report'      => $html_report,
-         'test_time'        => $this->execution_time,
-         'total_tests'      => $total_tests,
-         'total_successful' => $total_successful,
-         'total_failed'     => $total_failed,
-         'total_asserts'    => $total_asserts,
-         'failed_Summ'      => $failed_Summ,
-         'succ_Summ'        => $succ_Summ,
-         'menu_items'       => $menu_items
+         'total_suites'         => $total_suites,
+         'total_cases'          => $total_cases,
+         'failed_cases'         => $failed_cases,
+         'successful_case'      => $successful_case,
+         'html_report'          => $html_report,
+         'test_time'            => $this->execution_time,
+         'total_tests'          => $total_tests,
+         'total_successful'     => $total_successful,
+         'total_failed'         => $total_failed,
+         'total_asserts'        => $total_asserts,
+         'failed_Summ'          => $failed_Summ,
+         'succ_Summ'            => $succ_Summ,
+         'menu_items'           => $menu_items,
+         'cards_summary_suites' => $cards_summary_suites
       ]);
 
       if ($path == '.'. DIRECTORY_SEPARATOR)
@@ -466,7 +510,7 @@ class PhTestRun
       file_put_contents($path, $render);
    }
 
-   public function is_faild($item, $total_cases_failed)
+   public function is_failed($item, $total_cases_failed)
    {
       $faildSuite = false;
       foreach ($total_cases_failed as $suiteFaild)
@@ -528,14 +572,14 @@ class PhTestRun
       ];
 
       //generate table totals summary (suites,cases,tests)
-      $summary1 = self::generate_table_summary_totales($column_width, $tableSummary1, $gap_x, $joins, $axi_x, $axi_y);
+      $summary1 = self::generate_table_summary_totals($column_width, $tableSummary1, $gap_x, $joins, $axi_x, $axi_y);
 
       //generate table totals asserts summary
-      $summary2 = self::generate_table_summary_totales($column_width, $tableSummary2, $gap_x, $joins, $axi_x, $axi_y);
+      $summary2 = self::generate_table_summary_totals($column_width, $tableSummary2, $gap_x, $joins, $axi_x, $axi_y);
 
       echo PHP_EOL;
 
-      echo 'Summary reports --> total time: '. $this->execution_time .' μs' . PHP_EOL . PHP_EOL;
+      echo 'Summary reports --> total time: ' . $this->execution_time . ' μs' . PHP_EOL . PHP_EOL;
 
       //render table totals summary (suites,cases,tests)
       foreach ($summary1 as $table1)
@@ -610,11 +654,10 @@ class PhTestRun
       }
    }
 
-   public function generate_table_summary_totales($column_width, $tableSummary, $gap_x, $joins, $axi_x, $axi_y)
+   public function generate_table_summary_totals($column_width, $tableSummary, $gap_x, $joins, $axi_x, $axi_y)
    {
       /**
-       * generate summary table of totales
-       *
+       * generate summary table of totals
        */
       $row_separator = '';
       $row_headers = '';
@@ -730,7 +773,7 @@ class PhTestRun
       ];
    }
 
-   public function get_badge($item, $total_cases_failed, $total_cases_successful, $fatal_err)
+   public function get_badge($item, $total_cases_failed, $total_cases_successful, $tests_cases_with_fatal_err)
    {
       $case_failed = 0;
       $case_successfull = 0;
@@ -757,7 +800,7 @@ class PhTestRun
          }
       }
 
-      foreach ($fatal_err as $fatal)
+      foreach ($tests_cases_with_fatal_err as $fatal)
       {
          $suites = explode("\\", $fatal["case"]);
          if (array_search($item, $suites))
@@ -782,5 +825,51 @@ class PhTestRun
    {
       $path = __DIR__ . DIRECTORY_SEPARATOR .'..'. DIRECTORY_SEPARATOR .'views'. DIRECTORY_SEPARATOR .'templates';
       return new \League\Plates\Engine($path);
+   }
+
+   public function summaryXsuites($arrSummaryTestCase)
+   {
+      /** create the summary for each suite */
+      $totalTests = 0;
+      $totalClass = 0;
+      $totalsuccess = 0;
+      $totalfail = 0;
+      $arr = [];
+
+      for ($i=0; $i < count($arrSummaryTestCase); $i++)
+      {
+         $a = $i - 1;
+         if ($i > 0)
+         {
+            if ($arrSummaryTestCase[$i]["suite"] === $arrSummaryTestCase[$a]["suite"]) {
+               $totalTests = $arrSummaryTestCase[$i]["totalTestSuites"];
+               $totalClass = $arrSummaryTestCase[$i]["classes"];
+               $totalsuccess += $arrSummaryTestCase[$i]["success"];
+               $totalfail += $arrSummaryTestCase[$i]["failed"];
+            }
+            else
+            {
+               $totalTests = $arrSummaryTestCase[$i]["totalTestSuites"];
+               $totalClass = $arrSummaryTestCase[$i]["classes"];
+               $totalsuccess = $arrSummaryTestCase[$i]["success"];
+               $totalfail = $arrSummaryTestCase[$i]["failed"];
+            }
+         }
+         else
+         {
+            $totalTests = $arrSummaryTestCase[$i]["totalTestSuites"];
+            $totalClass = $arrSummaryTestCase[$i]["classes"];
+            $totalsuccess = $arrSummaryTestCase[$i]["success"];
+            $totalfail = $arrSummaryTestCase[$i]["failed"];
+         }
+
+         $arr[$arrSummaryTestCase[$i]["suite"]] = [
+            "totalTestSuites" => $totalTests,
+            "class" => $totalClass,
+            "success" => $totalsuccess,
+            "fail" => $totalfail
+         ];
+      }
+      return $arr;
    }
 }
