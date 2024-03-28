@@ -1,13 +1,13 @@
 <?php
 
-namespace CaboLabs\PhTest;
+namespace CaboLabs\Debbie;
 
-abstract class PhTestCase {
+abstract class DebbieTestCase {
 
    // path to the test case
    private $path;
 
-   // PhTestSuite
+   // DebbieSuite
    private $suite;
 
    // test being executed

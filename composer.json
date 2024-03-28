@@ -1,14 +1,14 @@
 {
-  "name": "cabolabs/phtest",
+  "name": "cabolabs/debbie",
   "description": "Small tesing library",
   "keywords": [
     "cabolabs",
     "testing",
     "test"
   ],
-  "homepage": "https://github.com/ppazos/PhTest",
+  "homepage": "https://github.com/CaboLabs/Debbie",
   "license": "Apache-2.0",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "repositories": [
     {
       "type": "vcs",
@@ -22,7 +22,7 @@
   },
   "autoload": {
       "psr-4": {
-          "CaboLabs\\PhTest\\": "src"
+          "CaboLabs\\Debbie\\": "src"
       }
   }
 }

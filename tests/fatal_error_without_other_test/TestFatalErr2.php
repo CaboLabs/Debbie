@@ -2,9 +2,10 @@
 
 namespace tests\fatal_error_without_other_test;
 
-use \CaboLabs\PhTest\PhTestCase;
+use \CaboLabs\Debbie\DebbieTestCase;
 
-class TestFatalErr2 extends PhTestCase {
+class TestFatalErr2 extends DebbieTestCase {
+
    public function test_with_fatal_error()
    {
       $n = 'not an object';

@@ -1,9 +1,9 @@
 <?php
 
-namespace CaboLabs\PhTest;
+namespace CaboLabs\Debbie;
 
-class PhTestSuite
-{
+class DebbieSuite {
+
    // name of the folder where the test cases for the suite are defined
    // should be the prefix of the $test_cases paths
    private $test_suite_name;
@@ -26,8 +26,8 @@ class PhTestSuite
       {
          require_once($test_case_path);
 
-         // if the file found doesn't define a PhTestCase, do not try to create the test case object
-         if (class_exists($test_case) && is_subclass_of($test_case, '\CaboLabs\PhTest\PhTestCase'))
+         // if the file found doesn't define a DebbieTestCase, do not try to create the test case object
+         if (class_exists($test_case) && is_subclass_of($test_case, '\CaboLabs\Debbie\DebbieTestCase'))
          {
             // test case object has a reference to it's test suite
             $test_case_object = new $test_case($this, $test_case_path);
@@ -165,8 +165,8 @@ class PhTestSuite
       $trace = $exception->getTrace();
       array_pop($trace); // removes call to cli
       array_pop($trace); // removes the call to phtests/cli
-      array_pop($trace); // removes call to PhTestRun
-      array_pop($trace); // removes call to PhTestSuite
+      array_pop($trace); // removes call to DebbieRun
+      array_pop($trace); // removes call to DebbieSuite
 
       $this->reports[$test_case_class][$test_name]['asserts'][] = array(
          'type'   => $is_fatal ? 'ERROR' : 'EXCEPTION',

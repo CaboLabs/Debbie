@@ -55,7 +55,7 @@ if ($argc < 2)
    exit;
 }
 
-$run = new \CaboLabs\PhTest\PhTestRun();
+$run = new \CaboLabs\Debbie\DebbieRun();
 
 $test_start_time = microtime(true);
 $run->init($argv[1]);
@@ -70,7 +70,6 @@ if ($argc > 4)
    }
 
    $run->run_case($argv[2], $argv[3], $methods);
-
 }
 // case or cases specific
 else if ($argc == 4)
@@ -92,14 +91,12 @@ if ($report == 'html')
 {
    $run->render_reports_html($output);
 }
-else
-if ($report != 'html' && $report != 'text')
+else if ($report != 'html' && $report != 'text')
 {
    echo '"-report=" should be equal to "html" or "text"'. PHP_EOL;
    exit;
 }
-else
-if ($report == 'text')
+else if ($report == 'text')
 {
    $run->render_reports();
 }

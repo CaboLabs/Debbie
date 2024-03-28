@@ -2,9 +2,9 @@
 
 namespace tests\fatal_error_with_other_test;
 
-use \CaboLabs\PhTest\PhTestCase;
+use \CaboLabs\Debbie\DebbieTestCase;
 
-class TestFatalErr extends PhTestCase {
+class TestFatalErr extends DebbieTestCase {
 
    public function test_with_fatal_error()
    {

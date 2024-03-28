@@ -2,9 +2,9 @@
 
 namespace tests\suiteLoremIpsum;
 
-use \CaboLabs\PhTest\PhTestCase;
+use \CaboLabs\Debbie\DebbieTestCase;
 
-class TestCase41 extends PhTestCase {
+class TestCase41 extends DebbieTestCase {
 
    public function test_this_is_a_test()
    {

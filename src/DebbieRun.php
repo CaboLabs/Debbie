@@ -1,11 +1,10 @@
 <?php
 
-namespace CaboLabs\PhTest;
+namespace CaboLabs\Debbie;
 
 use \CaboLabs\PhBasic\BasicString as str;
 
-class PhTestRun
-{
+class DebbieRun {
 
    // root folder where all the test suites have their own folder
    private $test_suite_root = './tests';
@@ -110,7 +109,7 @@ class PhTestRun
 
          $suite_dir->close();
 
-         $phsuite = new PhTestSuite($test_suite, $test_cases);
+         $phsuite = new DebbieSuite($test_suite, $test_cases);
          $phsuite->run($this->after_each_test_function);
          $this->reports[] = $phsuite->get_reports(); // NOTE: this adds one report per suite
          $this->execution_time += $phsuite->get_execution_time();
@@ -150,7 +149,7 @@ class PhTestRun
          $test_cases[$namespaced_class] = $test_case_path;
       }
 
-      $phsuite = new PhTestSuite($suite, $test_cases);
+      $phsuite = new DebbieSuite($suite, $test_cases);
       $phsuite->run($this->after_each_test_function, $method);
       $this->reports[] = $phsuite->get_reports();
       $this->execution_time = $phsuite->get_execution_time();
@@ -205,7 +204,7 @@ class PhTestRun
 
       $suite_dir->close();
 
-      $phsuite = new PhTestSuite($suite, $test_cases);
+      $phsuite = new DebbieSuite($suite, $test_cases);
       $phsuite->run($this->after_each_test_function);
       $this->reports[] = $phsuite->get_reports();
       $this->execution_time = $phsuite->get_execution_time();

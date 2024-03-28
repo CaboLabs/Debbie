@@ -2,9 +2,9 @@
 
 namespace tests\suite2;
 
-use \CaboLabs\PhTest\PhTestCase;
+use \CaboLabs\Debbie\DebbieTestCase;
 
-class TestCase21 extends PhTestCase {
+class TestCase21 extends DebbieTestCase {
 
    public function just_a_normal_function()
    {

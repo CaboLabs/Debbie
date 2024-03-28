@@ -2,9 +2,9 @@
 
 namespace tests\suite3;
 
-use \CaboLabs\PhTest\PhTestCase;
+use \CaboLabs\Debbie\DebbieTestCase;
 
-class TestCase32 extends PhTestCase {
+class TestCase32 extends DebbieTestCase {
 
    public function test_this_is_a_test()
    {
