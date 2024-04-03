@@ -342,7 +342,7 @@ class DebbieRun {
       $total_failed = 0;
       $total_successful = 0;
       $total_asserts = 0;
-      $output = 0;
+      $total_class_test_x_suites = 0;
 
       $html_report = '';
       $menu_items = '';
@@ -360,7 +360,6 @@ class DebbieRun {
          {
             $successful = 0;
             $failed = 0;
-            $total_class_test_x_suites = 0;
 
             $names = explode("\\", $test_case);
 
@@ -378,7 +377,6 @@ class DebbieRun {
                {
                   foreach ($report['asserts'] as $assert_report)
                   {
-                     $total_class_test_x_suites++;
                      if ($assert_report['type'] == 'FAIL') // TODO: EXCEPTION and ERROR should count as fail
                      {
                         $total_failed++;
@@ -433,6 +431,7 @@ class DebbieRun {
                'i'       => $i,
                'reports' => $reports
             ]);
+            $total_class_test_x_suites++;
          }
       }
 
