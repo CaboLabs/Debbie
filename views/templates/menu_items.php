@@ -2,10 +2,8 @@
   <a id="<?=$item?>" class="nav-link collapsed" href="#" data-toggle="collapse"
      data-target="#collapseUtilities_<?=$item?>" aria-expanded="true" aria-controls="collapseUtilities">
     <?php $style_item = "fa-fw fa fa-check text-success"; ?>
-    <?php $color = "green"; ?>
     <?php if ($is_failed || $badge['fatal_error_php']): ?>
       <?php $style_item = "fa-fw fas fa-times text-warning"; ?>
-      <?php $color = "red"; ?>
     <?php endif; ?>
     <i class="<?=$style_item?>"></i>
     <span class="mr-1 d-inline-block text-truncate align-text-top" title="<?=$item?>"><?=$item?></span>
@@ -18,6 +16,13 @@
   <div id="collapseUtilities_<?=$item?>" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
     <div id="collapse_<?=$item?>" class="bg-white py-2 collapse-inner rounded">
     <?php foreach ($namesSuitessubmenu as $submenu): ?>
+      <?php foreach ($total_cases_failed as $cases_failed): ?>
+        <?php if (in_array($submenu, $cases_failed)): ?>
+          <?php $color = "red"; ?>
+        <?php else: ?>
+          <?php $color = "green"; ?>
+        <?php endif; ?>
+      <?php endforeach; ?>
       <?php $suites = explode("\\", $submenu); ?>
       <?php if (in_array($item, $suites)): ?>
         <a id="<?=$suites[2]?>" class="text-truncate collapse-item" style="max-width: 175px; color:<?=$color?>" href="#" title="<?=$suites[2]?>"><?=$suites[2]?></a>

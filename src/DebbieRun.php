@@ -511,7 +511,6 @@ class DebbieRun {
 
    public function is_failed($item, $total_cases_failed)
    {
-      $faildSuite = false;
       foreach ($total_cases_failed as $suiteFaild)
       {
          $suites = explode("\\", $suiteFaild["case"]);
@@ -522,7 +521,7 @@ class DebbieRun {
          }
       }
 
-      return $faildSuite;
+      return $suites[2];
    }
 
    public function get_reports()
