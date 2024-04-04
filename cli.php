@@ -63,7 +63,7 @@ $run->init($argv[1]);
 // Method specific
 if ($argc > 4)
 {
-   $methods = array();
+   $methods = [];
 
    for ($i = 4; $i < $argc; $i++) {
       $methods[] = $argv[$i];
