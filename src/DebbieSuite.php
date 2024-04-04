@@ -36,14 +36,14 @@ class DebbieSuite {
       }
    }
 
-   public function run($after_each_test_callback = NULL, $specific_methods = NULL)
+   public function run($after_each_test_callback = NULL, array $specific_methods = [])
    {
       // for execution time calculation
       $test_start_time = microtime(true);
 
       foreach ($this->test_cases as $test_case_class => $test_case_object)
       {
-         $test_names = $specific_methods ?? get_class_methods($test_case_object);
+         $test_names = $specific_methods ? $specific_methods : get_class_methods($test_case_object);
 
          // execute only methods that starts with 'test'
          $test_names = array_filter($test_names, function ($n)
