@@ -359,6 +359,7 @@ class DebbieRun {
          {
             $successful = 0;
             $failed = 0;
+            $total_class_test_x_suites = 0;
 
             $names = explode("\\", $test_case);
 
@@ -376,6 +377,7 @@ class DebbieRun {
                {
                   foreach ($report['asserts'] as $assert_report)
                   {
+                     $total_class_test_x_suites++;
                      if ($assert_report['type'] == 'FAIL') // TODO: EXCEPTION and ERROR should count as fail
                      {
                         $total_failed++;
@@ -424,9 +426,9 @@ class DebbieRun {
             $arrSummaryTestCase [] = [
                "suite"           => $names[1],
                "totalTestSuites" => $ttests,
-               "classes" => count($test_suite_reports),
-               'failed'  => $failed,
-               'success' => $successful
+               "classes"         => $total_class_test_x_suites,
+               'failed'          => $failed,
+               'success'         => $successful
             ];
             $ttests++;
 
