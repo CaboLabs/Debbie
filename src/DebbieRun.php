@@ -334,20 +334,18 @@ class DebbieRun {
       $namesSuitesMenu = [];
       $tests_fatal_error = [];
       $tests_type_fail = [];
+
       $successful_case = 0;
       $failed_cases = 0;
-
       $total_cases = 0;
       $total_suites = 0;
       $total_tests = 0;
       $total_failed = 0;
       $total_successful = 0;
       $total_asserts = 0;
-      $output = 0;
 
       $html_report = '';
       $menu_items = '';
-
       $failed_Summ = "";
       $succ_Summ = "";
       $cards_summary_suites = "";
@@ -428,9 +426,9 @@ class DebbieRun {
             $arrSummaryTestCase [] = [
                "suite"           => $names[1],
                "totalTestSuites" => $ttests,
-               "classes" => $total_class_test_x_suites,
-               'failed'  => $failed,
-               'success' => $successful
+               "classes"         => $total_class_test_x_suites,
+               'failed'          => $failed,
+               'success'         => $successful
             ];
             $ttests++;
 
@@ -789,7 +787,6 @@ class DebbieRun {
       $case_successfull = 0;
       $total_cases = 0;
       $badge = [];
-      $fatal_error_php = false;
 
       foreach ($total_cases_failed as $suiteFaild)
       {
