@@ -1,6 +1,9 @@
 # Debbie
 
-The minimal PHP test library with beautiful test reports
+The minimal PHP test library with beautiful test reports.
+
+![](assets/debbie_ai.jpeg)
+
 
 # Try Debbie's own tests
 
