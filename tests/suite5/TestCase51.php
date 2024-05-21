@@ -6,7 +6,7 @@ use \CaboLabs\Debbie\DebbieTestCase;
 
 class TestCase51 extends DebbieTestCase {
 
-   public function test_does_not_file()
+   public function test_does_not_exist_file()
    {
       $directory = '/false/path/file.txt';
 
