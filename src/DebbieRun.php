@@ -183,7 +183,7 @@ class DebbieRun {
       $test_cases = [];
 
       // $test_case is a class name
-      while (false !== ($test_case = $suite_dir->read()))
+      while (false !== ($test_case = $suite_dir->read()) && preg_match('/\.php$/', $test_case))
       {
          if (empty($cases))
          {
