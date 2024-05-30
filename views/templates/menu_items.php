@@ -3,7 +3,7 @@
      data-target="#collapseUtilities_<?=$item?>" aria-expanded="true" aria-controls="collapseUtilities">
     <?php $style_item = "fa-fw fa fa-check text-success"; ?>
     <?php $color = "green"; ?>
-    <?php if ($is_failed || $fatal_error || $type_fail) : ?>
+    <?php if (isset($is_failed) || isset($fatal_error) || isset($type_fail)) : ?>
       <?php $style_item = "fa-fw fas fa-times text-warning"; ?>
     <?php endif; ?>
     <i class="<?=$style_item?>"></i>
