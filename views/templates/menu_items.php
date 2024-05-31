@@ -1,3 +1,4 @@
+<?=$color = ''; ?>
 <li class="nav-item position-relative">
   <a id="<?=$item?>" class="nav-link collapsed" href="#" data-toggle="collapse"
      data-target="#collapseUtilities_<?=$item?>" aria-expanded="true" aria-controls="collapseUtilities">
@@ -19,7 +20,7 @@
     <?php foreach ($namesSuitessubmenu as $submenu): ?>
       <?php $suites = explode("\\", $submenu); ?>
       <?php if (in_array($item, $suites)): ?>
-        <?php if ($fatal_error == $suites[2] || $type_fail == $suites[2] || $is_failed) : ?>
+        <?php if ($fatal_error == $suites[2] || $type_fail == $suites[2]) : ?>
           <?php $color = "red"; ?>
         <?php endif; ?>
         <a id="<?=$suites[2]?>" class="text-truncate collapse-item" style="max-width: 175px; color:<?=$color?>" href="#" title="<?=$suites[2]?>"><?=$suites[2]?></a>
