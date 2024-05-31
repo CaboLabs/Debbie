@@ -1,10 +1,9 @@
-<?=$color = ''; ?>
 <li class="nav-item position-relative">
   <a id="<?=$item?>" class="nav-link collapsed" href="#" data-toggle="collapse"
      data-target="#collapseUtilities_<?=$item?>" aria-expanded="true" aria-controls="collapseUtilities">
     <?php $style_item = "fa-fw fa fa-check text-success"; ?>
     <?php $color = "green"; ?>
-    <?php if (isset($is_failed) || isset($fatal_error) || isset($type_fail)) : ?>
+    <?php if ($is_failed || $fatal_error || $type_fail) : ?>
       <?php $style_item = "fa-fw fas fa-times text-warning"; ?>
     <?php endif; ?>
     <i class="<?=$style_item?>"></i>
@@ -20,8 +19,10 @@
     <?php foreach ($namesSuitessubmenu as $submenu): ?>
       <?php $suites = explode("\\", $submenu); ?>
       <?php if (in_array($item, $suites)): ?>
-        <?php if ($fatal_error == $suites[2] || $type_fail == $suites[2]) : ?>
+        <?php if ($fatal_error === $suites[2] || $type_fail === $suites[2]) : ?>
           <?php $color = "red"; ?>
+        <?php else: ?>
+          <?php $color = "green"; ?>
         <?php endif; ?>
         <a id="<?=$suites[2]?>" class="text-truncate collapse-item" style="max-width: 175px; color:<?=$color?>" href="#" title="<?=$suites[2]?>"><?=$suites[2]?></a>
       <?php endif; ?>
