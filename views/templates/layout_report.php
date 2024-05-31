@@ -31,6 +31,9 @@
           max-width: 102px;
         }
       }
+      .table.faild_table > tbody > tr {
+        cursor: pointer;
+      }
     </style>
 </head>
 <body id="page-top">
@@ -175,6 +178,25 @@
         $('#cardSummaryTables').hide();
       }
     }
+
+    $('table.faild_table tbody tr').on("click", function () {
+      let id = $(this).attr('id');
+      let str = id;
+      let arr = str.split("\\");
+
+      let id_li = arr[2];
+      let class_card = 'card_' + id_li;
+
+      $('#title_suite').show();
+      $('#title_suite').html(id_li);
+      $('#Card_suites').show();
+      $('.row_testcases').show();
+      $('.suites_test').show();
+
+      $('.card_summary_suites').hide();
+      $('#headCardSummary').hide();
+      $('#cardSummaryTables').hide();
+    });
   </script>
 </body>
 </html>
