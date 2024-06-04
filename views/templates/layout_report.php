@@ -187,15 +187,15 @@
       let id_li = arr[2];
       let class_card = 'card_' + id_li;
 
-      $('#title_suite').show();
-      $('#title_suite').html(id_li);
-      $('#Card_suites').show();
-      $('.row_testcases').show();
       $('.suites_test').show();
+
+      $('.row_testcases').hide();
+      $('#' + class_card).show();
 
       $('.card_summary_suites').hide();
       $('#headCardSummary').hide();
       $('#cardSummaryTables').hide();
+
     });
   </script>
 </body>
