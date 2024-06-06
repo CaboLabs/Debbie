@@ -66,7 +66,7 @@
 
   <script>
     // TODO: add a minimized version of the JS
-    $("li.nav-item").on("click", function (e)
+    $("li.nav-item").on("click", function ()
     {
       var id_li = $("a", this).attr("id");
       var class_card = 'card_' + id_li;
@@ -187,7 +187,12 @@
       let id_li = arr[2];
       let class_card = 'card_' + id_li;
 
+      $('#title_suite').show();
+      $('#title_suite').html(arr[1]);
+
+      $('#Card_suites').show();
       $('.suites_test').show();
+      $('#Card_suites').find('.' + class_card).show();
 
       $('.row_testcases').hide();
       $('#' + class_card).show();
@@ -195,7 +200,6 @@
       $('.card_summary_suites').hide();
       $('#headCardSummary').hide();
       $('#cardSummaryTables').hide();
-
     });
   </script>
 </body>
