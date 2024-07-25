@@ -180,6 +180,16 @@
     {
       $(this).toggleClass('border-danger active_card_fail');
     });
+
+    $('.nav-item a[style*="color:red"]').each(function(){
+      let txt_test_fail = $(this).text();
+      let txt_title = $('.card .card-header h6').text();
+
+      if (txt_test_fail = txt_title)
+      {
+        $('.card-header').addClass("fail_card");
+      }
+    });
   </script>
 </body>
 </html>
