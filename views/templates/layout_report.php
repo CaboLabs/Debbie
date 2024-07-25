@@ -175,6 +175,11 @@
         $('#cardSummaryTables').hide();
       }
     }
+
+    $(".card_fail_dashboard").on("click", function (e)
+    {
+      $(this).toggleClass('border-danger active_card_fail');
+    });
   </script>
 </body>
 </html>
