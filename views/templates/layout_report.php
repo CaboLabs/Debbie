@@ -176,14 +176,23 @@
       }
     }
 
+    $('.nav-item a[style*="color:red"]').each(function(){
+      let txt_test_fail = $(this).text();
+      $('.card_' + txt_test_fail).addClass("fail_card");
+      console.log(txt_test_fail);
+    });
+
     $(".card_fail_dashboard").on("click", function (e)
     {
       $(this).toggleClass('border-danger active_card_fail');
-    });
 
-    $('.nav-item a[style*="color:red"]').each(function(){
-      let txt_test_fail = $(this).text();
-      $('.' + txt_test_fail).addClass("fail_card");
+      if ($(this).hasClass('active_card_fail')) {
+        $("#cardSummaryTables").hide();
+        $(".suites_test:has(.fail_card)").show();
+      } else {
+        $(".suites_test:has(.fail_card)").hide();
+        $("#cardSummaryTables").show();
+      }
     });
   </script>
 </body>
