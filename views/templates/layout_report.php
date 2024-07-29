@@ -62,6 +62,7 @@
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
   <script>
+  $( document ).ready(function() {
     // TODO: add a minimized version of the JS
     $("li.nav-item").on("click", function (e)
     {
@@ -81,6 +82,7 @@
           $('li > div').collapse('hide');
           console.log($('li > div'));
         }
+        get_card_fail(".card_fail_dashboard");
       }
       else if (id_li === class_card.substring(5))
       {
@@ -185,15 +187,23 @@
     $(".card_fail_dashboard").on("click", function (e)
     {
       $(this).toggleClass('border-danger active_card_fail');
+      get_card_fail(".card_fail_dashboard");
+    });
 
-      if ($(this).hasClass('active_card_fail')) {
+    function get_card_fail(class_card_fail)
+    {
+      if ($(class_card_fail).hasClass('active_card_fail'))
+      {
         $("#cardSummaryTables").hide();
         $(".suites_test:has(.fail_card)").show();
-      } else {
+      }
+      else
+      {
         $(".suites_test:has(.fail_card)").hide();
         $("#cardSummaryTables").show();
       }
-    });
+    }
+  });
   </script>
 </body>
 </html>
