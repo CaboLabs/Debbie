@@ -64,41 +64,30 @@
   <script>
   $( document ).ready(function() {
     // TODO: add a minimized version of the JS
-    $("li.nav-item").on("click", function (e)
-    {
-      var id_li = $("a", this).attr("id");
-      var class_card = 'card_' + id_li;
-
-      if (id_li === 'dashboard')
-      {
-        $('#cardSummaryTables').show();
-        $('#headCardSummary').show();
-        $(this).addClass("active");
-        $('#title_suite').hide();
-        $('#Card_suites').hide();
-
-        if ($('li > div').hasClass('show'))
-        {
-          $('li > div').collapse('hide');
-          console.log($('li > div'));
-        }
-        get_card_fail(".card_fail_dashboard");
-      }
-      else if (id_li === class_card.substring(5))
-      {
-        $('#Card_suites').show();
-        $('#title_suite').show();
-        $('#title_suite').html(id_li);
-        $('#Card_suites').find('.' + class_card).show();
-        $(this).addClass("active");
-
-        $('.suites_test').not('.' + class_card).hide();
-        $('#headCardSummary').hide();
-        $('#cardSummaryTables').hide();
-      }
-
-      $('.nav-item').not(this).removeClass("active");
+    $('.nav-item a[style*="color:red"]').each(function(){
+      let txt_test_fail = $(this).text();
+      $('.card_' + txt_test_fail).addClass("fail_card");
     });
+
+    $(".card_fail_dashboard").on("click", function (e)
+    {
+      $(this).toggleClass('border-danger active_card_fail');
+      get_card_fail(".card_fail_dashboard");
+    });
+
+    function get_card_fail(class_card_fail)
+    {
+      if ($(class_card_fail).hasClass('active_card_fail'))
+      {
+        $("#cardSummaryTables").hide();
+        $(".suites_test:has(.fail_card)").show();
+      }
+      else
+      {
+        $(".suites_test:has(.fail_card)").hide();
+        $("#cardSummaryTables").show();
+      }
+    }
 
     $(".collapse-item").on("click", function ()
     {
@@ -159,6 +148,7 @@
         {
           $('li > div').collapse('hide');
         }
+        get_card_fail(".card_fail_dashboard");
       }
       else if (id_li === class_card.substring(5))
       {
@@ -175,32 +165,6 @@
         $('.card_summary_suites').not('#card_summary_' + id_li).hide();
         $('#headCardSummary').hide();
         $('#cardSummaryTables').hide();
-      }
-    }
-
-    $('.nav-item a[style*="color:red"]').each(function(){
-      let txt_test_fail = $(this).text();
-      $('.card_' + txt_test_fail).addClass("fail_card");
-      console.log(txt_test_fail);
-    });
-
-    $(".card_fail_dashboard").on("click", function (e)
-    {
-      $(this).toggleClass('border-danger active_card_fail');
-      get_card_fail(".card_fail_dashboard");
-    });
-
-    function get_card_fail(class_card_fail)
-    {
-      if ($(class_card_fail).hasClass('active_card_fail'))
-      {
-        $("#cardSummaryTables").hide();
-        $(".suites_test:has(.fail_card)").show();
-      }
-      else
-      {
-        $(".suites_test:has(.fail_card)").hide();
-        $("#cardSummaryTables").show();
       }
     }
   });
