@@ -72,15 +72,16 @@
     $(".card_fail_dashboard").on("click", function (e)
     {
       $(this).toggleClass('border-danger active_card_fail');
-      get_card_fail(".card_fail_dashboard");
+      get_all_card_fail(".card_fail_dashboard");
     });
 
-    function get_card_fail(class_card_fail)
+    function get_all_card_fail(class_card_fail)
     {
       if ($(class_card_fail).hasClass('active_card_fail'))
       {
         $("#cardSummaryTables").hide();
         $(".suites_test:has(.fail_card)").show();
+        $("#Card_suites").show();
       }
       else
       {
@@ -88,6 +89,40 @@
         $("#cardSummaryTables").show();
       }
     }
+
+    $("li.nav-item").on("click", function (e)
+    {
+      var id_li = $("a", this).attr("id");
+      var class_card = 'card_' + id_li;
+
+      if (id_li === 'dashboard')
+      {
+        $('#cardSummaryTables').show();
+        $('#headCardSummary').show();
+        $(this).addClass("active");
+        $('#title_suite').hide();
+        $('#Card_suites').hide();
+
+        if ($('li > div').hasClass('show'))
+        {
+          $('li > div').collapse('hide');
+        }
+      }
+      else if (id_li === class_card.substring(5))
+      {
+        $('#Card_suites').show();
+        $('#title_suite').show();
+        $('#title_suite').html(id_li);
+        $('#Card_suites').find('.' + class_card).show();
+        $(this).addClass("active");
+
+        $('.suites_test').not('.' + class_card).hide();
+        $('#headCardSummary').hide();
+        $('#cardSummaryTables').hide();
+      }
+
+      $('.nav-item').not(this).removeClass("active");
+    });
 
     $(".collapse-item").on("click", function ()
     {
@@ -135,22 +170,7 @@
 
     function AllSuite(id_li , class_card)
     {
-      if (id_li === 'dashboard')
-      {
-        $('#cardSummaryTables').show();
-        $('#headCardSummary').show();
-
-        $(this).addClass("active");
-        $('#title_suite').hide();
-        $('#Card_suites').hide();
-
-        if ($('li > div').hasClass('show'))
-        {
-          $('li > div').collapse('hide');
-        }
-        get_card_fail(".card_fail_dashboard");
-      }
-      else if (id_li === class_card.substring(5))
+      if (id_li === class_card.substring(5))
       {
         $(this).addClass("active");
         $('#Card_suites').show();
