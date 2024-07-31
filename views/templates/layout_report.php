@@ -75,6 +75,12 @@
       get_all_card_fail(".card_fail_dashboard");
     });
 
+    $(".card_fail_suite").on("click", function (e)
+    {
+      $(this).toggleClass('border-danger active_card_fail_suite');
+      get_suite_card_fail(".card_fail_suite");
+    });
+
     function get_all_card_fail(class_card_fail)
     {
       if ($(class_card_fail).hasClass('active_card_fail'))
@@ -87,6 +93,20 @@
       {
         $(".suites_test:has(.fail_card)").hide();
         $("#cardSummaryTables").show();
+      }
+    }
+
+    function get_suite_card_fail(class_card_fail_suite)
+    {
+      if ($(class_card_fail_suite).hasClass('active_card_fail_suite'))
+      {
+       // $("#Card_suites").hide();
+        $(".card_succes").hide();
+      }
+      else
+      {
+       // $("#Card_suites").show();
+        $(".card_succes").show();
       }
     }
 
@@ -110,9 +130,11 @@
       }
       else if (id_li === class_card.substring(5))
       {
+        clean_class(class_card);
         $('#Card_suites').show();
         $('#title_suite').show();
         $('#title_suite').html(id_li);
+        set_class_successful(id_li);
         $('#Card_suites').find('.' + class_card).show();
         $(this).addClass("active");
 
@@ -170,6 +192,7 @@
 
     function AllSuite(id_li , class_card)
     {
+      clean_class(class_card);
       if (id_li === class_card.substring(5))
       {
         $(this).addClass("active");
@@ -178,13 +201,28 @@
         $('#title_suite').html(id_li);
         $('#card_summary_' + id_li).show();
         $('.suites_test').show();
+        set_class_successful(id_li);
         $('#Card_suites').find('.' + class_card).show();
-
 
         $('.suites_test').not('.' + class_card).hide();
         $('.card_summary_suites').not('#card_summary_' + id_li).hide();
         $('#headCardSummary').hide();
         $('#cardSummaryTables').hide();
+      }
+    }
+
+    function set_class_successful(class_card) {
+      var card_suite = $('.card_' + class_card);
+      if (!card_suite.hasClass('fail_card')) {
+        card_suite.addClass('card_succes');
+      }
+      console.log(class_card);
+    }
+
+    function clean_class(class_card) {
+      var card_suite = $('.suites_test');
+      if (card_suite.hasClass('card_succes')) {
+        card_suite.removeClass('card_succes');
       }
     }
   });
