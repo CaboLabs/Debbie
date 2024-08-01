@@ -134,7 +134,7 @@
         $('#Card_suites').show();
         $('#title_suite').show();
         $('#title_suite').html(id_li);
-        set_class_successful(id_li);
+        set_class_successful(class_card);
         $('#Card_suites').find('.' + class_card).show();
         $(this).addClass("active");
 
@@ -201,7 +201,7 @@
         $('#title_suite').html(id_li);
         $('#card_summary_' + id_li).show();
         $('.suites_test').show();
-        set_class_successful(id_li);
+        set_class_successful(class_card);
         $('#Card_suites').find('.' + class_card).show();
 
         $('.suites_test').not('.' + class_card).hide();
@@ -212,16 +212,17 @@
     }
 
     function set_class_successful(class_card) {
-      var card_suite = $('.card_' + class_card);
-      if (!card_suite.hasClass('fail_card')) {
+      var card_suite = $('#Card_suites').find('.row_testcases');
+      if ($('.card_suite:not(.fail_card)'))
+      {
         card_suite.addClass('card_succes');
       }
-      console.log(class_card);
     }
 
     function clean_class(class_card) {
       var card_suite = $('.suites_test');
-      if (card_suite.hasClass('card_succes')) {
+      if (card_suite.hasClass('card_succes'))
+      {
         card_suite.removeClass('card_succes');
       }
     }
