@@ -98,14 +98,17 @@
 
     function get_suite_card_fail(class_card_fail_suite)
     {
+      /*if (card_suite.hasClass('card_succes') && card_suite.hasClass('fail_card'))
+      {
+        card_suite.removeClass('card_succes');
+      }*/
+
       if ($(class_card_fail_suite).hasClass('active_card_fail_suite'))
       {
-       // $("#Card_suites").hide();
         $(".card_succes").hide();
       }
       else
       {
-       // $("#Card_suites").show();
         $(".card_succes").show();
       }
     }
@@ -213,10 +216,17 @@
 
     function set_class_successful(class_card) {
       var card_suite = $('#Card_suites').find('.row_testcases');
+
       if ($('.card_suite:not(.fail_card)'))
       {
         card_suite.addClass('card_succes');
       }
+
+      $('.fail_card').each(function() {
+        if ($(this).hasClass('card_succes')) {
+            $(this).removeClass('card_succes');
+        }
+      });
     }
 
     function clean_class(class_card) {
