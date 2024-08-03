@@ -349,6 +349,9 @@ class DebbieRun {
       $failed_Summ = "";
       $succ_Summ = "";
       $cards_summary_suites = "";
+      $fatal_error = '';
+      $type_fail = '';
+      $is_failed  = false;
 
       foreach ($this->reports as $i => $test_suite_reports)
       {
@@ -382,6 +385,7 @@ class DebbieRun {
                      {
                         $total_failed++;
                         $failed++; //count the assert fail of each test per suite
+                        $tests_type_fail[] = $test_case;
                      }
                      else if ($assert_report['type'] == 'OK')
                      {
@@ -390,15 +394,13 @@ class DebbieRun {
                      }
                      else if ($assert_report['type'] == 'ERROR') // fatal error
                      {
-                        $tests_fatal_error[] = [
-                           'case' => $test_case
-                        ];
+                        $tests_fatal_error[] = $test_case;
+                        $failed++;
                      }
-                     else if ($assert_report['type'] == 'FAIL')
+                     else if ($assert_report['type'] == 'EXCEPTION')
                      {
-                        $tests_type_fail[] = [
-                           'case' => $test_case
-                        ];
+                        $tests_fatal_error[] = $test_case;
+                        $failed++;
                      }
                   }
                   $total_asserts++;
@@ -467,14 +469,15 @@ class DebbieRun {
             $badge = self::get_badge($item, $total_cases_failed, $total_cases_successful);
             $fatal_error = self::get_cases_with_fatal_err($item, $tests_fatal_error);
             $type_fail = self::get_type_fail($item, $tests_type_fail);
-
             $menu_items .= self::template_report_html()->render('menu_items', [
                'item'               => $item,
                'is_failed'          => $is_failed,
                'namesSuitessubmenu' => $namesSuitessubmenu,
                'badge'              => $badge,
                'fatal_error'        => $fatal_error,
-               'type_fail'          => $type_fail
+               'type_fail'          => $type_fail,
+               'tests_fatal_error'  => $tests_fatal_error,
+               'tests_type_fail'    => $tests_type_fail
             ]);
          }
       }
@@ -875,7 +878,7 @@ class DebbieRun {
       $fatal_error_php = '';
       foreach ($tests_fatal_error as $fatal)
       {
-         $suite_error = explode("\\", $fatal["case"]);
+         $suite_error = explode("\\", $fatal);
          if (array_search($item, $suite_error))
          {
             $fatal_error_php = $suite_error[2];
@@ -889,7 +892,7 @@ class DebbieRun {
       $type_fail = '';
       foreach ($tests_type_fail as $fail)
       {
-         $suite_error = explode("\\", $fail["case"]);
+         $suite_error = explode("\\", $fail);
          if (array_search($item, $suite_error))
          {
             $type_fail = $suite_error[2];

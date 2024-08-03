@@ -62,20 +62,20 @@
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
   <script>
-  $( document ).ready(function() {
+  $(document).ready(function() {
     // TODO: add a minimized version of the JS
     $('.nav-item a[style*="color:red"]').each(function(){
       let txt_test_fail = $(this).text();
       $('.card_' + txt_test_fail).addClass("fail_card");
     });
 
-    $(".card_fail_dashboard").on("click", function (e)
+    $(".card_fail_dashboard").on("click", function ()
     {
       $(this).toggleClass('border-danger active_card_fail');
       get_all_card_fail(".card_fail_dashboard");
     });
 
-    $(".card_fail_suite").on("click", function (e)
+    $(".card_fail_suite").on("click", function ()
     {
       $(this).toggleClass('border-danger active_card_fail_suite');
       get_suite_card_fail(".card_fail_suite");
@@ -98,11 +98,6 @@
 
     function get_suite_card_fail(class_card_fail_suite)
     {
-      /*if (card_suite.hasClass('card_succes') && card_suite.hasClass('fail_card'))
-      {
-        card_suite.removeClass('card_succes');
-      }*/
-
       if ($(class_card_fail_suite).hasClass('active_card_fail_suite'))
       {
         $(".card_succes").hide();
@@ -113,13 +108,15 @@
       }
     }
 
-    $("li.nav-item").on("click", function (e)
+    $("li.nav-item").on("click", function ()
     {
       var id_li = $("a", this).attr("id");
       var class_card = 'card_' + id_li;
 
       if (id_li === 'dashboard')
       {
+        $('.card_fail_dashboard').removeClass('active_card_fail');
+        $('.card_fail_dashboard').removeClass('border-danger');
         $('#cardSummaryTables').show();
         $('#headCardSummary').show();
         $(this).addClass("active");
