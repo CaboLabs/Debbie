@@ -398,7 +398,6 @@ class DebbieRun {
                         $failed++;
                      }
                      else if ($assert_report['type'] == 'EXCEPTION')
-                     else if ($assert_report['type'] == 'EXCEPTION')
                      {
                         $tests_fatal_error[] = $test_case;
                         $failed++;

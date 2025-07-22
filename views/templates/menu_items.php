@@ -22,8 +22,6 @@
           <?php $color = "red"; ?>
         <?php else: ?>
           <?php $color = "green"; ?>
-        <?php else: ?>
-          <?php $color = "green"; ?>
         <?php endif; ?>
         <a id="<?=$suites[2]?>" class="text-truncate collapse-item" style="max-width: 175px; color:<?=$color?>" href="#" title="<?=$suites[2]?>"><?=$suites[2]?></a>
       <?php endif; ?>
