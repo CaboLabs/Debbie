@@ -352,6 +352,9 @@ class DebbieRun {
       $fatal_error = '';
       $type_fail = '';
       $is_failed  = false;
+      $fatal_error = '';
+      $type_fail = '';
+      $is_failed  = false;
 
       foreach ($this->reports as $i => $test_suite_reports)
       {
@@ -397,6 +400,7 @@ class DebbieRun {
                         $tests_fatal_error[] = $test_case;
                         $failed++;
                      }
+                     else if ($assert_report['type'] == 'EXCEPTION')
                      else if ($assert_report['type'] == 'EXCEPTION')
                      {
                         $tests_fatal_error[] = $test_case;
