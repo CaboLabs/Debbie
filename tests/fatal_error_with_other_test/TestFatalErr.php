@@ -21,7 +21,7 @@ class TestFatalErr extends DebbieTestCase {
 
    public function test_throw_non_throwable()
    {
-      throw new TestFatalErr('a', 'b');
+      throw new \TestFatalErr('a', 'b');
    }
 
    public function test_throw_error()

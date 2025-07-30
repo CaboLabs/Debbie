@@ -152,7 +152,10 @@ class DebbieRun {
 
       $test_cases = [];
 
-      $test_cases[$namespaced_class] = $test_case_path;
+      if (is_file($test_case_path))
+      {
+         $test_cases[$namespaced_class] = $test_case_path;
+      }
 
       $phsuite = new DebbieSuite($suite, $test_cases);
       $phsuite->run($this->after_each_test_function, $method);
