@@ -141,13 +141,6 @@ class DebbieRun {
 
       $test_case_path = $path . $case . '.php';
 
-      // Check if the file exists before continuing
-      if (!is_file($test_case_path))
-      {
-         echo "Can't read " . $test_case_path . "\n";
-         return;
-      }
-
       $namespaced_class = substr(str_replace(['./', '/'], ['', '\\'], $test_case_path), 0, -4);
 
       $test_cases = [];
@@ -155,6 +148,11 @@ class DebbieRun {
       if (is_file($test_case_path))
       {
          $test_cases[$namespaced_class] = $test_case_path;
+      }
+      else
+      {
+         echo "Can't read " . $test_case_path . "\n";
+         exit;
       }
 
       $phsuite = new DebbieSuite($suite, $test_cases);
