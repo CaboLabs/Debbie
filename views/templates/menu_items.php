@@ -3,13 +3,13 @@
      data-target="#collapseUtilities_<?=$item?>" aria-expanded="true" aria-controls="collapseUtilities">
     <?php $style_item = "fa-fw fa fa-check text-success"; ?>
     <?php $color = "green"; ?>
-    <?php if ($is_failed || $fatal_error || $type_fail) : ?>
+    <?php if ($is_failed || !empty($fatal_error) || !empty($type_fail)) : ?>
       <?php $style_item = "fa-fw fas fa-times text-warning"; ?>
     <?php endif; ?>
     <i class="<?=$style_item?>"></i>
     <span class="mr-1 d-inline-block text-truncate align-text-top" title="<?=$item?>"><?=$item?></span>
     <?php $style_badge = "top-0 badge badge-success" ?>
-    <?php if ($badge['case_successfull'] < $badge['total_cases'] || $fatal_error || $type_fail) : ?>
+    <?php if ($badge['case_successfull'] < $badge['total_cases'] || !empty($fatal_error) || !empty($type_fail)) : ?>
       <?php $style_badge = "top-0 badge badge-danger"; ?>
     <?php endif; ?>
     <span class="<?=$style_badge?>"><?=$badge['case_successfull']?> / <?=$badge['total_cases']?></span>
@@ -19,7 +19,7 @@
     <?php foreach ($namesSuitessubmenu as $submenu): ?>
       <?php $suites = explode("\\", $submenu); ?>
       <?php if (in_array($item, $suites)): ?>
-        <?php if ($fatal_error === $suites[2] || $type_fail === $suites[2]) : ?>
+        <?php if (in_array($suites[2], $fatal_error) || in_array($suites[2], $type_fail)) : ?>
           <?php $color = "red"; ?>
         <?php else: ?>
           <?php $color = "green"; ?>

@@ -94,7 +94,7 @@ class DebbieRun {
          while (false !== ($test_case = $suite_dir->read()))
          {
             // only php files are valid test cases
-            if (preg_match('/\.php$/', $test_case))
+            if (str_ends_with($test_case, '.php'))
             {
                $test_case_path = $path . $test_case;
 
@@ -151,7 +151,7 @@ class DebbieRun {
       }
       else
       {
-         echo "Can't read " . $test_case_path . "\n";
+         echo "Can't read ", $test_case_path, "\n";
          exit;
       }
 
@@ -189,10 +189,11 @@ class DebbieRun {
       $test_cases = [];
 
       // $test_case is a class name
-      while (false !== ($test_case = $suite_dir->read()) && preg_match('/\.php$/', $test_case))
+      while (false !== ($test_case = $suite_dir->read()))
       {
          if (empty($cases))
          {
+            if (!str_ends_with($test_case, '.php')) continue;
             $test_case_path = $path . $test_case;
          }
          else
@@ -200,11 +201,19 @@ class DebbieRun {
             $test_case_path = $path . $cases[0] . '.php';
          }
 
+         // Only process if the file ends in .php
+         if (!str_ends_with($test_case_path, '.php')) continue;
+
          $namespaced_class = substr(str_replace(['./', '/'], ['', '\\'], $test_case_path), 0, -4);
 
          if (is_file($test_case_path))
          {
             $test_cases[$namespaced_class] = $test_case_path;
+         }
+         else
+         {
+            echo "Can't read " . $test_case_path . "\n";
+            exit;
          }
       }
 
@@ -886,29 +895,29 @@ class DebbieRun {
 
    public function get_cases_with_fatal_err($item, $tests_fatal_error)
    {
-      $fatal_error_php = '';
+      $fatal_error_php = [];
       foreach ($tests_fatal_error as $fatal)
       {
          $suite_error = explode("\\", $fatal["case"]);
          if (array_search($item, $suite_error))
          {
-            $fatal_error_php = $suite_error[2];
+            $fatal_error_php[] = $suite_error[2];
          }
       }
-      return $fatal_error_php;
+      return array_unique($fatal_error_php);
    }
 
    public function get_type_fail($item, $tests_type_fail)
    {
-      $type_fail = '';
+      $type_fail = [];
       foreach ($tests_type_fail as $fail)
       {
          $suite_error = explode("\\", $fail["case"]);
          if (array_search($item, $suite_error))
          {
-            $type_fail = $suite_error[2];
+            $type_fail[] = $suite_error[2];
          }
       }
-      return $type_fail;
+      return array_unique($type_fail);
    }
 }
