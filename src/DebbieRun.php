@@ -144,7 +144,6 @@ class DebbieRun {
       $namespaced_class = substr(str_replace(['./', '/'], ['', '\\'], $test_case_path), 0, -4);
 
       $test_cases = [];
-
       if (is_file($test_case_path))
       {
          $test_cases[$namespaced_class] = $test_case_path;
