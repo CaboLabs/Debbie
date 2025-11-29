@@ -4,14 +4,14 @@
       <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-          <h6 class="m-0 font-weight-bold text-primary"><?=$names[2]?></h6>
+          <h6 class="m-0 font-weight-bold text-primary">Case: <?=$names[2]?></h6>
         </div>
         <!-- Card Body -->
         <div class="card-body table-responsive">
           <table class="table table-borderless" style="margin: -0.5rem;">
             <thead>
               <tr class="border-bottom">
-                <th scope="col">Class</th>
+                <th scope="col">Test</th>
                 <th scope="col">Asserts</th>
                 <th scope="col"></th>
               </tr>
