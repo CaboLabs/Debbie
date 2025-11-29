@@ -393,7 +393,7 @@ class DebbieRun {
                   foreach ($report['asserts'] as $assert_report)
                   {
                      $total_class_test_x_suites++;
-                     if ($assert_report['type'] == 'FAIL') // TODO: EXCEPTION and ERROR should count as fail
+                     if ($assert_report['type'] == 'FAIL')
                      {
                         $total_failed++;
                         $failed++; //count the assert fail of each test per suite
