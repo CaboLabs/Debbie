@@ -65,7 +65,52 @@
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
   <script>
+  $(document).ready(function() {
     // TODO: add a minimized version of the JS
+    $('.nav-item a[style*="color:red"]').each(function(){
+      let txt_test_fail = $(this).text();
+      $('.card_' + txt_test_fail).addClass("fail_card");
+    });
+
+    $(".card_fail_dashboard").on("click", function ()
+    {
+      $(this).toggleClass('border-danger active_card_fail');
+      get_all_card_fail(".card_fail_dashboard");
+    });
+
+    $(".card_fail_suite").on("click", function ()
+    {
+      $(this).toggleClass('border-danger active_card_fail_suite');
+      get_suite_card_fail(".card_fail_suite");
+    });
+
+    function get_all_card_fail(class_card_fail)
+    {
+      if ($(class_card_fail).hasClass('active_card_fail'))
+      {
+        $("#cardSummaryTables").hide();
+        $(".suites_test:has(.fail_card)").show();
+        $("#Card_suites").show();
+      }
+      else
+      {
+        $(".suites_test:has(.fail_card)").hide();
+        $("#cardSummaryTables").show();
+      }
+    }
+
+    function get_suite_card_fail(class_card_fail_suite)
+    {
+      if ($(class_card_fail_suite).hasClass('active_card_fail_suite'))
+      {
+        $(".card_succes").hide();
+      }
+      else
+      {
+        $(".card_succes").show();
+      }
+    }
+
     $("li.nav-item").on("click", function ()
     {
       var id_li = $("a", this).attr("id");
@@ -73,6 +118,8 @@
 
       if (id_li === 'dashboard')
       {
+        $('.card_fail_dashboard').removeClass('active_card_fail');
+        $('.card_fail_dashboard').removeClass('border-danger');
         $('#cardSummaryTables').show();
         $('#headCardSummary').show();
         $(this).addClass("active");
@@ -82,14 +129,15 @@
         if ($('li > div').hasClass('show'))
         {
           $('li > div').collapse('hide');
-          console.log($('li > div'));
         }
       }
       else if (id_li === class_card.substring(5))
       {
+        clean_class(class_card);
         $('#Card_suites').show();
         $('#title_suite').show();
         $('#title_suite').html(id_li);
+        set_class_successful(class_card);
         $('#Card_suites').find('.' + class_card).show();
         $(this).addClass("active");
 
@@ -147,21 +195,8 @@
 
     function AllSuite(id_li , class_card)
     {
-      if (id_li === 'dashboard')
-      {
-        $('#cardSummaryTables').show();
-        $('#headCardSummary').show();
-
-        $(this).addClass("active");
-        $('#title_suite').hide();
-        $('#Card_suites').hide();
-
-        if ($('li > div').hasClass('show'))
-        {
-          $('li > div').collapse('hide');
-        }
-      }
-      else if (id_li === class_card.substring(5))
+      clean_class(class_card);
+      if (id_li === class_card.substring(5))
       {
         $(this).addClass("active");
         $('#Card_suites').show();
@@ -169,8 +204,8 @@
         $('#title_suite').html(id_li);
         $('#card_summary_' + id_li).show();
         $('.suites_test').show();
+        set_class_successful(class_card);
         $('#Card_suites').find('.' + class_card).show();
-
 
         $('.suites_test').not('.' + class_card).hide();
         $('.card_summary_suites').not('#card_summary_' + id_li).hide();
@@ -178,6 +213,30 @@
         $('#cardSummaryTables').hide();
       }
     }
+
+    function set_class_successful(class_card) {
+      var card_suite = $('#Card_suites').find('.row_testcases');
+
+      if ($('.card_suite:not(.fail_card)'))
+      {
+        card_suite.addClass('card_succes');
+      }
+
+      $('.fail_card').each(function() {
+        if ($(this).hasClass('card_succes')) {
+            $(this).removeClass('card_succes');
+        }
+      });
+    }
+
+    function clean_class(class_card) {
+      var card_suite = $('.suites_test');
+      if (card_suite.hasClass('card_succes'))
+      {
+        card_suite.removeClass('card_succes');
+      }
+    }
+  });
 
     $('table.faild_table tbody tr').on("click", function () {
       let id = $(this).attr('id');

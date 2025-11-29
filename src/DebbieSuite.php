@@ -24,7 +24,10 @@ class DebbieSuite {
       // load test cases from their files
       foreach ($test_cases as $test_case => $test_case_path)
       {
+         // Just in case there are files that are not test classes, capture the output to avoid echoing it in the CLI
+         ob_start();
          require_once($test_case_path);
+         $output = ob_get_clean();
 
          // if the file found doesn't define a DebbieTestCase, do not try to create the test case object
          if (class_exists($test_case) && is_subclass_of($test_case, '\CaboLabs\Debbie\DebbieTestCase'))

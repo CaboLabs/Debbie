@@ -1,24 +1,24 @@
 <li class="nav-item position-relative">
-  <a id="<?=$item?>" class="nav-link collapsed" href="#" data-toggle="collapse"
-     data-target="#collapseUtilities_<?=$item?>" aria-expanded="true" aria-controls="collapseUtilities">
+  <a id="<?=$suite?>" class="nav-link collapsed" href="#" data-toggle="collapse"
+     data-target="#collapseUtilities_<?=$suite?>" aria-expanded="true" aria-controls="collapseUtilities">
     <?php $style_item = "fa-fw fa fa-check text-success"; ?>
     <?php $color = "green"; ?>
     <?php if ($is_failed || !empty($cases_with_fatal_error) || !empty($type_fail)) : ?>
       <?php $style_item = "fa-fw fas fa-times text-warning"; ?>
     <?php endif; ?>
     <i class="<?=$style_item?>"></i>
-    <span class="mr-1 d-inline-block text-truncate align-text-top" title="<?=$item?>"><?=$item?></span>
+    <span class="mr-1 d-inline-block text-truncate align-text-top" title="<?=$suite?>"><?=$suite?></span>
     <?php $style_badge = "top-0 badge badge-success" ?>
-    <?php if ($badge['case_successfull'] < $badge['total_cases'] || !empty($cases_with_fatal_error) || !empty($type_fail)) : ?>
+    <?php if ($badge['case_successful'] < $badge['total_cases'] || !empty($cases_with_fatal_error) || !empty($type_fail)) : ?>
       <?php $style_badge = "top-0 badge badge-danger"; ?>
     <?php endif; ?>
-    <span class="<?=$style_badge?>"><?=$badge['case_successfull']?> / <?=$badge['total_cases']?></span>
+    <span class="<?=$style_badge?>"><?=$badge['case_successful']?> / <?=$badge['total_cases']?></span>
   </a>
-  <div id="collapseUtilities_<?=$item?>" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
-    <div id="collapse_<?=$item?>" class="bg-white py-2 collapse-inner rounded">
+  <div id="collapseUtilities_<?=$suite?>" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+    <div id="collapse_<?=$suite?>" class="bg-white py-2 collapse-inner rounded">
     <?php foreach ($namesSuitessubmenu as $submenu): ?>
       <?php $suites = explode("\\", $submenu); ?>
-      <?php if (in_array($item, $suites)): ?>
+      <?php if (in_array($suite, $suites)): ?>
         <?php if (in_array($suites[2], $cases_with_fatal_error) || in_array($suites[2], $type_fail)) : ?>
           <?php $color = "red"; ?>
         <?php else: ?>

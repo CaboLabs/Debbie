@@ -397,9 +397,7 @@ class DebbieRun {
                      {
                         $total_failed++;
                         $failed++; //count the assert fail of each test per suite
-                        $tests_type_fail[] = [
-                           'case' => $test_case // NOTE: this is the full path root/suite/case
-                        ];
+                        $tests_type_fail[] = $test_case;
                      }
                      else if ($assert_report['type'] == 'OK')
                      {
@@ -408,16 +406,12 @@ class DebbieRun {
                      }
                      else if ($assert_report['type'] == 'ERROR') // fatal error
                      {
-                        $tests_fatal_error[] = [
-                           'case' => $test_case
-                        ];
+                        $tests_fatal_error[] = $test_case;
                         $failed++;
                      }
                      else if ($assert_report['type'] == 'EXCEPTION')
                      {
-                        $tests_fatal_error[] = [
-                           'case' => $test_case
-                        ];
+                        $tests_fatal_error[] = $test_case;
                         $failed++;
                      }
                   }
@@ -486,18 +480,20 @@ class DebbieRun {
             $is_failed = self::is_failed($suite, $total_cases_failed);
             $badge = self::get_badge($suite, $total_cases_failed, $total_cases_successful);
 
-            // This is used to get the name of the test cases (classs) that had a fatal error so the menu shows red.
+            // This is used to get the name of the test cases (class) that had a fatal error so the menu shows red.
             $cases_with_fatal_error = self::get_cases_with_fatal_err($suite, $tests_fatal_error);
 
             $type_fail = self::get_type_fail($suite, $tests_type_fail);
 
             $menu_items .= self::template_report_html()->render('menu_items', [
-               'item'               => $suite,
+               'suite'              => $suite,
                'is_failed'          => $is_failed,
                'namesSuitessubmenu' => $namesSuitessubmenu,
                'badge'              => $badge,
                'cases_with_fatal_error' => $cases_with_fatal_error,
-               'type_fail'          => $type_fail
+               'type_fail'          => $type_fail,
+               'tests_fatal_error'  => $tests_fatal_error,
+               // 'tests_type_fail'    => $tests_type_fail
             ]);
          }
       }
@@ -807,7 +803,7 @@ class DebbieRun {
    public function get_badge($item, $total_cases_failed, $total_cases_successful)
    {
       $case_failed = 0;
-      $case_successfull = 0;
+      $case_successful = 0;
       $total_cases = 0;
       $badge = [];
 
@@ -817,7 +813,7 @@ class DebbieRun {
          if (array_search($item, $suites))
          {
             $case_failed += $suiteFaild['case_failed'];
-            $case_successfull += $suiteFaild['case_successful'];
+            $case_successful += $suiteFaild['case_successful'];
          }
       }
 
@@ -826,16 +822,16 @@ class DebbieRun {
          $suites = explode("\\", $suiteSuccess["case"]);
          if (array_search($item, $suites))
          {
-            $case_successfull += $suiteSuccess['case_successful'];
+            $case_successful += $suiteSuccess['case_successful'];
          }
       }
 
-      $total_cases = $case_successfull + $case_failed;
+      $total_cases = $case_successful + $case_failed;
 
       $badge = [
-         'case_successfull' => $case_successfull,
-         'case_failed'      => $case_failed,
-         'total_cases'      => $total_cases
+         'case_successful' => $case_successful,
+         'case_failed'     => $case_failed,
+         'total_cases'     => $total_cases
       ];
 
       return $badge;
@@ -899,7 +895,7 @@ class DebbieRun {
       $fatal_error_php = [];
       foreach ($tests_fatal_error as $test_with_fatal_error)
       {
-         $suite_error = explode("\\", $test_with_fatal_error["case"]); // fatal[case] has the root/suite/case path as a string
+         $suite_error = explode("\\", $test_with_fatal_error); // test_with_fatal_error has the root/suite/case path as a string
          if (array_search($suite, $suite_error))
          {
             $fatal_error_php[] = $suite_error[2]; // gets the case part
@@ -909,13 +905,13 @@ class DebbieRun {
    }
 
    // Returns an array with the tests that failed for a given suite
-   public function get_type_fail($item, $tests_type_fail)
+   public function get_type_fail($suite, $tests_type_fail)
    {
       $type_fail = [];
       foreach ($tests_type_fail as $fail)
       {
-         $suite_error = explode("\\", $fail["case"]);
-         if (array_search($item, $suite_error))
+         $suite_error = explode("\\", $fail);
+         if (array_search($suite, $suite_error))
          {
             $type_fail[] = $suite_error[2];
          }
