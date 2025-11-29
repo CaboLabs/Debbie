@@ -1,6 +1,6 @@
 <?php
 
-$var = 'this is not a tests case';
+$var = 'this PHP file is not a test case';
 echo $var;
 
 ?>

@@ -144,9 +144,14 @@ class DebbieRun {
       $namespaced_class = substr(str_replace(['./', '/'], ['', '\\'], $test_case_path), 0, -4);
 
       $test_cases = [];
-      if (is_file($test_case_path))
+      if (is_file($test_case_path) && is_readable($test_case_path))
       {
          $test_cases[$namespaced_class] = $test_case_path;
+      }
+      else
+      {
+         echo "Can't read $test_case_path\n";
+         exit;
       }
 
       $phsuite = new DebbieSuite($suite, $test_cases);
@@ -164,34 +169,36 @@ class DebbieRun {
          $path .= DIRECTORY_SEPARATOR;
       }
 
-      if (is_dir($path))
+      if (is_dir($path) && is_readable($path))
       {
          $suite_dir = dir($path);
       }
       else
       {
-         echo "Folder $path doesn't exist\n";
+         echo "Can't read $path\n";
          exit;
       }
 
       if ($suite_dir === FALSE)
       {
-         echo "Can't read " . $suite_dir . "\n";
-         exit();
+         echo "Can't read $suite_dir\n";
+         exit;
       }
 
       $test_cases = [];
 
       // $test_case is a class name
-      while (false !== ($test_case = $suite_dir->read()) && preg_match('/\.php$/', $test_case))
+      while (false !== ($test_case = $suite_dir->read()))
       {
          if (empty($cases))
          {
+            if (!preg_match('/\.php$/', $test_case)) continue;
+
             $test_case_path = $path . $test_case;
          }
          else
          {
-            $test_case_path = $path . $cases[0] . '.php';
+            $test_case_path = $path . $cases[0] . '.php'; // TODO: we might want to run more than one case
          }
 
          $namespaced_class = substr(str_replace(['./', '/'], ['', '\\'], $test_case_path), 0, -4);
@@ -199,6 +206,11 @@ class DebbieRun {
          if (is_file($test_case_path))
          {
             $test_cases[$namespaced_class] = $test_case_path;
+         }
+         else
+         {
+            echo "Can't read $test_case_path\n";
+            exit;
          }
       }
 
@@ -349,7 +361,7 @@ class DebbieRun {
       $failed_Summ = "";
       $succ_Summ = "";
       $cards_summary_suites = "";
-      $fatal_error = '';
+      $cases_with_fatal_error = '';
       $type_fail = '';
       $is_failed  = false;
 
@@ -386,7 +398,7 @@ class DebbieRun {
                         $total_failed++;
                         $failed++; //count the assert fail of each test per suite
                         $tests_type_fail[] = [
-                           'case' => $test_case
+                           'case' => $test_case // NOTE: this is the full path root/suite/case
                         ];
                      }
                      else if ($assert_report['type'] == 'OK')
@@ -463,25 +475,28 @@ class DebbieRun {
          ]);
       }
 
-      foreach ($namesSuitesMenu as $h => $item)
+      foreach ($namesSuitesMenu as $h => $suite)
       {
-         if ($h > 0 && $namesSuitesMenu[$h - 1] == $item)
+         if ($h > 0 && $namesSuitesMenu[$h - 1] == $suite)
          {
             $menu_items .= '';
          }
          else
          {
-            $is_failed = self::is_failed($item, $total_cases_failed);
-            $badge = self::get_badge($item, $total_cases_failed, $total_cases_successful);
-            $fatal_error = self::get_cases_with_fatal_err($item, $tests_fatal_error);
-            $type_fail = self::get_type_fail($item, $tests_type_fail);
+            $is_failed = self::is_failed($suite, $total_cases_failed);
+            $badge = self::get_badge($suite, $total_cases_failed, $total_cases_successful);
+
+            // This is used to get the name of the test cases (classs) that had a fatal error so the menu shows red.
+            $cases_with_fatal_error = self::get_cases_with_fatal_err($suite, $tests_fatal_error);
+
+            $type_fail = self::get_type_fail($suite, $tests_type_fail);
 
             $menu_items .= self::template_report_html()->render('menu_items', [
-               'item'               => $item,
+               'item'               => $suite,
                'is_failed'          => $is_failed,
                'namesSuitessubmenu' => $namesSuitessubmenu,
                'badge'              => $badge,
-               'fatal_error'        => $fatal_error,
+               'cases_with_fatal_error' => $cases_with_fatal_error,
                'type_fail'          => $type_fail
             ]);
          }
@@ -878,31 +893,33 @@ class DebbieRun {
       return $arr;
    }
 
-   public function get_cases_with_fatal_err($item, $tests_fatal_error)
+   // Returns an array with the names of the test cases that had fatal errors in a given suite.
+   public function get_cases_with_fatal_err($suite, $tests_fatal_error)
    {
-      $fatal_error_php = '';
-      foreach ($tests_fatal_error as $fatal)
+      $fatal_error_php = [];
+      foreach ($tests_fatal_error as $test_with_fatal_error)
       {
-         $suite_error = explode("\\", $fatal["case"]);
-         if (array_search($item, $suite_error))
+         $suite_error = explode("\\", $test_with_fatal_error["case"]); // fatal[case] has the root/suite/case path as a string
+         if (array_search($suite, $suite_error))
          {
-            $fatal_error_php = $suite_error[2];
+            $fatal_error_php[] = $suite_error[2]; // gets the case part
          }
       }
-      return $fatal_error_php;
+      return array_unique($fatal_error_php);
    }
 
+   // Returns an array with the tests that failed for a given suite
    public function get_type_fail($item, $tests_type_fail)
    {
-      $type_fail = '';
+      $type_fail = [];
       foreach ($tests_type_fail as $fail)
       {
          $suite_error = explode("\\", $fail["case"]);
          if (array_search($item, $suite_error))
          {
-            $type_fail = $suite_error[2];
+            $type_fail[] = $suite_error[2];
          }
       }
-      return $type_fail;
+      return array_unique($type_fail);
    }
 }
