@@ -236,20 +236,25 @@ class DebbieRun {
             {
                $test_case = $test_suite->addTestCase($test_function);
 
+               $first_fail_assert_report = null;
+
                // Check if the case has any asserts of type exception
                $has_exception = false;
                $has_error = false;
 
+               // tests that couldn't continue
                if (isset($report['asserts']))
                {
                   foreach ($report['asserts'] as $assert_report)
                   {
                      if ($assert_report['type'] == 'EXCEPTION') {
                         $has_exception = true;
+                        $first_fail_assert_report = $assert_report;
                         break;
                      }
                      else if ($assert_report['type'] == 'ERROR') {
                         $has_error = true;
+                        $first_fail_assert_report = $assert_report;
                         break;
                      }
                   }
@@ -257,19 +262,19 @@ class DebbieRun {
 
                if ($has_exception)
                {
-                  $test_case->addError($assert_report['msg'], 'Exception', $assert_report['trace']);
+                  $test_case->addError($first_fail_assert_report['msg'], 'Exception', $assert_report['trace']);
                   $test_case->setSkipped();
                }
                else if ($has_error)
                {
-                  $test_case->addError($assert_report['msg']);
+                  $test_case->addError($first_fail_assert_report['msg']);
                   $test_case->setSkipped();
                }
                else
                {
-                  // Check for FAIL or ERROR
+                  // Check for FAIL
                   $has_fail = false;
-                  $first_fail_assert_report = null;
+                  
                   if (isset($report['asserts'])) {
                      foreach ($report['asserts'] as $assert_report) {
                         if ($assert_report['type'] == 'FAIL') {
