@@ -87,18 +87,23 @@ else
    $run->run_all();
 }
 
+if (!in_array($report, ['html', 'text', 'junit']))
+{
+   echo '"-report=" should be equal to "html", "text" or "junit"'. PHP_EOL;
+   exit;
+}
+
 if ($report == 'html')
 {
    $run->render_reports_html($output);
 }
-else if ($report != 'html' && $report != 'text')
-{
-   echo '"-report=" should be equal to "html" or "text"'. PHP_EOL;
-   exit;
-}
 else if ($report == 'text')
 {
    $run->render_reports();
+}
+else if ($report == 'junit')
+{
+   $run->get_junit_xml();
 }
 else
 {

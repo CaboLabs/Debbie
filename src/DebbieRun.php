@@ -222,6 +222,60 @@ class DebbieRun {
       $this->execution_time = $phsuite->get_execution_time();
    }
 
+   public function get_junit_xml()
+   {
+      $builder = new JunitXmlBuilder();
+      
+      foreach ($this->reports as $test_suite_reports)
+      {
+         foreach ($test_suite_reports as $test_case => $reports)
+         {
+            $test_suite = $builder->addTestSuite($test_case);
+
+            foreach ($reports as $test_function => $report)
+            {
+               $test_case = $test_suite->addTestCase($test_function);
+
+               if (isset($report['asserts']))
+               {
+                  foreach ($report['asserts'] as $assert_report)
+                  {
+                     if ($assert_report['type'] == 'FAIL')
+                     {
+                        $test_case->addFailure($assert_report['msg']);
+                     }
+                     else if ($assert_report['type'] == 'ERROR')
+                     {
+                        $test_case->addError($assert_report['msg']);
+                     }
+                     else if ($assert_report['type'] == 'OK')
+                     {
+                        // do nothing, test passed
+                     }
+                     else if ($assert_report['type'] == 'EXCEPTION')
+                     {
+                        $test_case->addError($assert_report['msg'], 'Exception', $assert_report['trace']);
+                     }
+                     // else if ($assert_report['type'] == 'SKIPPED')
+                     // {
+                     //    $test_case->setSkipped();
+                     // }
+                  }
+               }
+
+               if (isset($report['output']))
+               {
+                  $test_case->addSystemOut($report['output']);
+               }
+
+               $test_case->finish();
+            }
+         }
+      }
+
+      $builder->saveToFile('test-results.xml');
+   }
+
    public function render_reports()
    {
       global $total_suites, $total_cases, $total_tests, $total_asserts, $total_failed, $total_successful;
