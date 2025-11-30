@@ -263,12 +263,12 @@ class DebbieRun {
                if ($has_exception)
                {
                   $test_case->addError($first_fail_assert_report['msg'], 'Exception', $assert_report['trace']);
-                  $test_case->setSkipped();
+                  //$test_case->setSkipped();
                }
                else if ($has_error)
                {
                   $test_case->addError($first_fail_assert_report['msg']);
-                  $test_case->setSkipped();
+                  //$test_case->setSkipped();
                }
                else
                {
