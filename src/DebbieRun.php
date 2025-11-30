@@ -236,6 +236,58 @@ class DebbieRun {
             {
                $test_case = $test_suite->addTestCase($test_function);
 
+               // Check if the case has any asserts of type exception
+               $has_exception = false;
+               $has_error = false;
+
+               if (isset($report['asserts']))
+               {
+                  foreach ($report['asserts'] as $assert_report)
+                  {
+                     if ($assert_report['type'] == 'EXCEPTION') {
+                        $has_exception = true;
+                        break;
+                     }
+                     else if ($assert_report['type'] == 'ERROR') {
+                        $has_error = true;
+                        break;
+                     }
+                  }
+               }
+
+               if ($has_exception)
+               {
+                  $test_case->addError($assert_report['msg'], 'Exception', $assert_report['trace']);
+                  $test_case->setSkipped();
+               }
+               else if ($has_error)
+               {
+                  $test_case->addError($assert_report['msg']);
+                  $test_case->setSkipped();
+               }
+               else
+               {
+                  // Check for FAIL or ERROR
+                  $has_fail = false;
+                  $first_fail_assert_report = null;
+                  if (isset($report['asserts'])) {
+                     foreach ($report['asserts'] as $assert_report) {
+                        if ($assert_report['type'] == 'FAIL') {
+                           $has_fail = true;
+                           $first_fail_assert_report = $assert_report;
+                           break;
+                        }
+                     }
+                  }
+                  if ($has_fail) {
+                     $test_case->addFailure($first_fail_assert_report['msg']);
+                  } else {
+                     // OK TEST
+                  }
+               }
+
+
+               /* This creates a test result for each assert, and junit needs only one per test case
                if (isset($report['asserts']))
                {
                   foreach ($report['asserts'] as $assert_report)
@@ -262,6 +314,7 @@ class DebbieRun {
                      // }
                   }
                }
+               */
 
                if (isset($report['output']))
                {
