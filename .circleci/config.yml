@@ -10,7 +10,7 @@ jobs:
       
       - restore_cache:
           keys:
-            - composer-v1-{{ checksum "composer.lock" }}
+            - composer-v1-{{ checksum "composer.json" }}
             - composer-v1-
       
       - run:
@@ -18,12 +18,12 @@ jobs:
           command: composer install --no-interaction --prefer-dist
       
       - save_cache:
-          key: composer-v1-{{ checksum "composer.lock" }}
+          key: composer-v1-{{ checksum "composer.json" }}
           paths:
             - vendor
       
       - run:
-          name: Run Debbie tests
+          name: Run tests
           command: php cli.php tests --output=junit
           # --file=test-results.xml
       
