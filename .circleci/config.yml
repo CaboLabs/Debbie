@@ -25,6 +25,7 @@ jobs:
       - run:
           name: Run tests
           command: php cli.php tests --output=junit
+          when: always
           # --file=test-results.xml
       
       - store_test_results:
