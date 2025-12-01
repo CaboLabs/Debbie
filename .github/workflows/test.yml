@@ -21,7 +21,7 @@ jobs:
       - name: Run Debbie tests
         run: |
           # Run your test suite and generate JUnit XML
-          php cli.php tests --output=junit
+          php cli.php tests -report=junit
           # --file=test-results.xml
         continue-on-error: true
       
