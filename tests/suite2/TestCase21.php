@@ -6,6 +6,7 @@ use \CaboLabs\Debbie\DebbieTestCase;
 
 class TestCase21 extends DebbieTestCase {
 
+   // doesn't have 'test' in the name so it's filteret
    public function just_a_normal_function()
    {
       echo "this is a normal function, not a test!";

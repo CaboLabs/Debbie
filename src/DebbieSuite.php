@@ -17,6 +17,12 @@ class DebbieSuite {
    // total execution time in microseconds
    private $execution_time;
 
+   /**
+    * $test_suite_name is the name of the test suite (package)
+    * $test_cases is an associative array with:
+    *   key: test case class name (class)
+    *   value: path to the test case file
+    */
    function __construct($test_suite_name, $test_cases = [])
    {
       $this->test_suite_name = $test_suite_name;

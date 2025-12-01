@@ -23,7 +23,7 @@ class TestCase22 extends DebbieTestCase {
       $this->assert(false, "This is happening", array(false));
    }
 
-   public function test_xception()
+   public function test_exception()
    {
       throw new \Exception('This is an Exception.');
    }
