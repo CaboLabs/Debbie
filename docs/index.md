@@ -96,7 +96,7 @@ Debbie generates JUnit XML reports that work with all major CI platforms:
 ### GitHub Actions
 ```yaml
 - name: Run Debbie tests
-  run: php cli.php tests -report=junit --file=test-results.xml
+  run: php cli.php tests -report=junit
 
 - name: Publish Test Results
   uses: EnricoMi/publish-unit-test-result-action@v2
@@ -109,7 +109,7 @@ Debbie generates JUnit XML reports that work with all major CI platforms:
 ```yaml
 - run:
     name: Run tests
-    command: php cli.php tests -report=junit --file=test-results.xml
+    command: php cli.php tests -report=junit
 
 - store_test_results:
     path: test-results.xml
