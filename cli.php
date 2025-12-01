@@ -112,6 +112,8 @@ else
    $exit_code = $run->render_reports_html($output);
 }
 
+echo "Exit code: $exit_code". PHP_EOL;
+
 exit($exit_code);
 
 ?>
