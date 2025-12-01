@@ -31,7 +31,7 @@
           max-width: 102px;
         }
       }
-      .table.faild_table > tbody > tr {
+      .table.failed_table > tbody > tr {
         cursor: pointer;
       }
     </style>
@@ -238,7 +238,7 @@
     }
   });
 
-    $('table.faild_table tbody tr').on("click", function () {
+    $('table.failed_table tbody tr').on("click", function () {
       let id = $(this).attr('id');
       let str = id;
       let arr = str.split("\\");

@@ -222,9 +222,11 @@ class DebbieRun {
       $this->execution_time = $phsuite->get_execution_time();
    }
 
-   public function get_junit_xml()
+   public function generate_junit_xml()
    {
       $builder = new JunitXmlBuilder();
+
+      $has_error_or_failed = false;
       
       foreach ($this->reports as $test_suite_reports)
       {
@@ -264,11 +266,13 @@ class DebbieRun {
                {
                   $test_case->addError($first_fail_assert_report['msg'], 'Exception', $assert_report['trace']);
                   //$test_case->setSkipped();
+                  $has_error_or_failed = true;
                }
                else if ($has_error)
                {
                   $test_case->addError($first_fail_assert_report['msg']);
                   //$test_case->setSkipped();
+                  $has_error_or_failed = true;
                }
                else
                {
@@ -286,6 +290,7 @@ class DebbieRun {
                   }
                   if ($has_fail) {
                      $test_case->addFailure($first_fail_assert_report['msg']);
+                     $has_error_or_failed = true;
                   } else {
                      // OK TEST
                   }
@@ -332,6 +337,11 @@ class DebbieRun {
       }
 
       $builder->saveToFile('test-results.xml');
+
+
+      // For the exit code of the CLI
+      if ($has_error_or_failed) return 1;
+      return 0;
    }
 
    public function render_reports()
@@ -434,6 +444,11 @@ class DebbieRun {
          $total_cases_failed,
          $total_cases_successful
       );
+
+
+      // For the exit code of the CLI
+      if ($total_failed > 0) return 1;
+      return 0;
    }
 
    public function render_reports_html($path)
@@ -647,22 +662,26 @@ class DebbieRun {
       }
 
       file_put_contents($path, $render);
+
+      // For the exit code of the CLI
+      if ($total_failed > 0) return 1;
+      return 0;
    }
 
    public function is_failed($item, $total_cases_failed)
    {
-      $faildSuite = false;
-      foreach ($total_cases_failed as $suiteFaild)
+      $failedSuite = false;
+      foreach ($total_cases_failed as $suitefailed)
       {
-         $suites = explode("\\", $suiteFaild["case"]);
+         $suites = explode("\\", $suitefailed["case"]);
          if (array_search($item, $suites))
          {
-            $faildSuite = true;
+            $failedSuite = true;
             break;
          }
       }
 
-      return $faildSuite;
+      return $failedSuite;
    }
 
    public function get_reports()
@@ -749,7 +768,7 @@ class DebbieRun {
          //generate table failed cases summary
          $summary_cases_failed = self::generate_table_cases_summary(5, $cases_failed_head, $total_cases_failed, $gap_x, $joins, $axi_x, $axi_y);
 
-         // render table cases failded summary
+         // render table cases faileded summary
          foreach ($summary_cases_failed as $cases_failed)
          {
             echo $cases_failed;
@@ -841,7 +860,7 @@ class DebbieRun {
    public function generate_table_cases_summary($column_width, $arr_head, $arr_cases, $gap_x, $joins, $axi_x, $axi_y)
    {
       /**
-       * generate summary table of successful summary and faild summary
+       * generate summary table of successful summary and failed summary
        *
        */
 
@@ -919,13 +938,13 @@ class DebbieRun {
       $total_cases = 0;
       $badge = [];
 
-      foreach ($total_cases_failed as $suiteFaild)
+      foreach ($total_cases_failed as $suitefailed)
       {
-         $suites = explode("\\", $suiteFaild["case"]);
+         $suites = explode("\\", $suitefailed["case"]);
          if (array_search($item, $suites))
          {
-            $case_failed += $suiteFaild['case_failed'];
-            $case_successful += $suiteFaild['case_successful'];
+            $case_failed += $suitefailed['case_failed'];
+            $case_successful += $suitefailed['case_successful'];
          }
       }
 

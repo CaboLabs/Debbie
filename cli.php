@@ -90,23 +90,28 @@ else
 if (!in_array($report, ['html', 'text', 'junit']))
 {
    echo '"-report=" should be equal to "html", "text" or "junit"'. PHP_EOL;
-   exit;
+   exit(1);
 }
+
+$exit_code = 0;
 
 if ($report == 'html')
 {
-   $run->render_reports_html($output);
+   $exit_code = $run->render_reports_html($output);
 }
 else if ($report == 'text')
 {
-   $run->render_reports();
+   $exit_code = $run->render_reports();
 }
 else if ($report == 'junit')
 {
-   $run->get_junit_xml();
+   $exit_code = $run->generate_junit_xml();
 }
 else
 {
-   $run->render_reports_html($output);
+   $exit_code = $run->render_reports_html($output);
 }
+
+exit($exit_code);
+
 ?>

@@ -1,4 +1,4 @@
-<table class="table faild_table">
+<table class="table failed_table">
   <thead>
     <tr>
       <th scope="col">Suite</th>
