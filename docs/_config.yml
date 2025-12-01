@@ -1,0 +1,8 @@
+title: Debbie
+description: The minimal PHP test library with beautiful test reports
+theme: jekyll-theme-cayman
+show_downloads: true
+github:
+  repository_url: https://github.com/CaboLabs/Debbie
+  zip_url: https://github.com/CaboLabs/Debbie/archive/refs/heads/master.zip
+  tar_url: https://github.com/CaboLabs/Debbie/archive/refs/heads/master.tar.gz
