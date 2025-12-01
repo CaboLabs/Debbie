@@ -25,14 +25,15 @@ jobs:
       - run:
           name: Run tests
           command: php cli.php tests --output=junit
-          when: always
           # --file=test-results.xml
       
       - store_test_results:
           path: test-results.xml
+          when: always
       
       - store_artifacts:
           path: test-results.xml
+          when: always
 
 workflows:
   version: 2
