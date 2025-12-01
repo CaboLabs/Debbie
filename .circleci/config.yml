@@ -1,0 +1,40 @@
+version: 2.1
+
+jobs:
+  test:
+    docker:
+      - image: cimg/php:8.2
+    
+    steps:
+      - checkout
+      
+      - restore_cache:
+          keys:
+            - composer-v1-{{ checksum "composer.json" }}
+            - composer-v1-
+      
+      - run:
+          name: Install Composer dependencies
+          command: composer install --no-interaction --prefer-dist
+      
+      - save_cache:
+          key: composer-v1-{{ checksum "composer.json" }}
+          paths:
+            - vendor
+      
+      - run:
+          name: Run tests
+          command: php cli.php tests --output=junit
+          # --file=test-results.xml
+      
+      - store_test_results:
+          path: test-results.xml
+      
+      - store_artifacts:
+          path: test-results.xml
+
+workflows:
+  version: 2
+  test-workflow:
+    jobs:
+      - test
