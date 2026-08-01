@@ -1,33 +1,60 @@
-name: Run Debbie Tests
+name: Debbie PR Quality Gate
 
-on: [push, pull_request]
+on:
+  pull_request:
+    branches:
+      - master
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+  workflow_dispatch:
+    inputs:
+      suite:
+        description: Test suite folder under tests/ to run
+        required: false
+        default: suite3
 
 jobs:
-  test:
+  debbie-tests:
+    # Skip draft PRs until they are marked ready for review.
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     runs-on: ubuntu-latest
-    
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
+    env:
+      DEBBIE_SUITE: ${{ github.event.inputs.suite || 'suite3' }}
+
     steps:
-      - uses: actions/checkout@v3
-      
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: '8.3'
           tools: composer
-      
+
       - name: Install dependencies
-        run: composer install --prefer-dist --no-progress
-      
-      - name: Run Debbie tests
-        run: |
-          # Run your test suite and generate JUnit XML
-          php cli.php tests -report=junit
-          # --file=test-results.xml
-        continue-on-error: true
-      
-      - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v2
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Run Debbie custom suite
+        run: php cli.php tests "${DEBBIE_SUITE}" -report=junit
+
+      - name: Publish JUnit report
         if: always()
+        uses: EnricoMi/publish-unit-test-result-action@v2
         with:
           files: test-results.xml
-          check_name: Debbie Test Results
+          check_name: Debbie Custom Suite Results
+
+      - name: Upload JUnit artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: test-results.xml
