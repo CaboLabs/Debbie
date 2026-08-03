@@ -193,6 +193,35 @@ class TestCase
     }
 
     /**
+     * Convert mixed values into a stable string representation for XML nodes.
+     *
+     * @param mixed $value
+     * @return string
+     */
+    private function normalizeText($value)
+    {
+        if ($value === null) {
+            return '';
+        }
+
+        if (is_scalar($value)) {
+            return (string) $value;
+        }
+
+        if ($value instanceof \Throwable) {
+            return $value->getMessage();
+        }
+
+        $json = json_encode($value);
+
+        if ($json !== false) {
+            return $json;
+        }
+
+        return print_r($value, true);
+    }
+
+    /**
      * Mark the test case as finished and record execution time
      */
     public function finish()
@@ -211,9 +240,9 @@ class TestCase
     public function addFailure($message, $type = 'AssertionFailure', $details = '')
     {
         $this->failure = [
-            'message' => $message,
-            'type' => $type,
-            'details' => $details
+            'message' => $this->normalizeText($message),
+            'type' => $this->normalizeText($type),
+            'details' => $this->normalizeText($details)
         ];
         return $this;
     }
@@ -229,9 +258,9 @@ class TestCase
     public function addError($message, $type = 'RuntimeError', $details = '')
     {
         $this->error = [
-            'message' => $message,
-            'type' => $type,
-            'details' => $details
+            'message' => $this->normalizeText($message),
+            'type' => $this->normalizeText($type),
+            'details' => $this->normalizeText($details)
         ];
         return $this;
     }
@@ -256,7 +285,7 @@ class TestCase
      */
     public function addSystemOut($output)
     {
-        $this->systemOut .= $output;
+        $this->systemOut .= $this->normalizeText($output);
         return $this;
     }
 
@@ -268,7 +297,7 @@ class TestCase
      */
     public function addSystemErr($output)
     {
-        $this->systemErr .= $output;
+        $this->systemErr .= $this->normalizeText($output);
         return $this;
     }
 

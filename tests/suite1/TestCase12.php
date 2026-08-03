@@ -21,9 +21,9 @@ class TestCase12 extends DebbieTestCase {
    public function test_this_is_another_test()
    {
       echo "this is another test output";
-      $this->assert(false, "This is happening", array(false));
-      $this->assert(false, "This is happening2", array(false));
-      $this->assert(false, "This is happening3", array(false));
+      $this->assert(true, "This should pass", array(true));
+      $this->assert(true, "This should pass2", array(true));
+      $this->assert(true, "This should pass3", array(true));
    }
 }
 

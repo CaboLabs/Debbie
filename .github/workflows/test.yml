@@ -10,12 +10,6 @@ on:
       - synchronize
       - reopened
       - ready_for_review
-  workflow_dispatch:
-    inputs:
-      suite:
-        description: Test suite folder under tests/ to run
-        required: false
-        default: suite3
 
 jobs:
   debbie-tests:
@@ -26,9 +20,6 @@ jobs:
       contents: read
       checks: write
       pull-requests: write
-    env:
-      DEBBIE_SUITE: ${{ github.event.inputs.suite || 'suite3' }}
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -42,15 +33,15 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress --no-interaction
 
-      - name: Run Debbie custom suite
-        run: php cli.php tests "${DEBBIE_SUITE}" -report=junit
+      - name: Run Debbie test suite
+        run: php cli.php tests -report=junit
 
       - name: Publish JUnit report
         if: always()
         uses: EnricoMi/publish-unit-test-result-action@v2
         with:
           files: test-results.xml
-          check_name: Debbie Custom Suite Results
+          check_name: Debbie Test Results
 
       - name: Upload JUnit artifact
         if: always()

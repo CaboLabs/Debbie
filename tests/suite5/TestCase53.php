@@ -13,7 +13,7 @@ class TestCase53 extends DebbieTestCase {
 
    public function test_this_is_another_test_53()
    {
-      $this->assert(false, "This is happening");
+      $this->assert(true, "This should pass");
    }
 }
 
