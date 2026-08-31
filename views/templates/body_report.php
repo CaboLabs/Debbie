@@ -41,13 +41,15 @@
                           ERROR: <pre><?=$assert_report['msg'] ?></pre>
                         </td>
                       <?php endif; ?>
-                      <td class="text-secondary">
-                        <?php if (!empty($report['output'])): ?>
-                          OUTPUT: <pre><?=$report['output']?></pre>
-                        <?php endif; ?>
-                      </td>
+                      <td></td>
                     </tr>
                   <?php endforeach; ?>
+                <?php endif; ?>
+                <?php if (!empty($report['output'])): ?>
+                  <tr>
+                    <td><?=$test_function?></td>
+                    <td colspan="2" class="text-secondary">OUTPUT: <pre><?=$report['output']?></pre></td>
+                  </tr>
                 <?php endif; ?>
               <?php endforeach; ?>
             </tbody>

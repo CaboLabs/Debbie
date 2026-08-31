@@ -16,6 +16,19 @@ class TestCase42_simply_dummy_text extends DebbieTestCase {
    {
       $this->assert(true, "This is happening");
    }
+   public function test_this_is_yet_another_test()
+   {
+      print_r("this is a test output with print_r");
+      $this->assert(true, "This is happening");
+   }
+   public function test_this_is_yet_another_test_2()
+   {
+      $this->assert(true, "This is happening");
+   }
+   public function test_this_is_yet_another_test_3()
+   {
+      $this->assert(true, "This is happening");
+   }
 }
 
 ?>
