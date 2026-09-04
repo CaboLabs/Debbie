@@ -1,143 +1,249 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites tests="41" failures="8" errors="11" skipped="0" time="0.000224">
-  <testsuite name="tests\fatal_error_without_other_test\TestFatalErr2" tests="1" failures="0" errors="1" skipped="0" time="0.000017">
-    <testcase name="test_with_fatal_error" classname="tests\fatal_error_without_other_test\TestFatalErr2" time="0.000017">
-      <error message="Call to a member function get_name() on string" type="RuntimeError"/>
+<testsuites name="Amplify - Tests Report" tests="41" failures="8" errors="11" skipped="0" time="0.000055">
+  <testsuite name="tests\fatal_error_without_other_test\" tests="3" failures="0" errors="2" skipped="0" assertions="3" time="0.000008" timestamp="2026-09-04T15:54:23+00:00">
+    <properties>
+      <property name="php.version" value="8.3.6"/>
+      <property name="os" value="Linux"/>
+    </properties>
+    <testcase name="test_with_fatal_error_3" classname="tests\fatal_error_without_other_test\TestFatalErr3" assertions="1" time="0.000004">
+      <error message="[test_with_fatal_error_3] Call to a member function get_name() on string" type="RuntimeError"><![CDATA[Assertion: Call to a member function get_name() on string]]></error>
     </testcase>
-  </testsuite>
-  <testsuite name="tests\fatal_error_without_other_test\TestCase" tests="1" failures="0" errors="0" skipped="0" time="0.000004">
-    <testcase name="test_this_is_a_test" classname="tests\fatal_error_without_other_test\TestCase" time="0.000004">
+    <testcase name="test_with_fatal_error" classname="tests\fatal_error_without_other_test\TestFatalErr2" assertions="1" time="0.000002">
+      <error message="[test_with_fatal_error] Call to a member function get_name() on string" type="RuntimeError"><![CDATA[Assertion: Call to a member function get_name() on string]]></error>
+    </testcase>
+    <testcase name="test_this_is_a_test" classname="tests\fatal_error_without_other_test\TestCase" assertions="1" time="0.000002">
       <system-out><![CDATA[this is a test output]]></system-out>
     </testcase>
   </testsuite>
-  <testsuite name="tests\fatal_error_without_other_test\TestFatalErr3" tests="1" failures="0" errors="1" skipped="0" time="0.000003">
-    <testcase name="test_with_fatal_error_3" classname="tests\fatal_error_without_other_test\TestFatalErr3" time="0.000003">
-      <error message="Call to a member function get_name() on string" type="RuntimeError"/>
-    </testcase>
-  </testsuite>
-  <testsuite name="tests\fatal_error_with_other_test\TestFatalErr" tests="6" failures="0" errors="5" skipped="0" time="0.000013">
-    <testcase name="test_with_fatal_error" classname="tests\fatal_error_with_other_test\TestFatalErr" time="0.000003">
-      <error message="Call to undefined function tests\fatal_error_with_other_test\undefinedFunctionCall()" type="RuntimeError"/>
-    </testcase>
-    <testcase name="test_div_by_zero" classname="tests\fatal_error_with_other_test\TestFatalErr" time="0.000003">
-      <error message="Division by zero" type="Exception"/>
-    </testcase>
-    <testcase name="test_throw_non_throwable" classname="tests\fatal_error_with_other_test\TestFatalErr" time="0.000002">
-      <error message="Cannot throw objects that do not implement Throwable" type="RuntimeError"/>
-    </testcase>
-    <testcase name="test_throw_error" classname="tests\fatal_error_with_other_test\TestFatalErr" time="0.000002">
-      <error message="this is an Error" type="RuntimeError"/>
-    </testcase>
-    <testcase name="test_trigger_error" classname="tests\fatal_error_with_other_test\TestFatalErr" time="0.000002">
-      <error message="Trigger fatal error" type="RuntimeError"/>
-    </testcase>
-    <testcase name="test_without_fatal_error" classname="tests\fatal_error_with_other_test\TestFatalErr" time="0.000001"/>
-  </testsuite>
-  <testsuite name="tests\suite1\TestCase12" tests="2" failures="1" errors="0" skipped="0" time="0.000005">
-    <testcase name="test_this_is_a_test" classname="tests\suite1\TestCase12" time="0.000002">
+  <testsuite name="tests\suite3\" tests="4" failures="0" errors="0" skipped="0" assertions="4" time="0.000005" timestamp="2026-09-04T15:54:23+00:00">
+    <properties>
+      <property name="php.version" value="8.3.6"/>
+      <property name="os" value="Linux"/>
+    </properties>
+    <testcase name="test_this_is_a_test" classname="tests\suite3\TestCase32" assertions="1" time="0.000002">
       <system-out><![CDATA[this is a test output]]></system-out>
     </testcase>
-    <testcase name="test_this_is_another_test" classname="tests\suite1\TestCase12" time="0.000003">
-      <failure message="This is happening" type="AssertionFailure"/>
+    <testcase name="test_this_is_another_test" classname="tests\suite3\TestCase32" assertions="1" time="0.000001"/>
+    <testcase name="test_this_is_a_test" classname="tests\suite3\TestCase31" assertions="1" time="0.000001">
+      <system-out><![CDATA[this is a test output]]></system-out>
+    </testcase>
+    <testcase name="test_this_is_another_test" classname="tests\suite3\TestCase31" assertions="1" time="0.000001"/>
+  </testsuite>
+  <testsuite name="tests\suite5\" tests="8" failures="1" errors="2" skipped="0" assertions="8" time="0.000010" timestamp="2026-09-04T15:54:23+00:00">
+    <properties>
+      <property name="php.version" value="8.3.6"/>
+      <property name="os" value="Linux"/>
+    </properties>
+    <testcase name="test_this_is_a_test_5" classname="tests\suite5\TestCase51" assertions="1" time="0.000002"/>
+    <testcase name="test_this_is_another_test_5" classname="tests\suite5\TestCase51" assertions="1" time="0.000001"/>
+    <testcase name="test_does_not_exist_file" classname="tests\suite5\TestCase51" assertions="1" time="0.000001">
+      <error message="[test_does_not_exist_file] opendir(/false/path/file.txt): Failed to open directory: No such file or directory" type="RuntimeError"><![CDATA[Assertion: opendir(/false/path/file.txt): Failed to open directory: No such file or directory
+
+Stack Trace:
+at CaboLabs\Debbie\DebbieRun::CaboLabs\Debbie\{closure}() in unknown:?
+at opendir() in /var/www/html/Debbie/tests/suite5/TestCase51.php:28]]></error>
+    </testcase>
+    <testcase name="test_warning" classname="tests\suite5\TestCase51" assertions="1" time="0.000002">
+      <error message="[test_warning] This is an intentional warning" type="RuntimeError"><![CDATA[Assertion: This is an intentional warning
+
+Stack Trace:
+at CaboLabs\Debbie\DebbieRun::CaboLabs\Debbie\{closure}() in unknown:?
+at trigger_error() in /var/www/html/Debbie/tests/suite5/TestCase51.php:39]]></error>
+    </testcase>
+    <testcase name="test_this_is_a_test_52" classname="tests\suite5\TestCase52" assertions="1" time="0.000001"/>
+    <testcase name="test_this_is_another_test_52" classname="tests\suite5\TestCase52" assertions="1" time="0.000001"/>
+    <testcase name="test_this_is_a_test_53" classname="tests\suite5\TestCase53" assertions="1" time="0.000001"/>
+    <testcase name="test_this_is_another_test_53" classname="tests\suite5\TestCase53" assertions="1" time="0.000001">
+      <failure message="[test_this_is_another_test_53] This is happening" type="AssertionFailedError"><![CDATA[Assertion: This is happening
+
+Stack Trace:
+at tests\suite5\TestCase53::test_this_is_another_test_53() in unknown:?
+at call_user_func() in /var/www/html/Debbie/src/DebbieSuite.php:81
+at CaboLabs\Debbie\DebbieSuite::run() in /var/www/html/Debbie/src/DebbieRun.php:113]]></failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="tests\suite2\" tests="5" failures="2" errors="1" skipped="0" assertions="6" time="0.000007" timestamp="2026-09-04T15:54:23+00:00">
+    <properties>
+      <property name="php.version" value="8.3.6"/>
+      <property name="os" value="Linux"/>
+    </properties>
+    <testcase name="test_this_is_a_test" classname="tests\suite2\TestCase21" assertions="2" time="0.000003">
+      <system-out><![CDATA[this is a test output]]></system-out>
+    </testcase>
+    <testcase name="test_this_is_another_test" classname="tests\suite2\TestCase21" assertions="1" time="0.000001">
+      <failure message="[test_this_is_another_test] This is happening" type="AssertionFailedError"><![CDATA[Assertion: This is happening
+
+Parameters:
+0=(boolean)
+
+
+Stack Trace:
+at tests\suite2\TestCase21::test_this_is_another_test() in unknown:?
+at call_user_func() in /var/www/html/Debbie/src/DebbieSuite.php:81
+at CaboLabs\Debbie\DebbieSuite::run() in /var/www/html/Debbie/src/DebbieRun.php:113]]></failure>
       <system-out><![CDATA[this is another test output]]></system-out>
     </testcase>
-  </testsuite>
-  <testsuite name="tests\suite1\TestCase11" tests="3" failures="1" errors="0" skipped="0" time="0.000008">
-    <testcase name="test_this_is_a_test" classname="tests\suite1\TestCase11" time="0.000002">
+    <testcase name="test_this_is_a_test" classname="tests\suite2\TestCase22" assertions="1" time="0.000001">
       <system-out><![CDATA[this is a test output]]></system-out>
     </testcase>
-    <testcase name="test_this_is_another_test" classname="tests\suite1\TestCase11" time="0.000003">
-      <failure message="This is happening" type="AssertionFailure"/>
+    <testcase name="test_this_is_another_test" classname="tests\suite2\TestCase22" assertions="1" time="0.000001">
+      <failure message="[test_this_is_another_test] This is happening" type="AssertionFailedError"><![CDATA[Assertion: This is happening
+
+Parameters:
+0=(boolean)
+
+
+Stack Trace:
+at tests\suite2\TestCase22::test_this_is_another_test() in unknown:?
+at call_user_func() in /var/www/html/Debbie/src/DebbieSuite.php:81
+at CaboLabs\Debbie\DebbieSuite::run() in /var/www/html/Debbie/src/DebbieRun.php:113]]></failure>
       <system-out><![CDATA[this is another test output]]></system-out>
     </testcase>
-    <testcase name="test_no_output" classname="tests\suite1\TestCase11" time="0.000003"/>
+    <testcase name="test_exception" classname="tests\suite2\TestCase22" assertions="1" time="0.000001">
+      <error message="[test_exception] This is an Exception." type="Exception"><![CDATA[Assertion: This is an Exception.]]></error>
+    </testcase>
   </testsuite>
-  <testsuite name="tests\suiteLoremIpsum\TestCase42" tests="3" failures="2" errors="1" skipped="0" time="0.000008">
-    <testcase name="test_this_is_a_test" classname="tests\suiteLoremIpsum\TestCase42" time="0.000003">
-      <failure message="This is happening" type="AssertionFailure"/>
+  <testsuite name="tests\fatal_error_with_other_test\" tests="6" failures="0" errors="5" skipped="0" assertions="6" time="0.000007" timestamp="2026-09-04T15:54:23+00:00">
+    <properties>
+      <property name="php.version" value="8.3.6"/>
+      <property name="os" value="Linux"/>
+    </properties>
+    <testcase name="test_with_fatal_error" classname="tests\fatal_error_with_other_test\TestFatalErr" assertions="1" time="0.000002">
+      <error message="[test_with_fatal_error] Call to undefined function tests\fatal_error_with_other_test\undefinedFunctionCall()" type="RuntimeError"><![CDATA[Assertion: Call to undefined function tests\fatal_error_with_other_test\undefinedFunctionCall()]]></error>
+    </testcase>
+    <testcase name="test_div_by_zero" classname="tests\fatal_error_with_other_test\TestFatalErr" assertions="1" time="0.000001">
+      <error message="[test_div_by_zero] Division by zero" type="Exception"><![CDATA[Assertion: Division by zero]]></error>
+    </testcase>
+    <testcase name="test_throw_non_throwable" classname="tests\fatal_error_with_other_test\TestFatalErr" assertions="1" time="0.000001">
+      <error message="[test_throw_non_throwable] Cannot throw objects that do not implement Throwable" type="RuntimeError"><![CDATA[Assertion: Cannot throw objects that do not implement Throwable]]></error>
+    </testcase>
+    <testcase name="test_throw_error" classname="tests\fatal_error_with_other_test\TestFatalErr" assertions="1" time="0.000001">
+      <error message="[test_throw_error] this is an Error" type="RuntimeError"><![CDATA[Assertion: this is an Error]]></error>
+    </testcase>
+    <testcase name="test_trigger_error" classname="tests\fatal_error_with_other_test\TestFatalErr" assertions="1" time="0.000001">
+      <error message="[test_trigger_error] Trigger fatal error" type="RuntimeError"><![CDATA[Assertion: Trigger fatal error
+
+Stack Trace:
+at CaboLabs\Debbie\DebbieRun::CaboLabs\Debbie\{closure}() in unknown:?
+at trigger_error() in /var/www/html/Debbie/tests/fatal_error_with_other_test/TestFatalErr.php:34]]></error>
+    </testcase>
+    <testcase name="test_without_fatal_error" classname="tests\fatal_error_with_other_test\TestFatalErr" assertions="1" time="0.000001"/>
+  </testsuite>
+  <testsuite name="tests\suiteLoremIpsum\" tests="6" failures="3" errors="1" skipped="0" assertions="6" time="0.000007" timestamp="2026-09-04T15:54:23+00:00">
+    <properties>
+      <property name="php.version" value="8.3.6"/>
+      <property name="os" value="Linux"/>
+    </properties>
+    <testcase name="test_this_is_a_test" classname="tests\suiteLoremIpsum\TestCase42" assertions="1" time="0.000001">
+      <failure message="[test_this_is_a_test] This is happening" type="AssertionFailedError"><![CDATA[Assertion: This is happening
+
+Stack Trace:
+at tests\suiteLoremIpsum\TestCase42::test_this_is_a_test() in unknown:?
+at call_user_func() in /var/www/html/Debbie/src/DebbieSuite.php:81
+at CaboLabs\Debbie\DebbieSuite::run() in /var/www/html/Debbie/src/DebbieRun.php:113]]></failure>
       <system-out><![CDATA[this is a test output]]></system-out>
     </testcase>
-    <testcase name="test_this_is_another_test" classname="tests\suiteLoremIpsum\TestCase42" time="0.000002">
-      <failure message="This is happening" type="AssertionFailure"/>
+    <testcase name="test_this_is_another_test" classname="tests\suiteLoremIpsum\TestCase42" assertions="1" time="0.000001">
+      <failure message="[test_this_is_another_test] This is happening" type="AssertionFailedError"><![CDATA[Assertion: This is happening
+
+Stack Trace:
+at tests\suiteLoremIpsum\TestCase42::test_this_is_another_test() in unknown:?
+at call_user_func() in /var/www/html/Debbie/src/DebbieSuite.php:81
+at CaboLabs\Debbie\DebbieSuite::run() in /var/www/html/Debbie/src/DebbieRun.php:113]]></failure>
     </testcase>
-    <testcase name="test_exception" classname="tests\suiteLoremIpsum\TestCase42" time="0.000003">
-      <error message="This is an exception!" type="Exception"/>
+    <testcase name="test_exception" classname="tests\suiteLoremIpsum\TestCase42" assertions="1" time="0.000002">
+      <error message="[test_exception] This is an exception!" type="Exception"><![CDATA[Assertion: This is an exception!]]></error>
       <system-out><![CDATA[output before the exception]]></system-out>
     </testcase>
-  </testsuite>
-  <testsuite name="tests\suiteLoremIpsum\TestCase41" tests="3" failures="1" errors="0" skipped="0" time="0.000007">
-    <testcase name="test_this_is_a_test" classname="tests\suiteLoremIpsum\TestCase41" time="0.000002">
+    <testcase name="test_this_is_a_test" classname="tests\suiteLoremIpsum\TestCase41" assertions="1" time="0.000001">
       <system-out><![CDATA[this is a test output]]></system-out>
     </testcase>
-    <testcase name="test_this_is_another_test" classname="tests\suiteLoremIpsum\TestCase41" time="0.000002"/>
-    <testcase name="test_this_is_another_test_failed" classname="tests\suiteLoremIpsum\TestCase41" time="0.000003">
-      <failure message="This is happening" type="AssertionFailure"/>
+    <testcase name="test_this_is_another_test" classname="tests\suiteLoremIpsum\TestCase41" assertions="1" time="0.000001"/>
+    <testcase name="test_this_is_another_test_failed" classname="tests\suiteLoremIpsum\TestCase41" assertions="1" time="0.000001">
+      <failure message="[test_this_is_another_test_failed] This is happening" type="AssertionFailedError"><![CDATA[Assertion: This is happening
+
+Parameters:
+0=(boolean)
+
+
+Stack Trace:
+at tests\suiteLoremIpsum\TestCase41::test_this_is_another_test_failed() in unknown:?
+at call_user_func() in /var/www/html/Debbie/src/DebbieSuite.php:81
+at CaboLabs\Debbie\DebbieSuite::run() in /var/www/html/Debbie/src/DebbieRun.php:113]]></failure>
       <system-out><![CDATA[this is another test output]]></system-out>
     </testcase>
   </testsuite>
-  <testsuite name="tests\suite3\TestCase32" tests="2" failures="0" errors="0" skipped="0" time="0.000004">
-    <testcase name="test_this_is_a_test" classname="tests\suite3\TestCase32" time="0.000002">
+  <testsuite name="tests\suite1\" tests="5" failures="2" errors="0" skipped="0" assertions="8" time="0.000006" timestamp="2026-09-04T15:54:23+00:00">
+    <properties>
+      <property name="php.version" value="8.3.6"/>
+      <property name="os" value="Linux"/>
+    </properties>
+    <testcase name="test_this_is_a_test" classname="tests\suite1\TestCase11" assertions="1" time="0.000001">
       <system-out><![CDATA[this is a test output]]></system-out>
     </testcase>
-    <testcase name="test_this_is_another_test" classname="tests\suite3\TestCase32" time="0.000002"/>
-  </testsuite>
-  <testsuite name="tests\suite3\TestCase31" tests="2" failures="0" errors="0" skipped="0" time="0.000005">
-    <testcase name="test_this_is_a_test" classname="tests\suite3\TestCase31" time="0.000003">
-      <system-out><![CDATA[this is a test output]]></system-out>
-    </testcase>
-    <testcase name="test_this_is_another_test" classname="tests\suite3\TestCase31" time="0.000002"/>
-  </testsuite>
-  <testsuite name="tests\suite2\TestCase22" tests="3" failures="1" errors="1" skipped="0" time="0.000008">
-    <testcase name="test_this_is_a_test" classname="tests\suite2\TestCase22" time="0.000002">
-      <system-out><![CDATA[this is a test output]]></system-out>
-    </testcase>
-    <testcase name="test_this_is_another_test" classname="tests\suite2\TestCase22" time="0.000003">
-      <failure message="This is happening" type="AssertionFailure"/>
+    <testcase name="test_this_is_another_test" classname="tests\suite1\TestCase11" assertions="1" time="0.000001">
+      <failure message="[test_this_is_another_test] This is happening" type="AssertionFailedError"><![CDATA[Assertion: This is happening
+
+Parameters:
+0=(boolean)
+
+
+Stack Trace:
+at tests\suite1\TestCase11::test_this_is_another_test() in unknown:?
+at call_user_func() in /var/www/html/Debbie/src/DebbieSuite.php:81
+at CaboLabs\Debbie\DebbieSuite::run() in /var/www/html/Debbie/src/DebbieRun.php:113]]></failure>
       <system-out><![CDATA[this is another test output]]></system-out>
     </testcase>
-    <testcase name="test_exception" classname="tests\suite2\TestCase22" time="0.000003">
-      <error message="This is an Exception." type="Exception"/>
-    </testcase>
-  </testsuite>
-  <testsuite name="tests\suite2\TestCase21" tests="2" failures="1" errors="0" skipped="0" time="0.000005">
-    <testcase name="test_this_is_a_test" classname="tests\suite2\TestCase21" time="0.000002">
+    <testcase name="test_no_output" classname="tests\suite1\TestCase11" assertions="1" time="0.000000"/>
+    <testcase name="test_this_is_a_test" classname="tests\suite1\TestCase12" assertions="2" time="0.000002">
       <system-out><![CDATA[this is a test output]]></system-out>
     </testcase>
-    <testcase name="test_this_is_another_test" classname="tests\suite2\TestCase21" time="0.000003">
-      <failure message="This is happening" type="AssertionFailure"/>
+    <testcase name="test_this_is_another_test" classname="tests\suite1\TestCase12" assertions="3" time="0.000002">
+      <failure message="[test_this_is_another_test] This is happening" type="AssertionFailedError"><![CDATA[Assertion: This is happening
+
+Parameters:
+0=(boolean)
+
+
+Stack Trace:
+at tests\suite1\TestCase12::test_this_is_another_test() in unknown:?
+at call_user_func() in /var/www/html/Debbie/src/DebbieSuite.php:81
+at CaboLabs\Debbie\DebbieSuite::run() in /var/www/html/Debbie/src/DebbieRun.php:113]]></failure>
+      <failure message="[test_this_is_another_test] This is happening2" type="AssertionFailedError"><![CDATA[Assertion: This is happening2
+
+Parameters:
+0=(boolean)
+
+
+Stack Trace:
+at tests\suite1\TestCase12::test_this_is_another_test() in unknown:?
+at call_user_func() in /var/www/html/Debbie/src/DebbieSuite.php:81
+at CaboLabs\Debbie\DebbieSuite::run() in /var/www/html/Debbie/src/DebbieRun.php:113]]></failure>
+      <failure message="[test_this_is_another_test] This is happening3" type="AssertionFailedError"><![CDATA[Assertion: This is happening3
+
+Parameters:
+0=(boolean)
+
+
+Stack Trace:
+at tests\suite1\TestCase12::test_this_is_another_test() in unknown:?
+at call_user_func() in /var/www/html/Debbie/src/DebbieSuite.php:81
+at CaboLabs\Debbie\DebbieSuite::run() in /var/www/html/Debbie/src/DebbieRun.php:113]]></failure>
       <system-out><![CDATA[this is another test output]]></system-out>
     </testcase>
   </testsuite>
-  <testsuite name="tests\suite5\TestCase53" tests="2" failures="1" errors="0" skipped="0" time="0.000005">
-    <testcase name="test_this_is_a_test_53" classname="tests\suite5\TestCase53" time="0.000002"/>
-    <testcase name="test_this_is_another_test_53" classname="tests\suite5\TestCase53" time="0.000003">
-      <failure message="This is happening" type="AssertionFailure"/>
-    </testcase>
-  </testsuite>
-  <testsuite name="tests\suite5\TestCase51" tests="4" failures="0" errors="2" skipped="0" time="0.000010">
-    <testcase name="test_this_is_a_test_5" classname="tests\suite5\TestCase51" time="0.000002"/>
-    <testcase name="test_this_is_another_test_5" classname="tests\suite5\TestCase51" time="0.000002"/>
-    <testcase name="test_does_not_exist_file" classname="tests\suite5\TestCase51" time="0.000003">
-      <error message="opendir(/false/path/file.txt): Failed to open directory: No such file or directory" type="RuntimeError"/>
-    </testcase>
-    <testcase name="test_warning" classname="tests\suite5\TestCase51" time="0.000003">
-      <error message="This is an intentional warning" type="RuntimeError"/>
-    </testcase>
-  </testsuite>
-  <testsuite name="tests\suite5\TestCase52" tests="2" failures="0" errors="0" skipped="0" time="0.000005">
-    <testcase name="test_this_is_a_test_52" classname="tests\suite5\TestCase52" time="0.000003"/>
-    <testcase name="test_this_is_another_test_52" classname="tests\suite5\TestCase52" time="0.000002"/>
-  </testsuite>
-  <testsuite name="tests\suite4__Lorem_Ipsum_is_simply_dummy_text\TestCase41_Lorem_Ipsum_is" tests="2" failures="0" errors="0" skipped="0" time="0.000004">
-    <testcase name="test_this_is_a_test" classname="tests\suite4__Lorem_Ipsum_is_simply_dummy_text\TestCase41_Lorem_Ipsum_is" time="0.000002">
+  <testsuite name="tests\suite4__Lorem_Ipsum_is_simply_dummy_text\" tests="4" failures="0" errors="0" skipped="0" assertions="4" time="0.000004" timestamp="2026-09-04T15:54:23+00:00">
+    <properties>
+      <property name="php.version" value="8.3.6"/>
+      <property name="os" value="Linux"/>
+    </properties>
+    <testcase name="test_this_is_a_test" classname="tests\suite4__Lorem_Ipsum_is_simply_dummy_text\TestCase41_Lorem_Ipsum_is" assertions="1" time="0.000001">
       <system-out><![CDATA[this is a test output]]></system-out>
     </testcase>
-    <testcase name="test_this_is_another_test" classname="tests\suite4__Lorem_Ipsum_is_simply_dummy_text\TestCase41_Lorem_Ipsum_is" time="0.000002"/>
-  </testsuite>
-  <testsuite name="tests\suite4__Lorem_Ipsum_is_simply_dummy_text\TestCase42_simply_dummy_text" tests="2" failures="0" errors="0" skipped="0" time="0.000005">
-    <testcase name="test_this_is_a_test" classname="tests\suite4__Lorem_Ipsum_is_simply_dummy_text\TestCase42_simply_dummy_text" time="0.000003">
+    <testcase name="test_this_is_another_test" classname="tests\suite4__Lorem_Ipsum_is_simply_dummy_text\TestCase41_Lorem_Ipsum_is" assertions="1" time="0.000001"/>
+    <testcase name="test_this_is_a_test" classname="tests\suite4__Lorem_Ipsum_is_simply_dummy_text\TestCase42_simply_dummy_text" assertions="1" time="0.000001">
       <system-out><![CDATA[this is a test output]]></system-out>
     </testcase>
-    <testcase name="test_this_is_another_test" classname="tests\suite4__Lorem_Ipsum_is_simply_dummy_text\TestCase42_simply_dummy_text" time="0.000002"/>
+    <testcase name="test_this_is_another_test" classname="tests\suite4__Lorem_Ipsum_is_simply_dummy_text\TestCase42_simply_dummy_text" assertions="1" time="0.000001"/>
   </testsuite>
 </testsuites>
