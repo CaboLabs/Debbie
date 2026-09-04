@@ -49,12 +49,19 @@ class JunitXmlBuilder
      */
     public function addReports(array $reports)
     {
+        $suitesByNamespace = [];
+
         foreach ($reports as $suiteReports) {
             foreach ($suiteReports as $className => $tests) {
-                $suite = $this->addTestSuite($className);
+                $namespace = $this->extractNamespace($className);
+
+                if (!isset($suitesByNamespace[$namespace])) {
+                    $suitesByNamespace[$namespace] = $this->addTestSuite($namespace);
+                }
+                $suite = $suitesByNamespace[$namespace];
 
                 foreach ($tests as $testName => $report) {
-                    $testCase = $suite->addTestCase($testName);
+                    $testCase = $suite->addTestCase($testName, $className);
 
                     foreach (isset($report['asserts']) ? $report['asserts'] : [] as $assert) {
                         $type = isset($assert['type']) ? $assert['type'] : '';
@@ -97,6 +104,18 @@ class JunitXmlBuilder
     private function buildAssertionMessage($testName, $message)
     {
         return '[' . $testName . '] ' . $message;
+    }
+
+    /**
+     * Get the namespace.
+     *
+     * @param string $className Fully qualified class name
+     * @return string
+     */
+    private function extractNamespace($className)
+    {
+        $pos = strrpos($className, '\\');
+        return $pos !== false ? substr($className, 0, $pos + 1) : $className;
     }
 
     /**
@@ -224,11 +243,12 @@ class TestSuite
      * Add a test case to this suite
      *
      * @param string $name The test case name (typically the test method name)
+     * @param string|null $classname The fully qualified test class name (defaults to the suite name)
      * @return TestCase
      */
-    public function addTestCase($name)
+    public function addTestCase($name, $classname = null)
     {
-        $testCase = new TestCase($name, $this->name);
+        $testCase = new TestCase($name, $classname !== null ? $classname : $this->name);
         $this->testCases[] = $testCase;
         return $testCase;
     }
