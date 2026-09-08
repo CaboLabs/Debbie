@@ -23,11 +23,10 @@ $ php cli.php tests suite2
 # Debbie's PHPUnit test suite
 
 Debbie itself is tested with PHPUnit, under `phpunit-tests/`. These tests
-run the CLI against Debbie's own fixture suites (`tests/`) and assert the
-generated JUnit report has the expected totals, and unit test the
-`JunitXmlBuilder` class directly. All of these PHPUnit tests are expected
-to pass, even though some of the fixture suites are intentionally designed
-to fail or error.
+run the CLI against Debbie's own fixture suites (`tests/`) and assert the generated JUnit report, including individual passing, failing, and
+error test cases. They also run the CLI against an individual real test
+case. All of these PHPUnit tests are expected to pass, even though some of
+the fixture suites are intentionally designed to fail or error.
 
 ```shell
 $ vendor/bin/phpunit

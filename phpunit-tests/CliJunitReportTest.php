@@ -64,6 +64,10 @@ class CliJunitReportTest extends PHPUnitTestCase
         $this->fail("Test suite \"$suiteName\" not found in the generated JUnit XML");
     }
 
+    /**
+     * Verifies the CLI exit code when fixtures contain intentional failures.
+     * Expect: Debbie finishes with exit code one.
+     */
     public function testCliExitsWithFailureBecauseSomeFixturesAreDesignedToFail()
     {
         // Debbie's own fixtures include failures and errors on purpose,
@@ -71,6 +75,10 @@ class CliJunitReportTest extends PHPUnitTestCase
         $this->assertSame(1, self::$cliExitCode);
     }
 
+    /**
+     * Verifies the overall totals produced by all fixture suites.
+     * Expect: 41 tests, 8 failures, 11 errors, and no skipped tests.
+     */
     public function testOverallTotalsMatchTheKnownFixtures()
     {
         $testsuites = self::$xml->getElementsByTagName('testsuites')->item(0);
@@ -81,6 +89,10 @@ class CliJunitReportTest extends PHPUnitTestCase
         $this->assertSame('0', $testsuites->getAttribute('skipped'));
     }
 
+    /**
+     * Verifies that a suite continues reporting its cases after fatal errors.
+     * Expect: the suite contains six tests, five errors, and no failures.
+     */
     public function testFatalErrorWithOtherTestSuiteReportsFiveErrorsOutOfSixTests()
     {
         $suiteName = 'tests\\fatal_error_with_other_test\\TestFatalErr';
@@ -90,6 +102,10 @@ class CliJunitReportTest extends PHPUnitTestCase
         $this->assertSame('5', $this->testSuiteAttribute($suiteName, 'errors'));
     }
 
+    /**
+     * Verifies that a fatal error in one case does not prevent sibling cases from running.
+     * Expect: each case produces its own result in the report.
+     */
     public function testFatalErrorWithoutOtherTestDoesNotStopSiblingCasesInTheSuite()
     {
         // The suite fatal_error_without_other_test has 3 separate test case files,
@@ -99,12 +115,20 @@ class CliJunitReportTest extends PHPUnitTestCase
         $this->assertSame('1', $this->testSuiteAttribute('tests\\fatal_error_without_other_test\\TestFatalErr3', 'errors'));
     }
 
+    /**
+     * Verifies that each case in suite1 reports its intentional failure.
+     * Expect: one failure in TestCase11 and another in TestCase12.
+     */
     public function testSuite1ReportsOneFailurePerCase()
     {
         $this->assertSame('1', $this->testSuiteAttribute('tests\\suite1\\TestCase11', 'failures'));
         $this->assertSame('1', $this->testSuiteAttribute('tests\\suite1\\TestCase12', 'failures'));
     }
 
+    /**
+     * Verifies that the successful cases in suite3 produce no negative results.
+     * Expect: zero failures and zero errors in both cases.
+     */
     public function testSuite3HasNoFailuresOrErrors()
     {
         $this->assertSame('0', $this->testSuiteAttribute('tests\\suite3\\TestCase31', 'failures'));
@@ -113,6 +137,10 @@ class CliJunitReportTest extends PHPUnitTestCase
         $this->assertSame('0', $this->testSuiteAttribute('tests\\suite3\\TestCase32', 'errors'));
     }
 
+    /**
+     * Verifies the mixed results of TestCase42 in suiteLoremIpsum.
+     * Expect: three tests, two failures, and one error.
+     */
     public function testSuiteLoremIpsumTestCase42HasFailuresAndAnError()
     {
         $suiteName = 'tests\\suiteLoremIpsum\\TestCase42';
@@ -122,6 +150,10 @@ class CliJunitReportTest extends PHPUnitTestCase
         $this->assertSame('1', $this->testSuiteAttribute($suiteName, 'errors'));
     }
 
+    /**
+     * Verifies the expected results of the cases in suite5.
+     * Expect: two errors in TestCase51, no errors in TestCase52, and one failure in TestCase53.
+     */
     public function testSuite5ReportsExpectedErrorsAndFailures()
     {
         $this->assertSame('2', $this->testSuiteAttribute('tests\\suite5\\TestCase51', 'errors'));
@@ -129,4 +161,5 @@ class CliJunitReportTest extends PHPUnitTestCase
         $this->assertSame('0', $this->testSuiteAttribute('tests\\suite5\\TestCase52', 'errors'));
         $this->assertSame('1', $this->testSuiteAttribute('tests\\suite5\\TestCase53', 'failures'));
     }
+
 }
