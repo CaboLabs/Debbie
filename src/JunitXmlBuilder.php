@@ -5,7 +5,7 @@ namespace CaboLabs\Debbie;
 /**
  * Builder class for creating JUnit XML test result files
  */
-class JUnitXMLBuilder
+class JunitXmlBuilder
 {
     private $testSuites = [];
     private $startTime;
@@ -17,7 +17,7 @@ class JUnitXMLBuilder
 
     /**
      * Create a new test suite
-     * 
+     *
      * @param string $name The name of the test suite (typically the test class name)
      * @return TestSuite
      */
@@ -30,7 +30,7 @@ class JUnitXMLBuilder
 
     /**
      * Generate the JUnit XML string
-     * 
+     *
      * @return string The complete JUnit XML
      */
     public function toXML()
@@ -72,7 +72,7 @@ class JUnitXMLBuilder
 
     /**
      * Save the JUnit XML to a file
-     * 
+     *
      * @param string $filepath Path to save the XML file
      * @return bool True on success, false on failure
      */
@@ -100,7 +100,7 @@ class TestSuite
 
     /**
      * Add a test case to this suite
-     * 
+     *
      * @param string $name The test case name (typically the test method name)
      * @return TestCase
      */
@@ -113,7 +113,7 @@ class TestSuite
 
     /**
      * Get statistics for this test suite
-     * 
+     *
      * @return array Array with keys: tests, failures, errors, skipped
      */
     public function getStatistics()
@@ -144,14 +144,14 @@ class TestSuite
 
     /**
      * Convert this test suite to a DOMElement
-     * 
+     *
      * @param \DOMDocument $doc The document to create elements in
      * @return \DOMElement
      */
     public function toXMLElement(\DOMDocument $doc)
     {
         $stats = $this->getStatistics();
-        
+
         $element = $doc->createElement('testsuite');
         $element->setAttribute('name', $this->name);
         $element->setAttribute('tests', $stats['tests']);
@@ -202,7 +202,7 @@ class TestCase
 
     /**
      * Add a failure to this test case
-     * 
+     *
      * @param string $message The failure message
      * @param string $type The failure type (default: 'AssertionFailure')
      * @param string $details Additional details/stack trace
@@ -220,7 +220,7 @@ class TestCase
 
     /**
      * Add an error to this test case
-     * 
+     *
      * @param string $message The error message
      * @param string $type The error type (default: 'RuntimeError')
      * @param string $details Additional details/stack trace
@@ -238,7 +238,7 @@ class TestCase
 
     /**
      * Mark this test case as skipped
-     * 
+     *
      * @param string $message Optional skip message
      * @return self
      */
@@ -250,7 +250,7 @@ class TestCase
 
     /**
      * Add standard output to this test case
-     * 
+     *
      * @param string $output The output text
      * @return self
      */
@@ -262,7 +262,7 @@ class TestCase
 
     /**
      * Add error output to this test case
-     * 
+     *
      * @param string $output The error output text
      * @return self
      */
@@ -274,7 +274,7 @@ class TestCase
 
     /**
      * Check if this test case has a failure
-     * 
+     *
      * @return bool
      */
     public function hasFailure()
@@ -284,7 +284,7 @@ class TestCase
 
     /**
      * Check if this test case has an error
-     * 
+     *
      * @return bool
      */
     public function hasError()
@@ -294,7 +294,7 @@ class TestCase
 
     /**
      * Check if this test case is skipped
-     * 
+     *
      * @return bool
      */
     public function isSkipped()
@@ -304,7 +304,7 @@ class TestCase
 
     /**
      * Get the execution time
-     * 
+     *
      * @return float
      */
     public function getTime()
@@ -314,7 +314,7 @@ class TestCase
 
     /**
      * Convert this test case to a DOMElement
-     * 
+     *
      * @param \DOMDocument $doc The document to create elements in
      * @return \DOMElement
      */

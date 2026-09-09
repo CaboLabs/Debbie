@@ -17,17 +17,13 @@ jobs:
       
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
-      
-      - name: Run Debbie tests
-        run: |
-          # Run your test suite and generate JUnit XML
-          php cli.php tests -report=junit
-          # --file=test-results.xml
-        continue-on-error: true
-      
+
+      - name: Run PHPUnit tests
+        run: vendor/bin/phpunit --log-junit phpunit-results.xml
+
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
         with:
-          files: test-results.xml
+          files: phpunit-results.xml
           check_name: Debbie Test Results
