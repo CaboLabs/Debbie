@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites tests="41" failures="8" errors="11" skipped="0" time="0.000053">
+<testsuites tests="41" failures="8" errors="11" skipped="0" time="0.000054">
   <testsuite name="tests\fatal_error_without_other_test\TestFatalErr3" tests="1" failures="0" errors="1" skipped="0" time="0.000002">
     <testcase name="test_with_fatal_error_3" classname="tests\fatal_error_without_other_test\TestFatalErr3" time="0.000002">
       <error message="Call to a member function get_name() on string" type="RuntimeError"/>
@@ -15,17 +15,17 @@
       <system-out><![CDATA[this is a test output]]></system-out>
     </testcase>
   </testsuite>
-  <testsuite name="tests\suite3\TestCase32" tests="2" failures="0" errors="0" skipped="0" time="0.000002">
-    <testcase name="test_this_is_a_test" classname="tests\suite3\TestCase32" time="0.000001">
+  <testsuite name="tests\suite3\TestCase32" tests="2" failures="0" errors="0" skipped="0" time="0.000000">
+    <testcase name="test_this_is_a_test" classname="tests\suite3\TestCase32" time="0.000000">
       <system-out><![CDATA[this is a test output]]></system-out>
     </testcase>
-    <testcase name="test_this_is_another_test" classname="tests\suite3\TestCase32" time="0.000001"/>
+    <testcase name="test_this_is_another_test" classname="tests\suite3\TestCase32" time="0.000000"/>
   </testsuite>
-  <testsuite name="tests\suite3\TestCase31" tests="2" failures="0" errors="0" skipped="0" time="0.000002">
-    <testcase name="test_this_is_a_test" classname="tests\suite3\TestCase31" time="0.000001">
+  <testsuite name="tests\suite3\TestCase31" tests="2" failures="0" errors="0" skipped="0" time="0.000000">
+    <testcase name="test_this_is_a_test" classname="tests\suite3\TestCase31" time="0.000000">
       <system-out><![CDATA[this is a test output]]></system-out>
     </testcase>
-    <testcase name="test_this_is_another_test" classname="tests\suite3\TestCase31" time="0.000001"/>
+    <testcase name="test_this_is_another_test" classname="tests\suite3\TestCase31" time="0.000000"/>
   </testsuite>
   <testsuite name="tests\suite5\TestCase51" tests="4" failures="0" errors="2" skipped="0" time="0.000004">
     <testcase name="test_this_is_a_test_5" classname="tests\suite5\TestCase51" time="0.000001"/>
@@ -68,8 +68,8 @@
       <error message="This is an Exception." type="Exception"/>
     </testcase>
   </testsuite>
-  <testsuite name="tests\fatal_error_with_other_test\TestFatalErr" tests="6" failures="0" errors="5" skipped="0" time="0.000006">
-    <testcase name="test_with_fatal_error" classname="tests\fatal_error_with_other_test\TestFatalErr" time="0.000001">
+  <testsuite name="tests\fatal_error_with_other_test\TestFatalErr" tests="6" failures="0" errors="5" skipped="0" time="0.000005">
+    <testcase name="test_with_fatal_error" classname="tests\fatal_error_with_other_test\TestFatalErr" time="0.000000">
       <error message="Call to undefined function tests\fatal_error_with_other_test\undefinedFunctionCall()" type="RuntimeError"/>
     </testcase>
     <testcase name="test_div_by_zero" classname="tests\fatal_error_with_other_test\TestFatalErr" time="0.000001">
@@ -86,15 +86,15 @@
     </testcase>
     <testcase name="test_without_fatal_error" classname="tests\fatal_error_with_other_test\TestFatalErr" time="0.000001"/>
   </testsuite>
-  <testsuite name="tests\suiteLoremIpsum\TestCase42" tests="3" failures="2" errors="1" skipped="0" time="0.000001">
-    <testcase name="test_this_is_a_test" classname="tests\suiteLoremIpsum\TestCase42" time="0.000000">
+  <testsuite name="tests\suiteLoremIpsum\TestCase42" tests="3" failures="2" errors="1" skipped="0" time="0.000002">
+    <testcase name="test_this_is_a_test" classname="tests\suiteLoremIpsum\TestCase42" time="0.000001">
       <failure message="This is happening" type="AssertionFailure"/>
       <system-out><![CDATA[this is a test output]]></system-out>
     </testcase>
-    <testcase name="test_this_is_another_test" classname="tests\suiteLoremIpsum\TestCase42" time="0.000000">
+    <testcase name="test_this_is_another_test" classname="tests\suiteLoremIpsum\TestCase42" time="0.000001">
       <failure message="This is happening" type="AssertionFailure"/>
     </testcase>
-    <testcase name="test_exception" classname="tests\suiteLoremIpsum\TestCase42" time="0.000001">
+    <testcase name="test_exception" classname="tests\suiteLoremIpsum\TestCase42" time="0.000000">
       <error message="This is an exception!" type="Exception"/>
       <system-out><![CDATA[output before the exception]]></system-out>
     </testcase>
@@ -119,25 +119,25 @@
     </testcase>
     <testcase name="test_no_output" classname="tests\suite1\TestCase11" time="0.000001"/>
   </testsuite>
-  <testsuite name="tests\suite1\TestCase12" tests="2" failures="1" errors="0" skipped="0" time="0.000000">
+  <testsuite name="tests\suite1\TestCase12" tests="2" failures="1" errors="0" skipped="0" time="0.000001">
     <testcase name="test_this_is_a_test" classname="tests\suite1\TestCase12" time="0.000000">
       <system-out><![CDATA[this is a test output]]></system-out>
     </testcase>
-    <testcase name="test_this_is_another_test" classname="tests\suite1\TestCase12" time="0.000000">
+    <testcase name="test_this_is_another_test" classname="tests\suite1\TestCase12" time="0.000001">
       <failure message="This is happening" type="AssertionFailure"/>
       <system-out><![CDATA[this is another test output]]></system-out>
     </testcase>
   </testsuite>
-  <testsuite name="tests\suite4__Lorem_Ipsum_is_simply_dummy_text\TestCase41_Lorem_Ipsum_is" tests="2" failures="0" errors="0" skipped="0" time="0.000002">
-    <testcase name="test_this_is_a_test" classname="tests\suite4__Lorem_Ipsum_is_simply_dummy_text\TestCase41_Lorem_Ipsum_is" time="0.000001">
+  <testsuite name="tests\suite4__Lorem_Ipsum_is_simply_dummy_text\TestCase41_Lorem_Ipsum_is" tests="2" failures="0" errors="0" skipped="0" time="0.000001">
+    <testcase name="test_this_is_a_test" classname="tests\suite4__Lorem_Ipsum_is_simply_dummy_text\TestCase41_Lorem_Ipsum_is" time="0.000000">
       <system-out><![CDATA[this is a test output]]></system-out>
     </testcase>
     <testcase name="test_this_is_another_test" classname="tests\suite4__Lorem_Ipsum_is_simply_dummy_text\TestCase41_Lorem_Ipsum_is" time="0.000001"/>
   </testsuite>
-  <testsuite name="tests\suite4__Lorem_Ipsum_is_simply_dummy_text\TestCase42_simply_dummy_text" tests="2" failures="0" errors="0" skipped="0" time="0.000002">
+  <testsuite name="tests\suite4__Lorem_Ipsum_is_simply_dummy_text\TestCase42_simply_dummy_text" tests="2" failures="0" errors="0" skipped="0" time="0.000001">
     <testcase name="test_this_is_a_test" classname="tests\suite4__Lorem_Ipsum_is_simply_dummy_text\TestCase42_simply_dummy_text" time="0.000001">
       <system-out><![CDATA[this is a test output]]></system-out>
     </testcase>
-    <testcase name="test_this_is_another_test" classname="tests\suite4__Lorem_Ipsum_is_simply_dummy_text\TestCase42_simply_dummy_text" time="0.000001"/>
+    <testcase name="test_this_is_another_test" classname="tests\suite4__Lorem_Ipsum_is_simply_dummy_text\TestCase42_simply_dummy_text" time="0.000000"/>
   </testsuite>
 </testsuites>
