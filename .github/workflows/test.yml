@@ -19,6 +19,11 @@ jobs:
         run: composer install --prefer-dist --no-progress
       
       - name: Run Debbie tests
+        env:
+          DB_TEST_HOST: ${{ secrets.DB_TEST_HOST }}
+          DB_TEST_NAME: ${{ secrets.DB_TEST_NAME }}
+          DB_TEST_USER: ${{ secrets.DB_TEST_USER }}
+          DB_TEST_PASS: ${{ secrets.DB_TEST_PASS }}
         run: |
           # Run your test suite and generate JUnit XML
           php cli.php tests -report=junit
