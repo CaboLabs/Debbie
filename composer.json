@@ -24,5 +24,13 @@
       "psr-4": {
           "CaboLabs\\Debbie\\": "src"
       }
+  },
+  "autoload-dev": {
+      "psr-4": {
+          "CaboLabs\\Debbie\\PHPUnitTests\\": "phpunit-tests"
+      }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^10"
   }
 }

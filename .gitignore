@@ -2,3 +2,5 @@
 composer.lock
 
 test_report.html
+.phpunit.result.cache
+phpunit-results.xml
