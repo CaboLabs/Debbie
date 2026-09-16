@@ -13,12 +13,15 @@ require __DIR__ . '/vendor/autoload.php';
  * argv[3] -> case (optional)
  * argv[4] -> -report=html (optional)
  * argv[5] -> -output="./output/out.html" (optional), if no path is specified it will be saved in the root
+ * JUnit example -> php cli.php tests -report=junit reports/test-results.xml
  * */
 
 $output = '.'. DIRECTORY_SEPARATOR;
 $report = 'html';
 $output_index = 0;
 $report_index = 0;
+$junit_output = 'test-results.xml';
+$junit_output_index = 0;
 $test_start_time = 0;
 $test_end_time = 0;
 $test_time = 0;
@@ -33,6 +36,13 @@ foreach ($argv as $i => $arg)
       $report = end($type_out);
       $argc--;
       $report_index = $i;
+
+      if ($report == 'junit' && isset($argv[$i + 1]) && substr($argv[$i + 1], 0, 1) != '-')
+      {
+         $junit_output = $argv[$i + 1];
+         $junit_output_index = $i + 1;
+         $argc--;
+      }
    }
 
    if ($search == '-output')
@@ -47,6 +57,7 @@ foreach ($argv as $i => $arg)
 // remove output and report parameters, so the rest are in the same order for the execution (suite, class, function)
 if ($output_index > 0) unset($argv[$output_index]);
 if ($report_index > 0) unset($argv[$report_index]);
+if ($junit_output_index > 0) unset($argv[$junit_output_index]);
 $argv = array_values($argv);
 
 if ($argc < 2)
@@ -105,7 +116,20 @@ else if ($report == 'text')
 }
 else if ($report == 'junit')
 {
-   $exit_code = $run->generate_junit_xml();
+   $builder = new \CaboLabs\Debbie\JunitXmlBuilder();
+   $generated = $builder->generateFromReports(
+      $run->get_reports(),
+      $junit_output
+   );
+
+   if (!$generated)
+   {
+      $exit_code = 1;
+   }
+   else
+   {
+      $exit_code = $builder->hasFailures() ? 1 : 0;
+   }
 }
 else
 {
