@@ -115,7 +115,7 @@ class JunitXmlBuilder
     private function extractNamespace($className)
     {
         $pos = strrpos($className, '\\');
-        return $pos !== false ? substr($className, 0, $pos + 1) : $className;
+        return $pos !== false ? substr($className, 0, $pos) : $className;
     }
 
     /**
